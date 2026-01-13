@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Filament\Resources\MovieResource\Pages;
+
+use App\Filament\Resources\MovieResource;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateMovie extends CreateRecord
+{
+    protected static string $resource = MovieResource::class;
+}
