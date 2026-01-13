@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace App\Filament\Resources\AnimeResource\Concerns;
 
 use App\Enums\AnimeStatus;
+use Closure;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Set;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
 trait HasAnimeForm
 {
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\TextInput::make('tmdb_id')
                     ->numeric(),
                 Forms\Components\TextInput::make('anilist_id')
@@ -23,7 +23,7 @@ trait HasAnimeForm
                 Forms\Components\TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(function (Set $set, ?string $state) {
+                    ->afterStateUpdated(function (callable $set, ?string $state): void {
                         if (!$state) {
                             return;
                         }

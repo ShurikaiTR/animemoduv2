@@ -18,9 +18,9 @@ class AnimeResource extends Resource
 
     protected static ?string $model = Anime::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tv';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-tv';
 
-    protected static ?string $navigationGroup = 'İçerik Yönetimi';
+    protected static string|\UnitEnum|null $navigationGroup = 'İçerik Yönetimi';
 
     protected static ?string $pluralLabel = 'Animeler';
 

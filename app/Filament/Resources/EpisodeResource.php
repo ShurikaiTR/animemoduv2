@@ -17,9 +17,9 @@ class EpisodeResource extends Resource
 
     protected static ?string $model = Episode::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?string $navigationGroup = 'İçerik Yönetimi';
+    protected static string|\UnitEnum|null $navigationGroup = 'İçerik Yönetimi';
 
     protected static ?string $pluralLabel = 'Bölümler';
 

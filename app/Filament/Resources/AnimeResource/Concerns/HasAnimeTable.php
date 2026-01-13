@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Filament\Resources\AnimeResource\Concerns;
 
 use App\Enums\AnimeStatus;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -77,11 +80,11 @@ trait HasAnimeTable
                     ->label('Öne Çıkan'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

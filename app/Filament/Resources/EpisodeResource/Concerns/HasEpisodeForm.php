@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Filament\Resources\EpisodeResource\Concerns;
 
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 
 trait HasEpisodeForm
 {
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\Select::make('anime_id')
                     ->relationship('anime', 'title')
                     ->required(),

@@ -6,7 +6,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\MovieResource\Pages;
 use App\Models\Anime;
-use Filament\Forms\Form;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,9 +19,9 @@ class MovieResource extends Resource
 {
     protected static ?string $model = Anime::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-film';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-film';
 
-    protected static ?string $navigationGroup = 'İçerik Yönetimi';
+    protected static string|\UnitEnum|null $navigationGroup = 'İçerik Yönetimi';
 
     protected static ?string $pluralLabel = 'Filmler';
 
@@ -29,10 +32,10 @@ class MovieResource extends Resource
         return parent::getEloquentQuery()->where('media_type', 'movie');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 //
             ]);
     }
@@ -47,11 +50,11 @@ class MovieResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

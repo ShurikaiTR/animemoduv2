@@ -1,6 +1,6 @@
 # AnimeModu v2 - Proje Bilgi Haritası
 
-> **Son Güncelleme:** 2026-01-13
+> **Son Güncelleme:** 2026-01-13 (Livewire 4 + Filament 5 Beta Upgrade)
 > 
 > Bu belge, projenin tüm yapısını detaylı şekilde dokümante eder.
 
@@ -8,17 +8,36 @@
 
 ## 📊 Tech Stack
 
-| Bileşen | Teknoloji | Versiyon |
-|---------|-----------|----------|
-| **Framework** | Laravel | 12.x |
-| **PHP** | PHP | 8.2+ (Strict Mode) |
-| **Admin Panel** | FilamentPHP | 3.2+ |
-| **Frontend** | Livewire | 3.x |
-| **CSS** | Tailwind CSS | 4.x |
-| **Build Tool** | Vite | 7.x |
-| **Database** | SQLite (Dev) / PostgreSQL (Prod) | - |
-| **Static Analysis** | Larastan | 3.0 |
-| **Code Style** | Laravel Pint | 1.24+ |
+| Bileşen | Teknoloji | Versiyon | Not |
+|---------|-----------|----------|-----|
+| **Framework** | Laravel | 12.x | |
+| **PHP** | PHP | 8.2+ | Strict Mode |
+| **Admin Panel** | FilamentPHP | **5.0-beta9** | 🔥 Beta |
+| **Frontend** | Livewire | **4.0-beta.6** | 🔥 Beta |
+| **CSS** | Tailwind CSS | 4.x | |
+| **Build Tool** | Vite | 7.x | |
+| **Database** | SQLite (Dev) / PostgreSQL (Prod) | - | |
+| **Static Analysis** | Larastan | 3.0 | |
+| **Code Style** | Laravel Pint | 1.24+ | |
+
+> ⚠️ **Beta Uyarısı:** Livewire 4 + Filament 5 beta sürümleri kullanılıyor. Stable: 2026 Q1
+
+---
+
+## 🔮 Filament 5 Namespace Değişiklikleri
+
+Filament 5, Livewire 4 ile uyumluluk için bazı namespace değişiklikleri içeriyor:
+
+| Eski (v4) | Yeni (v5) |
+|-----------|-----------|
+| `Filament\Forms\Form` | `Filament\Schemas\Schema` |
+| `Filament\Forms\Set` | `callable $set` |
+| `Filament\Tables\Actions\EditAction` | `Filament\Actions\EditAction` |
+| `Filament\Tables\Actions\BulkActionGroup` | `Filament\Actions\BulkActionGroup` |
+| `Filament\Tables\Actions\DeleteBulkAction` | `Filament\Actions\DeleteBulkAction` |
+
+**Güncellenen dosyalar:**
+`HasAnimeForm.php`, `HasAnimeTable.php`, `HasEpisodeTable.php`, `CommentResource.php`, `GenreResource.php`, `MovieResource.php`, `PageResource.php`, `ReportResource.php`, `UserResource.php`
 
 ---
 

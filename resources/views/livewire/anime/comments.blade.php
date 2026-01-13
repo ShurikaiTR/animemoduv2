@@ -20,7 +20,9 @@
     {{-- Items List --}}
     <ul class="block">
         @forelse($items as $item)
-            @include('livewire.anime.partials.comment-item', ['item' => $item, 'isReply' => false])
+            <div wire:key="comment-{{ $item->id }}">
+                @include('livewire.anime.partials.comment-item', ['item' => $item, 'isReply' => false])
+            </div>
         @empty
             @include('livewire.anime.partials.comments-empty-state', ['activeTab' => $activeTab])
         @endforelse
