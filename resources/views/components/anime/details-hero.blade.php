@@ -44,7 +44,7 @@
                                 @endphp
                                 <li class="flex items-center">
                                     <span
-                                        class="px-2 py-0.5 rounded bg-{{ $statusColor }}/20 text-{{ $statusColor }} border-{{ $statusColor }}/30 text-tiny font-bold border uppercase tracking-wide">
+                                        class="px-2 py-0.5 rounded-md bg-{{ $statusColor }}/10 text-{{ $statusColor }} border-{{ $statusColor }}/20 text-xs font-bold border uppercase tracking-wider">
                                         {{ $anime->status->value }}
                                     </span>
                                 </li>
