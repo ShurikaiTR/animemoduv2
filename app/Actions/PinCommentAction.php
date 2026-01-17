@@ -11,12 +11,12 @@ class PinCommentAction
 {
     public function execute(string $commentId): Comment
     {
-        if (Auth::user()?->profile?->role !== 'admin') {
+        if (Auth::user()?->profile?->role !== \App\Enums\UserRole::ADMIN->value) {
             throw new \Exception('Unauthorized action.');
         }
 
         $comment = Comment::findOrFail($commentId);
-        $comment->update(['is_pinned' => !$comment->is_pinned]);
+        $comment->update(['is_pinned' => ! $comment->is_pinned]);
 
         return $comment;
     }

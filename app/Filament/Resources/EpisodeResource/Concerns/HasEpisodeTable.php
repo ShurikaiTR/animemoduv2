@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\EpisodeResource\Concerns;
 
+use App\Filament\Resources\EpisodeResource\Pages;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -18,16 +19,19 @@ trait HasEpisodeTable
             ->columns([
                 Tables\Columns\ImageColumn::make('still_path')
                     ->label('Görsel')
-                    ->getStateUsing(fn($record) => $record->still_path
+                    ->getStateUsing(fn ($record) => $record->still_path
                         ? "https://image.tmdb.org/t/p/w185{$record->still_path}"
                         : null)
-                    ->width(80)
-                    ->height(45)
+                    ->width(100)
+                    ->height(56)
+                    ->extraImgAttributes(['class' => 'rounded-md shadow-sm border border-gray-100 dark:border-gray-800'])
                     ->defaultImageUrl(asset('img/placeholder.jpg')),
                 Tables\Columns\TextColumn::make('anime.title')
                     ->label('Anime')
                     ->searchable()
                     ->limit(30)
+                    ->weight('medium')
+                    ->color('primary')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('episode_info')
                     ->label('Bölüm')
@@ -36,13 +40,14 @@ trait HasEpisodeTable
 
                         if ($structureType === 'absolute') {
                             $absNum = $record->absolute_episode_number ?? $record->episode_number;
+
                             return "Bölüm {$absNum}";
                         }
 
                         return "S{$record->season_number} B{$record->episode_number}";
                     })
                     ->badge()
-                    ->color(fn($record) => ($record->anime?->structure_type ?? 'seasonal') === 'absolute' ? 'warning' : 'primary')
+                    ->color(fn ($record) => ($record->anime?->structure_type ?? 'seasonal') === 'absolute' ? 'warning' : 'primary')
                     ->alignCenter()
                     ->sortable(query: function ($query, string $direction) {
                         return $query
@@ -53,17 +58,19 @@ trait HasEpisodeTable
                     ->label('Bölüm Adı')
                     ->searchable()
                     ->limit(35)
-                    ->placeholder('—'),
+                    ->placeholder('Başlık belirtilmemiş'),
                 Tables\Columns\TextColumn::make('air_date')
                     ->label('Yayın')
                     ->date('d.m.Y')
+                    ->color('gray')
                     ->sortable(),
                 Tables\Columns\IconColumn::make('video_url')
-                    ->label('Video')
+                    ->label('Durum')
+                    ->tooltip('Video Durumu')
                     ->boolean()
-                    ->getStateUsing(fn($record) => filled($record->video_url))
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
+                    ->getStateUsing(fn ($record) => filled($record->video_url))
+                    ->trueIcon('heroicon-o-play-circle')
+                    ->falseIcon('heroicon-o-no-symbol')
                     ->trueColor('success')
                     ->falseColor('danger')
                     ->alignCenter(),
@@ -76,10 +83,13 @@ trait HasEpisodeTable
                 Tables\Columns\TextColumn::make('vote_average')
                     ->label('Puan')
                     ->numeric(1)
+                    ->icon('heroicon-m-star')
+                    ->color('warning')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
+                    ->fontFamily('mono')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tmdb_id')
                     ->label('TMDB ID')
@@ -88,8 +98,10 @@ trait HasEpisodeTable
                     ->label('Abs. No')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label('Oluşturulma')
+                    ->label('Eklenme')
                     ->dateTime('d.m.Y H:i')
+                    ->color('gray')
+                    ->size('xs')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -99,11 +111,12 @@ trait HasEpisodeTable
                     ->relationship('anime', 'title')
                     ->searchable()
                     ->preload()
-                    ->label('Anime'),
+                    ->label('Animeye Göre Filtrele'),
             ])
             ->actions([
                 EditAction::make(),
             ])
+            ->recordUrl(fn ($record) => Pages\EditEpisode::getUrl([$record]))
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

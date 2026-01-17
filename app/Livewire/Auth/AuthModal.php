@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Livewire\Auth;
 
+use App\Livewire\Auth\Concerns\HasAuthModalConfig;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use App\Livewire\Auth\Concerns\HasAuthModalConfig;
 
 class AuthModal extends Component
 {

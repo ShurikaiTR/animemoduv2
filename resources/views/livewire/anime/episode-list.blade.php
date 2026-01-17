@@ -19,8 +19,9 @@
             @if($structureType === 'seasonal' && $seasons->count() > 1)
                 <div class="flex gap-2 mr-2">
                     @foreach($seasons as $season)
-                        <button wire:click="selectSeason({{ $season }})"
-                            class="px-3 py-1 rounded-lg text-sm font-medium transition-colors {{ $selectedSeason === $season ? 'bg-primary text-white' : 'bg-bg-secondary text-text-main hover:bg-white hover:text-bg-secondary' }}">
+                        <button type="button" wire:click="selectSeason({{ $season }})"
+                            aria-pressed="{{ $selectedSeason === $season ? 'true' : 'false' }}" aria-label="Sezon {{ $season }}"
+                            class="px-3 py-1 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg-main {{ $selectedSeason === $season ? 'bg-primary text-white' : 'bg-bg-secondary text-text-main hover:bg-white hover:text-bg-secondary' }}">
                             S{{ $season }}
                         </button>
                     @endforeach
@@ -47,9 +48,8 @@
                     :image="app(\App\Services\TmdbService::class)->getImageUrl($episode->still_path ?? $anime->backdrop_path, 'w500')" :timeAgo="''" :href="route('anime.show', ['slug' => $anime->slug]) . '#episode-' . $episode->episode_number" />
             </div>
         @empty
-            <div class="w-full text-center py-8 text-white/40">
-                Bu sezon için henüz bölüm bulunmuyor.
-            </div>
+            <x-ui.empty-state icon="heroicon-o-video-camera-slash" title="Bölüm Bulunamadı"
+                description="Bu sezon için henüz bölüm bulunmuyor." class="w-full py-10" />
         @endforelse
     </div>
 </div>

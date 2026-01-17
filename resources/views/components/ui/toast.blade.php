@@ -15,7 +15,7 @@
         addToast('{{ session('toast.type') }}', '{{ session('toast.message') }}');
     @endif
 " @toast-notify.window="addToast($event.detail.type, $event.detail.message)"
-    class="fixed bottom-6 right-6 z-[200] flex flex-col-reverse gap-3 w-full max-w-sm pointer-events-none">
+    class="fixed bottom-6 right-6 z-toast flex flex-col-reverse gap-3 w-full max-w-sm pointer-events-none">
 
     <template x-for="toast in toasts" :key="toast.id">
         <div class="pointer-events-auto flex items-center gap-4 p-4 rounded-2xl border bg-glass animate-toast-in shadow-2xl transition-all duration-300"

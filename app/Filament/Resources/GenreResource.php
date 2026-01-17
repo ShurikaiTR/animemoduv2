@@ -10,8 +10,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
-use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -20,8 +20,6 @@ class GenreResource extends Resource
     protected static ?string $model = Genre::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-tag';
-
-    protected static string|\UnitEnum|null $navigationGroup = 'İçerik Yönetimi';
 
     protected static ?string $pluralLabel = 'Türler';
 

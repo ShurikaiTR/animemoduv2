@@ -23,11 +23,11 @@ class TmdbService
      */
     public function search(string $query): array
     {
-        if (!$this->apiKey || strlen($query) < 2) {
+        if (! $this->apiKey || strlen($query) < 2) {
             return [];
         }
 
-        $cacheKey = 'tmdb_search_' . md5($query);
+        $cacheKey = 'tmdb_search_'.md5($query);
 
         return Cache::remember($cacheKey, now()->addMinutes(5), function () use ($query) {
             return Http::timeout(10)->get("{$this->baseUrl}/search/multi", [
@@ -44,7 +44,7 @@ class TmdbService
      */
     public function getDetails(int $id, string $type = 'tv'): ?array
     {
-        if (!$this->apiKey) {
+        if (! $this->apiKey) {
             return null;
         }
 
@@ -64,7 +64,7 @@ class TmdbService
      */
     public function getSeasonDetails(int $tvId, int $seasonNumber): ?array
     {
-        if (!$this->apiKey) {
+        if (! $this->apiKey) {
             return null;
         }
 
@@ -83,7 +83,7 @@ class TmdbService
      */
     public function getImageUrl(?string $path, string $size = 'w500'): string
     {
-        if (!$path) {
+        if (! $path) {
             return asset('img/placeholder.jpg');
         }
 
@@ -103,7 +103,7 @@ class TmdbService
      */
     public function getTrailerUrl(?string $key): ?string
     {
-        if (!$key) {
+        if (! $key) {
             return null;
         }
 
@@ -115,7 +115,7 @@ class TmdbService
      */
     public function getYear(?string $date): int
     {
-        if (!$date) {
+        if (! $date) {
             return (int) date('Y');
         }
 

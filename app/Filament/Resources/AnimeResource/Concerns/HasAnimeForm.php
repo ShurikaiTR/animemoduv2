@@ -5,67 +5,93 @@ declare(strict_types=1);
 namespace App\Filament\Resources\AnimeResource\Concerns;
 
 use App\Enums\AnimeStatus;
-use Closure;
-use Filament\Forms;
+use App\Models\Genre;
+use App\Services\TmdbService;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 
 trait HasAnimeForm
 {
+    use HasAnimeMediaForm;
+    use HasAnimeMetadataForm;
+
     public static function form(Schema $schema): Schema
     {
         return $schema
+            ->columns(3)
             ->components([
-                Forms\Components\TextInput::make('tmdb_id')
-                    ->numeric(),
-                Forms\Components\TextInput::make('anilist_id')
-                    ->numeric(),
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (callable $set, ?string $state): void {
-                        if (!$state) {
-                            return;
-                        }
+                // MAIN CONTENT (Left - Span 2)
+                Grid::make(1)
+                    ->columnSpan(['lg' => 2])
+                    ->components([
+                        Section::make('İçerik Bilgileri')
+                            ->icon('heroicon-o-document-text')
+                            ->schema([
+                                TextInput::make('title')
+                                    ->label('Başlık')
+                                    ->required()
+                                    ->live(onBlur: true)
+                                    ->afterStateUpdated(function (Set $set, ?string $state): void {
+                                        if (!$state) {
+                                            return;
+                                        }
+                                        $set('slug', Str::slug($state));
+                                    })
+                                    ->maxLength(255),
 
-                        $slug = str_replace('×', 'x', $state);
-                        $set('slug', Str::slug($slug));
-                    }),
-                Forms\Components\TextInput::make('original_title'),
-                Forms\Components\Textarea::make('overview')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('poster_path'),
-                Forms\Components\TextInput::make('backdrop_path'),
-                Forms\Components\TextInput::make('vote_average')
-                    ->numeric(),
-                Forms\Components\DatePicker::make('release_date'),
-                Forms\Components\TextInput::make('slug')
-                    ->required(),
-                Forms\Components\Select::make('media_type')
-                    ->options([
-                        'tv' => 'TV Serisi',
-                        'movie' => 'Film',
-                    ])
-                    ->required(),
-                Forms\Components\Select::make('status')
-                    ->options(AnimeStatus::class)
-                    ->required(),
-                Forms\Components\Select::make('structure_type')
-                    ->label('Bölüm Yapısı')
-                    ->options([
-                        'seasonal' => 'Sezonluk (S1 E1)',
-                        'absolute' => 'Absolute (Bölüm 100)',
-                    ])
-                    ->required(),
-                Forms\Components\Textarea::make('genres')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('characters')
-                    ->columnSpanFull(),
-                Forms\Components\Toggle::make('is_featured')
-                    ->required(),
-                Forms\Components\TextInput::make('vote_count')
-                    ->numeric(),
-                Forms\Components\TextInput::make('trailer_key'),
+                                TextInput::make('original_title')
+                                    ->label('Orijinal Başlık')
+                                    ->maxLength(255),
+
+                                Textarea::make('overview')
+                                    ->label('Özet')
+                                    ->rows(5)
+                                    ->columnSpanFull(),
+
+                                TagsInput::make('characters')
+                                    ->label('Karakterler')
+                                    ->columnSpanFull(),
+                            ]),
+
+                        static::getMediaSection(),
+                    ]),
+
+                // SIDEBAR (Right - Span 1)
+                Grid::make(1)
+                    ->columnSpan(['lg' => 1])
+                    ->components([
+                        Section::make('Yayın Durumu')
+                            ->icon('heroicon-o-globe-alt')
+                            ->schema([
+                                Select::make('status')
+                                    ->label('Durum')
+                                    ->options(AnimeStatus::class)
+                                    ->required()
+                                    ->native(false),
+
+                                Toggle::make('is_featured')
+                                    ->label('Vitrin (Hero) İçeriği')
+                                    ->helperText('Ana sayfada büyük alanda gösterilir.')
+                                    ->onIcon('heroicon-m-star')
+                                    ->offIcon('heroicon-m-x-mark')
+                                    ->onColor('warning'),
+                            ]),
+
+                        ...static::getMetadataSection(),
+                    ]),
             ]);
     }
 }

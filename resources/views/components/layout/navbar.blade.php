@@ -7,9 +7,9 @@
             'top-64': mobileMenuOpen,
             'top-0': !mobileMenuOpen
         }"
-        class="fixed left-0 w-full z-[100] transition-all duration-500 border-b border-transparent"
+        class="fixed left-0 w-full z-modal transition-all duration-500 border-b border-transparent"
     >
-        <div class="container mx-auto px-4 sm:px-8">
+        <div class="container mx-auto px-6 sm:px-8">
             <div class="relative xl:overflow-visible">
                 <div class="flex flex-row justify-between items-center h-20 lg:h-24 relative">
                     {{-- Mobile Menu Button --}}
@@ -58,7 +58,8 @@
                                 <a href="{{ url('/kesfet') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors">Keşfet</a>
                             </li>
                             <li class="relative" x-data="{ open: false }" @click.outside="open = false">
-                                <button 
+                            <button 
+                                    type="button"
                                     @click="open = !open"
                                     class="text-sm font-medium text-text-main hover:text-primary transition-colors outline-none cursor-pointer leading-5"
                                 >
@@ -70,7 +71,7 @@
                                     x-transition:enter="transition ease-out duration-300 transform"
                                     x-transition:enter-start="opacity-0 translate-y-2"
                                     x-transition:enter-end="opacity-100 translate-y-0"
-                                    class="absolute top-full left-0 mt-4 w-48 bg-bg-secondary border-none text-white p-1.5 shadow-2xl rounded-2xl z-[60]"
+                                    class="absolute top-full left-0 mt-4 w-48 bg-bg-secondary border-none text-white p-1.5 shadow-2xl rounded-2xl z-dropdown"
                                 >
                                     <a href="{{ url('/takvim') }}" class="flex items-center px-4 py-2.5 text-sm font-medium hover:text-primary transition-colors rounded-xl">Takvim</a>
                                     <a href="{{ url('/sss') }}" class="flex items-center px-4 py-2.5 text-sm font-medium hover:text-primary transition-colors rounded-xl">SSS</a>
@@ -116,7 +117,7 @@
     {{-- Mobile Navigation (Slides down from top) --}}
     <ul
         :class="{ 'top-0 opacity-100 visible': mobileMenuOpen, '-top-64 opacity-0 invisible': !mobileMenuOpen }"
-        class="fixed left-0 w-full bg-bg-main border-b border-bg-secondary z-[50] transition-all duration-500 flex flex-col justify-start items-start p-5 overflow-y-auto h-64 xl:hidden"
+        class="fixed left-0 w-full bg-bg-main border-b border-bg-secondary z-50 transition-all duration-500 flex flex-col justify-start items-start p-5 overflow-y-auto h-64 xl:hidden"
     >
         <li class="relative mb-5 w-full">
             <a href="{{ url('/animeler') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors block">Animeler</a>
@@ -128,7 +129,7 @@
             <a href="{{ url('/kesfet') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors block">Keşfet</a>
         </li>
         <li class="relative mb-5 w-full" x-data="{ open: false }">
-            <button @click="open = !open" class="text-sm font-medium text-text-main hover:text-primary transition-colors flex items-center gap-2">
+            <button type="button" @click="open = !open" class="text-sm font-medium text-text-main hover:text-primary transition-colors flex items-center gap-2">
                 Daha Fazla <x-heroicon-o-chevron-down class="w-4 h-4 transition-transform" ::class="{ 'rotate-180': open }" />
             </button>
             <div x-show="open" x-cloak class="mt-4 pl-4 space-y-4 border-l border-white/5">

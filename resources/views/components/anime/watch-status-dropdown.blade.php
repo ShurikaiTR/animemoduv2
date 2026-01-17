@@ -27,7 +27,7 @@
         this.open = !this.open;
     }
 }" @click.outside="open = false">
-    <button @click="toggle()" {{ $attributes->merge(['class' => 'flex items-center justify-center cursor-pointer']) }}>
+    <button type="button" @click="toggle()" {{ $attributes->merge(['class' => 'flex items-center justify-center cursor-pointer focus:outline-none']) }}>
         {{ $trigger ?? '' }}
     </button>
 
@@ -41,7 +41,7 @@
             'translate-y-2': !open && position === 'bottom',
             '-translate-y-2': !open && position === 'top'
         }"
-        class="absolute left-0 w-56 bg-bg-secondary border-none text-white p-1.5 shadow-2xl rounded-2xl z-[60] transition-transform duration-300">
+        class="absolute left-0 w-56 bg-bg-secondary border-none text-white p-1.5 shadow-2xl rounded-2xl z-dropdown transition-transform duration-300">
 
         <div class="text-xs font-normal text-white/50 mb-2 px-2 uppercase tracking-wider text-left pt-2">
             Listeye Ekle
@@ -49,7 +49,7 @@
 
         <div class="space-y-1">
             {{-- İzliyorum --}}
-            <button
+            <button type="button"
                 class="flex items-center gap-3 w-full cursor-pointer rounded-xl p-2.5 transition-colors hover:bg-white/5 group text-left">
                 <div class="p-1.5 rounded-md bg-white/5 group-hover:bg-primary/20 transition-colors">
                     <x-heroicon-o-eye class="w-4 h-4 text-white/70 group-hover:text-primary transition-colors" />
@@ -58,7 +58,7 @@
             </button>
 
             {{-- İzledim --}}
-            <button
+            <button type="button"
                 class="flex items-center gap-3 w-full cursor-pointer rounded-xl p-2.5 transition-colors hover:bg-white/5 group text-left">
                 <div class="p-1.5 rounded-md bg-white/5 group-hover:bg-success/20 transition-colors">
                     <x-heroicon-o-check class="w-4 h-4 text-white/70 group-hover:text-success transition-colors" />
@@ -67,7 +67,7 @@
             </button>
 
             {{-- İzleyeceğim --}}
-            <button
+            <button type="button"
                 class="flex items-center gap-3 w-full cursor-pointer rounded-xl p-2.5 transition-colors hover:bg-white/5 group text-left">
                 <div class="p-1.5 rounded-md bg-white/5 group-hover:bg-orange/20 transition-colors">
                     <x-heroicon-o-clock class="w-4 h-4 text-white/70 group-hover:text-orange transition-colors" />
@@ -76,7 +76,7 @@
             </button>
 
             {{-- Beklemede --}}
-            <button
+            <button type="button"
                 class="flex items-center gap-3 w-full cursor-pointer rounded-xl p-2.5 transition-colors hover:bg-white/5 group text-left">
                 <div class="p-1.5 rounded-md bg-white/5 group-hover:bg-warning/20 transition-colors">
                     <x-heroicon-o-pause class="w-4 h-4 text-white/70 group-hover:text-warning transition-colors" />
@@ -85,7 +85,7 @@
             </button>
 
             {{-- Bıraktım --}}
-            <button
+            <button type="button"
                 class="flex items-center gap-3 w-full cursor-pointer rounded-xl p-2.5 transition-colors hover:bg-white/5 group text-left">
                 <div class="p-1.5 rounded-md bg-white/5 group-hover:bg-danger/20 transition-colors">
                     <x-heroicon-o-x-circle class="w-4 h-4 text-white/70 group-hover:text-danger transition-colors" />

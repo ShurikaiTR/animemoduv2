@@ -85,6 +85,6 @@ class User extends Authenticatable implements FilamentUser
      */
     public function isAdmin(): bool
     {
-        return $this->profile?->role === 'admin';
+        return $this->profile?->role === \App\Enums\UserRole::ADMIN->value;
     }
 }

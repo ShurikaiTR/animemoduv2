@@ -8,6 +8,7 @@ trait HasAuthModalConfig
 {
     /**
      * Get the current view configuration.
+     *
      * @return array<string, string>
      */
     public function getConfig(): array

@@ -17,6 +17,7 @@ trait InteractsWithComments
     {
         if (!Auth::check()) {
             $this->dispatch('openAuthModal');
+
             return;
         }
 
@@ -32,7 +33,7 @@ trait InteractsWithComments
         $this->validate([
             'content' => $parentId ? 'nullable' : 'required|string|min:3|max:1000',
             'replyContent.' . $parentId => $parentId ? 'required|string|min:3|max:1000' : 'nullable',
-            'isSpoiler' => 'boolean'
+            'isSpoiler' => 'boolean',
         ]);
 
         app(CreateCommentAction::class)->execute([
@@ -50,6 +51,7 @@ trait InteractsWithComments
         }
 
         $this->showReplyInput = [];
+        $this->dispatch('comment-added');
         session()->flash('toast', ['type' => 'success', 'message' => 'Yorumun gönderildi!']);
         $this->resetFields();
     }
@@ -60,7 +62,7 @@ trait InteractsWithComments
             'content' => 'required|string|min:10|max:2000',
             'title' => 'nullable|string|max:100',
             'rating' => 'required|integer|min:1|max:10',
-            'isSpoiler' => 'boolean'
+            'isSpoiler' => 'boolean',
         ]);
 
         app(CreateReviewAction::class)->execute([
@@ -71,6 +73,7 @@ trait InteractsWithComments
             'is_spoiler' => $this->isSpoiler,
         ]);
 
+        $this->dispatch('comment-added');
         session()->flash('toast', ['type' => 'success', 'message' => 'İncelemen paylaşıldı!']);
         $this->resetFields();
     }
@@ -98,6 +101,7 @@ trait InteractsWithComments
     {
         if (!Auth::check()) {
             $this->dispatch('openAuthModal');
+
             return;
         }
 

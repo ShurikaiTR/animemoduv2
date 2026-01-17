@@ -18,7 +18,7 @@ class Show extends Component
     }
 
     #[Layout('components.layout.app')]
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.anime.show', [
             'anime' => $this->anime,

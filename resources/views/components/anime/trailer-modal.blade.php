@@ -6,7 +6,7 @@
         } else {
             document.body.classList.remove('overflow-hidden');
         }
-    })" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-20">
+    })" class="fixed inset-0 z-top flex items-center justify-center p-4 sm:p-20">
 
     {{-- Overlay --}}
     <div x-show="showTrailer" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
@@ -23,8 +23,9 @@
         class="relative w-full max-w-5xl aspect-video bg-black rounded-3xl overflow-visible shadow-2xl border border-white/10 z-10">
 
         {{-- Close Button --}}
-        <button @click="showTrailer = false"
-            class="absolute -top-12 right-0 z-[10000] text-primary hover:brightness-110 transition-all cursor-pointer">
+        <button type="button" @click="showTrailer = false"
+            class="absolute -top-12 right-0 z-top text-primary hover:brightness-110 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-black rounded-full"
+            aria-label="Fragmanı kapat">
             <x-icons.close class="w-8 h-8" />
         </button>
 

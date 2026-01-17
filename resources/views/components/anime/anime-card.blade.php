@@ -5,6 +5,8 @@
     'genres' => [],
     'rating' => 0,
     'image',
+    'imageW300' => null,
+    'imageW500' => null,
     'slug' => null,
     'status' => null,
     'mediaType' => 'tv'
@@ -12,13 +14,14 @@
 
 @php
     $href = $slug ? route('anime.show', $slug) : '#';
+    $altText = $title . ($year ? ' (' . $year . ')' : '') . ' poster görseli';
 @endphp
 
-<div class="group relative w-full aspect-[2/3] rounded-2xl overflow-hidden cursor-pointer bg-bg-secondary">
+<div class="group relative w-full aspect-poster rounded-2xl overflow-hidden cursor-pointer bg-bg-secondary">
     {{-- Year Badge --}}
     @if($year)
         <div class="absolute top-3 left-3 z-20 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 shadow-lg">
-            <span class="text-[10px] sm:text-xs font-bold text-white">{{ $year }}</span>
+            <span class="text-2xs sm:text-xs font-bold text-white">{{ $year }}</span>
         </div>
     @endif
 
@@ -30,15 +33,23 @@
     <a href="{{ $href }}" class="block w-full h-full relative">
         {{-- Poster Image --}}
         @if($image)
-            <img src="{{ $image }}" alt="{{ $title }}" loading="lazy"
-                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+            <img 
+                src="{{ $image }}" 
+                @if($imageW300 && $imageW500)
+                    srcset="{{ $imageW300 }} 300w, {{ $imageW500 }} 500w, {{ $image }} 780w"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                @endif
+                alt="{{ $altText }}" 
+                loading="lazy"
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+            />
         @endif
 
         {{-- Gradient Overlay --}}
         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
 
         {{-- Hover Inset Shadow --}}
-        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none shadow-[inset_0_0_80px_rgba(0,0,0,0.8)]"></div>
+        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none shadow-inset-dark"></div>
 
         {{-- Play Button Wrapper --}}
         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 z-10">
@@ -55,7 +66,7 @@
                 {{ $title }}
             </h3>
 
-            <div class="flex items-center justify-between text-[10px] sm:text-xs text-white/70 font-medium">
+            <div class="flex items-center justify-between text-2xs sm:text-xs text-white/70 font-medium">
                 <div class="flex items-center gap-1.5 flex-wrap">
                     @if(!empty($genres))
                         @foreach(array_slice($genres, 0, 2) as $genre)

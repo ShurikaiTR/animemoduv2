@@ -166,3 +166,7 @@ body {
 @utility aspect-poster {
     aspect-ratio: 2/3;
 }
+
+@utility z-top {
+    z-index: 10000;
+}

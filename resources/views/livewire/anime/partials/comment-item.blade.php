@@ -30,66 +30,33 @@
     @endif
 
     {{-- Author Header & Meta --}}
-    <div class="flex items-start justify-between gap-4 mb-4 relative z-10">
-        <div class="flex items-center gap-4">
-            {{-- Avatar --}}
-            <div class="relative group/avatar">
-                <img src="{{ $profile->avatar_url }}" alt="{{ $profile->username }}"
-                    class="w-12 h-12 rounded-full object-cover ring-2 ring-white/5 group-hover/avatar:ring-primary/50 transition-all shadow-lg">
-            </div>
+    @include('livewire.anime.partials.comment-header', ['item' => $item, 'profile' => $profile, 'isAdmin' => $isAdmin, 'activeTab' => $activeTab])
 
-            {{-- User Info --}}
-            <div class="flex flex-col">
-                <div class="flex items-center gap-2">
-                    <span
-                        class="text-white font-bold text-base tracking-wide group-hover/comment:text-primary transition-colors">
-                        {{ $profile->username }}
-                    </span>
-                    @if($isAdmin)
-                        <span
-                            class="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-[10px] font-bold text-primary uppercase tracking-wider">
-                            <x-heroicon-s-shield-check class="w-3 h-3" />
-                            Yönetici
-                        </span>
-                    @endif
+    {{-- Top Right Area (Rating & Pin) --}}
+    <div class="absolute top-6 right-6 flex items-center gap-3 z-20">
+        @if(!$isReply && auth()->check() && auth()->user()->profile->role === 'admin')
+            <button wire:click="pinComment('{{ $item->id }}')"
+                class="p-2 rounded-xl bg-black/20 backdrop-blur-md border border-white/5 text-white/40 hover:text-primary hover:border-primary/20 transition-all group-hover/comment:opacity-100 {{ $item->is_pinned ? '!text-primary border-primary/20 bg-primary/10 opacity-100' : 'opacity-0' }}"
+                title="{{ $item->is_pinned ? 'Sabitlemeyi Kaldır' : 'Sabitle' }}">
+                @if($item->is_pinned)
+                    <x-heroicon-s-bookmark class="w-5 h-5" />
+                @else
+                    <x-heroicon-o-bookmark class="w-5 h-5" />
+                @endif
+            </button>
+        @endif
+
+        @if($activeTab === 'reviews' && $item->rating)
+            <div
+                class="flex items-center gap-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/5 shadow-lg">
+                <x-heroicon-s-star class="w-6 h-6 text-primary drop-shadow-glow" />
+                <div class="flex items-baseline gap-0.5">
+                    <span class="text-xl font-black text-white leading-none">{{ $item->rating }}</span>
+                    <span class="text-2xs font-bold text-white/40">/10</span>
                 </div>
             </div>
-            <div class="flex items-center gap-2 text-xs text-white/40">
-                <span>{{ $item->created_at->diffForHumans() }}</span>
-                {{-- Only show simple dot separator for comments, reviews get their own big display --}}
-                @if($activeTab !== 'reviews')
-                    <span class="w-1 h-1 rounded-full bg-white/20"></span>
-                @endif
-            </div>
-        </div>
+        @endif
     </div>
-
-    {{-- Review Rating Badge (Top Right) --}}
-    @if($activeTab === 'reviews' && $item->rating)
-        <div
-            class="absolute top-6 right-6 flex items-center gap-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/5 shadow-lg">
-            <x-heroicon-s-star class="w-6 h-6 text-primary drop-shadow-glow" />
-            <div class="flex items-baseline gap-0.5">
-                <span class="text-xl font-black text-white leading-none">{{ $item->rating }}</span>
-                <span class="text-[10px] font-bold text-white/40">/10</span>
-            </div>
-        </div>
-    @else
-        {{-- Standard Actions for Comments --}}
-        <div class="flex items-center gap-2 opacity-0 group-hover/comment:opacity-100 transition-opacity">
-            @if(!$isReply && auth()->check() && auth()->user()->profile->role === 'admin')
-                <button wire:click="pinComment('{{ $item->id }}')"
-                    class="p-2 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-all {{ $item->is_pinned ? '!text-primary opacity-100' : '' }}"
-                    title="{{ $item->is_pinned ? 'Sabitlemeyi Kaldır' : 'Sabitle' }}">
-                    @if($item->is_pinned)
-                        <x-heroicon-s-bookmark class="w-4 h-4" />
-                    @else
-                        <x-heroicon-o-bookmark class="w-4 h-4" />
-                    @endif
-                </button>
-            @endif
-        </div>
-    @endif
 
 
     {{-- Content --}}
@@ -134,49 +101,7 @@
     </div>
 
     {{-- Bottom Actions --}}
-    <div class="flex items-center justify-between mt-6 pl-16 relative z-10">
-        {{-- Left: Likes --}}
-        <div>
-            @if($activeTab === 'comments')
-                <div
-                    class="flex items-center bg-white/5 rounded-full p-1 ring-1 ring-white/5 group-hover/comment:ring-white/10 transition-all">
-                    <button wire:click="toggleLike('{{ $item->id }}', true)"
-                        class="px-3 py-1.5 flex items-center gap-2 rounded-full hover:bg-primary/10 transition-all {{ $isLiked ? 'text-primary bg-primary/10' : 'text-white/40 hover:text-primary' }}">
-                        <x-heroicon-s-hand-thumb-up class="w-4 h-4" />
-                        <span class="text-xs font-bold">{{ $item->like_count ?? 0 }}</span>
-                    </button>
-                    <div class="w-px h-4 bg-white/10"></div>
-                    <button wire:click="toggleLike('{{ $item->id }}', false)"
-                        class="px-3 py-1.5 flex items-center gap-2 rounded-full hover:bg-red-500/10 transition-all {{ $isDisliked ? 'text-red-500 bg-red-500/10' : 'text-white/40 hover:text-red-500' }}">
-                        <x-heroicon-s-hand-thumb-down class="w-4 h-4" />
-                        <span class="text-xs font-bold">{{ $item->dislike_count ?? 0 }}</span>
-                    </button>
-                </div>
-            @else
-                <div class="flex items-center gap-2 text-white/40">
-                    <x-heroicon-s-hand-thumb-up class="w-4 h-4" />
-                    <span class="text-xs">{{ $item->helpful_count ?? 0 }} kişi bu incelemeyi yararlı buldu</span>
-                </div>
-            @endif
-        </div>
-
-        {{-- Right: Actions --}}
-        @if($activeTab === 'comments')
-            <div class="flex items-center gap-4">
-                <button wire:click="toggleReply('{{ $item->id }}')"
-                    class="flex items-center gap-2 text-white/40 hover:text-primary transition-colors group/action">
-                    <x-heroicon-s-arrow-turn-down-right class="w-4 h-4 group-hover/action:scale-110 transition-transform" />
-                    <span class="text-xs font-bold uppercase tracking-wider">Yanıtla</span>
-                </button>
-                <button wire:click="quote('{{ $item->id }}')"
-                    class="flex items-center gap-2 text-white/40 hover:text-primary transition-colors group/action">
-                    <x-heroicon-s-chat-bubble-bottom-center-text
-                        class="w-4 h-4 group-hover/action:scale-110 transition-transform" />
-                    <span class="text-xs font-bold uppercase tracking-wider">Alıntıla</span>
-                </button>
-            </div>
-        @endif
-    </div>
+    @include('livewire.anime.partials.comment-actions', ['item' => $item, 'activeTab' => $activeTab, 'isLiked' => $isLiked, 'isDisliked' => $isDisliked])
 
     {{-- Reply Input --}}
     @if(isset($showReplyInput[$item->id]) && $showReplyInput[$item->id])
@@ -187,7 +112,7 @@
                     placeholder="Yanıtınızı yazın..."></textarea>
                 <div class="absolute bottom-3 right-3">
                     <button wire:click="submit('{{ $item->id }}')"
-                        class="bg-primary hover:bg-primary-hover text-white p-2 rounded-full shadow-lg hover:shadow-primary/30 hover:scale-105 transition-all">
+                        class="bg-primary hover:bg-primary-hover text-white p-2 rounded-full hover:scale-105 transition-all">
                         <x-heroicon-s-paper-airplane class="w-4 h-4" />
                     </button>
                 </div>

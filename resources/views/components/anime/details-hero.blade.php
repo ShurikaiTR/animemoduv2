@@ -10,14 +10,14 @@
 @endphp
 
 <div x-data="{ showTrailer: false }">
-    <section
+    <section aria-labelledby="anime-title"
         class="section section--head section--head-fixed section--gradient section--details-bg relative pb-16 pt-60 -mt-24 bg-bg-main">
         {{-- Backdrop Image --}}
         <div class="absolute top-0 left-0 right-0 h-96 w-full z-0">
             @if($backdrop)
                 <img src="{{ $backdrop }}" alt="{{ $anime->title }} arkaplan görseli"
-                    class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" loading="lazy"
-                    decoding="async" />
+                    class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" loading="eager"
+                    fetchpriority="high" decoding="async" />
             @endif
             <div class="absolute inset-0 bg-gradient-to-b from-bg-main/30 via-bg-main/80 to-bg-main z-10"></div>
         </div>
@@ -27,7 +27,7 @@
                 <div class="flex-1 min-w-0">
                     <div class="article__content flex flex-col mb-10">
                         {{-- Title --}}
-                        <h1
+                        <h1 id="anime-title"
                             class="text-4xl lg:text-6xl text-white font-rubik font-semibold mb-6 leading-tight tracking-tight">
                             {{ $anime->title }}
                         </h1>
@@ -68,8 +68,8 @@
                                 {{ $anime->overview ?: 'Bu içerik için henüz bir özet bulunmuyor.' }}
                             </p>
                             @if(strlen($anime->overview ?? '') > 150)
-                                <button @click="expanded = !expanded"
-                                    class="text-primary text-sm font-bold mt-2 hover:underline md:hidden">
+                                <button type="button" @click="expanded = !expanded"
+                                    class="text-primary text-sm font-bold mt-2 hover:underline md:hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg-main rounded">
                                     <span x-show="!expanded" class="text-xs uppercase tracking-widest">Devamını Oku</span>
                                     <span x-show="expanded" class="text-xs uppercase tracking-widest">Daha Az Göster</span>
                                 </button>
@@ -80,7 +80,7 @@
                         <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-8">
                             {{-- Hemen İzle Button --}}
                             <x-ui.button tag="a" href="{{ $watchUrl }}" variant="primary" size="lg"
-                                class="w-full md:w-auto px-10 h-14 md:h-12 gap-3 group/watch shadow-primary/20 shadow-xl cursor-pointer">
+                                class="w-full md:w-auto px-10 h-14 md:h-12 gap-3 group/watch cursor-pointer">
                                 <x-icons.play class="w-6 h-6 fill-current" />
                                 <span class="text-lg md:text-base">Hemen İzle</span>
                             </x-ui.button>
@@ -88,8 +88,8 @@
                             <div class="flex items-center gap-4 md:gap-8">
                                 {{-- Trailer Button --}}
                                 @if($trailer)
-                                    <button @click="showTrailer = true"
-                                        class="flex-1 md:flex-none inline-flex items-center justify-center md:justify-start text-white text-lg hover:text-primary transition-colors group cursor-pointer outline-none">
+                                    <button type="button" @click="showTrailer = true"
+                                        class="flex-1 md:flex-none inline-flex items-center justify-center md:justify-start text-white text-lg hover:text-primary transition-colors group cursor-pointer outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg-main rounded-lg">
                                         <div
                                             class="w-12 h-12 flex items-center justify-center rounded-full border border-white group-hover:border-primary transition-colors mr-3 md:mr-4">
                                             <x-icons.play class="w-5 h-5 fill-current ml-1" />

@@ -1,5 +1,5 @@
 <div class="pt-24 sm:pt-28 pb-8">
-    <x-layout.container class="!px-0 sm:!px-8 mb-8">
+    <x-layout.container class="!px-0 sm:!px-8 mb-12">
         <livewire:anime.home-hero />
     </x-layout.container>
 

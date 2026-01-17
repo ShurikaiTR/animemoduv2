@@ -20,9 +20,9 @@
                     fetchpriority="high" decoding="async" />
             @endif
             {{-- Bottom gradient (for buttons/content) --}}
-            <div class="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent z-10"></div>
+            <div class="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent z-10"></div>
             {{-- Left-to-Right gradient (Netflix technique) --}}
-            <div class="absolute inset-0 bg-linear-to-r from-black/90 via-black/50 to-transparent z-10"></div>
+            <div class="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent z-10"></div>
         </div>
 
         {{-- Content --}}
@@ -100,7 +100,7 @@
                         @if ($anime->trailer_key)
                             <x-ui.button variant="glass" size="lg" @click="showTrailer = true" class="flex-1 sm:flex-none">
                                 <x-icons.movie class="w-5 h-5" />
-                                <span class="hidden sm:inline">Fragman</span>
+                                <span class="ml-2">Fragman</span>
                             </x-ui.button>
                         @endif
 

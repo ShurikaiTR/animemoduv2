@@ -7,7 +7,7 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum AnimeStatus: string implements HasLabel, HasColor
+enum AnimeStatus: string implements HasColor, HasLabel
 {
     case ONGOING = 'Devam Ediyor';
     case COMPLETED = 'Tamamlandı';
@@ -27,6 +27,7 @@ enum AnimeStatus: string implements HasLabel, HasColor
 
     /**
      * Get the badge color for Filament.
+     *
      * @deprecated Use getColor() via HasColor interface
      */
     public function color(): string
@@ -36,6 +37,7 @@ enum AnimeStatus: string implements HasLabel, HasColor
 
     /**
      * Get the display label.
+     *
      * @deprecated Use getLabel() via HasLabel interface
      */
     public function label(): string

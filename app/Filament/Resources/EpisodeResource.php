@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EpisodeResource\Concerns\HasEpisodeForm;
+use App\Filament\Resources\EpisodeResource\Concerns\HasEpisodeInfolist;
 use App\Filament\Resources\EpisodeResource\Concerns\HasEpisodeTable;
 use App\Filament\Resources\EpisodeResource\Pages;
 use App\Models\Episode;
@@ -13,13 +14,12 @@ use Filament\Resources\Resource;
 class EpisodeResource extends Resource
 {
     use HasEpisodeForm;
+    use HasEpisodeInfolist;
     use HasEpisodeTable;
 
     protected static ?string $model = Episode::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-squares-2x2';
-
-    protected static string|\UnitEnum|null $navigationGroup = 'İçerik Yönetimi';
 
     protected static ?string $pluralLabel = 'Bölümler';
 

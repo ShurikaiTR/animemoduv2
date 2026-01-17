@@ -12,7 +12,7 @@
     @if(!$isReply && $item->is_pinned)
         <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4 w-fit">
             <x-heroicon-s-hashtag class="w-3.5 h-3.5 text-primary" />
-            <span class="text-[10px] font-bold text-primary uppercase tracking-wider">Sabitlenmiş</span>
+            <span class="text-2xs font-bold text-primary uppercase tracking-wider">Sabitlenmiş</span>
         </div>
     @endif
     <div class="flex gap-5 w-full">
@@ -42,7 +42,7 @@
                         </span>
                         @if($isAdmin)
                             <span
-                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 {{ $isReply ? 'text-[8px]' : 'text-[10px]' }} font-bold text-primary uppercase tracking-tight">
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 {{ $isReply ? 'text-[8px]' : 'text-2xs' }} font-bold text-primary uppercase tracking-tight">
                                 <x-heroicon-s-shield-check class="{{ $isReply ? 'w-2.5 h-2.5' : 'w-3.5 h-3.5' }}" />
                                 Yönetici
                             </span>
@@ -96,11 +96,11 @@
                             <div
                                 class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 backdrop-blur-sm">
                                 <div class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-glow-sm"></div>
-                                <span class="text-[10px] font-bold text-primary uppercase tracking-widest">Spoiler
+                                <span class="text-2xs font-bold text-primary uppercase tracking-widest">Spoiler
                                     İçerik</span>
                             </div>
                             <button wire:click="revealSpoiler('{{ $item->id }}')"
-                                class="px-5 py-2 rounded-lg bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/30 text-[11px] font-bold text-white/60 hover:text-white transition-all uppercase">
+                                class="px-5 py-2 rounded-lg bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/30 text-xs font-bold text-white/60 hover:text-white transition-all uppercase">
                                 GÖSTER
                             </button>
                         </div>

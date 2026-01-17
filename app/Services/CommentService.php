@@ -23,7 +23,7 @@ class CommentService
     {
         $userId = auth()->id();
 
-        if ($params['activeTab'] === 'comments') {
+        if ($params['activeTab'] === \App\Enums\CommentTab::COMMENTS->value) {
             $query = Comment::with([
                 'user.profile',
                 'replies.user.profile',
@@ -32,7 +32,7 @@ class CommentService
                 },
                 'likes' => function ($q) use ($userId) {
                     $q->where('user_id', $userId);
-                }
+                },
             ])
                 ->whereNull('parent_id')
                 ->where('anime_id', $params['anime_id'])

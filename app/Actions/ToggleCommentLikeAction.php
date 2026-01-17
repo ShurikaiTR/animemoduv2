@@ -13,9 +13,7 @@ class ToggleCommentLikeAction
     /**
      * Toggles a like or dislike on a comment.
      *
-     * @param string $userId
-     * @param string $commentId
-     * @param bool $isLike True for like, false for dislike
+     * @param  bool  $isLike  True for like, false for dislike
      * @return array{like_count: int, dislike_count: int, user_status: ?bool} Returns updated counts and user's new status (true=like, false=dislike, null=none)
      */
     public function execute(string $userId, string $commentId, bool $isLike): array

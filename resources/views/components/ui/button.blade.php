@@ -5,14 +5,14 @@
 ])
 @php
     $variants = [
-        'primary' => 'bg-primary text-white hover:scale-105 active:scale-95 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700 before:z-0',
+        'primary' => 'bg-primary text-white hover:scale-105 active:scale-95 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700 before:z-0 transition-all',
         'secondary' => 'bg-bg-secondary text-white border border-white/5 hover:bg-white/5 active:scale-95',
         'outline' => 'bg-transparent border border-primary text-primary hover:bg-primary hover:text-white active:scale-95',
         'ghost' => 'bg-transparent text-text-main hover:bg-white/5 active:scale-95',
         'link' => 'bg-transparent text-text-main hover:text-primary',
         'danger' => 'bg-danger text-white hover:bg-danger/90 active:scale-95',
-        'success' => 'bg-success text-white hover:scale-105 active:scale-95 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700 before:z-0',
-        'orange' => 'bg-orange text-white hover:scale-105 active:scale-95 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700 before:z-0',
+        'success' => 'bg-success text-white hover:scale-105 active:scale-95 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700 before:z-0 transition-all',
+        'orange' => 'bg-orange text-white hover:scale-105 active:scale-95 before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:-translate-x-full hover:before:translate-x-full before:transition-transform before:duration-700 before:z-0 transition-all',
         'glass' => 'bg-white/10 hover:bg-primary/20 backdrop-blur-sm border border-white/10 text-white hover:text-primary hover:border-primary/40 active:scale-95 transition-all duration-300',
         'glass-success' => 'bg-white/10 hover:bg-success/20 backdrop-blur-sm border border-white/10 text-white hover:text-success hover:border-success/40 active:scale-95 transition-all duration-300',
         'glass-danger' => 'bg-white/10 hover:bg-danger/20 backdrop-blur-sm border border-white/10 text-white hover:text-danger hover:border-danger/40 active:scale-95 transition-all duration-300',

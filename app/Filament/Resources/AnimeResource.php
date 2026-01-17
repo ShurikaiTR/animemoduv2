@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AnimeResource\Concerns\HasAnimeForm;
+use App\Filament\Resources\AnimeResource\Concerns\HasAnimeInfolist;
 use App\Filament\Resources\AnimeResource\Concerns\HasAnimeTable;
 use App\Filament\Resources\AnimeResource\Pages;
 use App\Models\Anime;
@@ -14,13 +15,12 @@ use Illuminate\Database\Eloquent\Builder;
 class AnimeResource extends Resource
 {
     use HasAnimeForm;
+    use HasAnimeInfolist;
     use HasAnimeTable;
 
     protected static ?string $model = Anime::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-tv';
-
-    protected static string|\UnitEnum|null $navigationGroup = 'İçerik Yönetimi';
 
     protected static ?string $pluralLabel = 'Animeler';
 
@@ -45,6 +45,7 @@ class AnimeResource extends Resource
         return [
             'index' => Pages\ListAnimes::route('/'),
             'create' => Pages\CreateAnime::route('/create'),
+            'view' => Pages\ViewAnime::route('/{record}'),
             'edit' => Pages\EditAnime::route('/{record}/edit'),
         ];
     }

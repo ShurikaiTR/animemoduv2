@@ -99,7 +99,7 @@
                             {{-- Right: Submit Button --}}
                             <div class="w-full sm:w-auto">
                                 <x-ui.button wire:click="submit" wire:loading.attr="disabled" variant="primary" size="lg"
-                                    class="w-full sm:w-auto gap-2 font-bold px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all">
+                                    class="w-full sm:w-auto gap-2 font-bold px-8 hover:scale-105 active:scale-95 transition-all">
                                     <span
                                         wire:loading.remove>{{ $activeTab === 'reviews' ? 'İNCELEMEYİ YAYINLA' : 'GÖNDER' }}</span>
                                     <div wire:loading flex items-center gap-1>
@@ -122,26 +122,22 @@
             </div>
         </div>
     @else
-        <div
-            class="bg-bg-secondary/20 backdrop-blur-sm rounded-3xl p-12 border border-white/5 text-center flex flex-col items-center gap-6 group-hover:border-primary/20 transition-all relative overflow-hidden">
-            <div
-                class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none">
-            </div>
+        <div class="py-12 text-center flex flex-col items-center gap-6 transition-all relative overflow-hidden">
 
             <div
                 class="w-20 h-20 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center shadow-2xl shadow-black/50 ring-1 ring-white/5 transform rotate-3 group-hover:rotate-6 transition-transform duration-500">
                 <x-heroicon-o-lock-closed class="w-8 h-8 text-white/40" />
             </div>
             <div class="z-10 relative">
-                <h4 class="text-white font-black text-2xl mb-2 tracking-tight">Tartışmaya Katıl</h4>
+                <h4 class="text-white font-black text-2xl mb-2 tracking-tight">Tartışmaya Katılın</h4>
                 <p class="text-white/40 text-base max-w-sm mx-auto leading-relaxed">
-                    {{ $activeTab === 'reviews' ? 'Bu başyapıt hakkındaki görüşlerini paylaşmak ve puan vermek için giriş yap.' : 'Topluluğun bir parçası ol ve düşüncelerini diğer hayranlarla paylaş.' }}
+                    {{ $activeTab === 'reviews' ? 'Bu anime hakkındaki incelemeleri okumaya devam et veya kendi görüşünü paylaşmak için giriş yap.' : 'Topluluğa katılın, düşüncelerinizi paylaşın ve diğer hayranlarla etkileşime geçin.' }}
                 </p>
             </div>
-            <button @click="$dispatch('openAuthModal')"
-                class="mt-2 bg-white text-black hover:bg-white/90 font-black py-4 px-10 rounded-xl transition-all shadow-glow-white hover:shadow-glow-white-lg hover:scale-105 active:scale-95 z-10">
+            <x-ui.button @click="$dispatch('openAuthModal')" variant="primary" size="lg"
+                class="mt-2 font-black px-10 hover:scale-105 active:scale-95 z-10">
                 GİRİŞ YAP
-            </button>
+            </x-ui.button>
         </div>
     @endauth
 </div>

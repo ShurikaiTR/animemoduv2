@@ -1,10 +1,12 @@
-@props(['title', 'episodeNumber', 'image', 'href' => '#', 'timeAgo' => ''])
+@props(['title', 'episodeNumber', 'image', 'imageW300' => null, 'href' => '#', 'timeAgo' => ''])
 
 <div class="group relative w-full aspect-video rounded-2xl overflow-hidden cursor-pointer bg-bg-secondary">
     <a href="{{ $href }}" class="block w-full h-full relative">
         {{-- Poster Image --}}
         @if($image)
-            <img src="{{ $image }}" alt="{{ $title }}" loading="lazy"
+            <img src="{{ $image }}" @if($imageW300) srcset="{{ $imageW300 }} 300w, {{ $image }} 500w"
+            sizes="(max-width: 640px) 85vw, 320px" @endif alt="{{ $title }} - {{ $episodeNumber }} bölüm görseli"
+                loading="lazy"
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
         @endif
 
