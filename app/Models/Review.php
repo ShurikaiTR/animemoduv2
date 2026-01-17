@@ -27,6 +27,11 @@ class Review extends Model
         'rating' => 'integer',
     ];
 
+    public function helpfulVotes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ReviewHelpful::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

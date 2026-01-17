@@ -7,10 +7,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Cache;
 
 class Anime extends Model
 {
     use HasUuids;
+
+    protected static function booted(): void
+    {
+        static::saved(fn(Anime $anime) => Cache::forget("anime_show_{$anime->slug}"));
+        static::deleted(fn(Anime $anime) => Cache::forget("anime_show_{$anime->slug}"));
+    }
 
     protected $fillable = [
         'tmdb_id',

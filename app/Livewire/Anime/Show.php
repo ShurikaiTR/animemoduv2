@@ -5,16 +5,26 @@ declare(strict_types=1);
 namespace App\Livewire\Anime;
 
 use App\Models\Anime;
+use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
+#[Lazy]
 class Show extends Component
 {
-    public Anime $anime;
+    public ?Anime $anime = null;
+
+    public function placeholder(): \Illuminate\Contracts\View\View
+    {
+        return view('livewire.anime.partials.show-skeleton');
+    }
 
     public function mount(string $slug): void
     {
-        $this->anime = Anime::where('slug', $slug)->firstOrFail();
+        $this->anime = Cache::remember("anime_show_{$slug}", 86400, function () use ($slug) {
+            return Anime::where('slug', $slug)->firstOrFail();
+        });
     }
 
     #[Layout('components.layout.app')]
@@ -22,8 +32,8 @@ class Show extends Component
     {
         return view('livewire.anime.show', [
             'anime' => $this->anime,
-            'characters' => $this->anime->characters ?? [],
-            'trailer' => $this->anime->trailer_key,
+            'characters' => $this->anime?->characters ?? [],
+            'trailer' => $this->anime?->trailer_key,
         ]);
     }
 }

@@ -20,7 +20,7 @@
     {{ $isReply ? 'ml-6 md:ml-10 border-l-2 border-l-primary/20 bg-bg-secondary/40 hover:bg-bg-secondary/60 backdrop-blur-sm border border-white/5' : '' }} 
     {{ !$isReply && $item->is_pinned
     ? 'bg-primary/5 border border-primary/20 shadow-glow-subtle'
-    : (!$isReply ? 'bg-bg-secondary/40 hover:bg-bg-secondary/60 backdrop-blur-sm border border-white/5 hover:border-white/10' : '') }}">
+    : (!$isReply ? 'bg-bg-secondary/40 hover:bg-bg-secondary/60 backdrop-blur-sm border border-white/5 hover:border-white/10 shadow-lg hover:shadow-2xl hover:border-primary/20' : '') }}">
 
     @if(!$isReply && $item->is_pinned)
         <div class="flex items-center gap-2 mb-4 text-primary border-b border-primary/10 pb-3">
@@ -48,11 +48,11 @@
 
         @if($activeTab === 'reviews' && $item->rating)
             <div
-                class="flex items-center gap-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/5 shadow-lg">
-                <x-heroicon-s-star class="w-6 h-6 text-primary drop-shadow-glow" />
+                class="flex items-center gap-2 bg-slate-800/80 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-700/50 shadow-lg">
+                <x-heroicon-s-star class="w-5 h-5 text-primary drop-shadow-glow" />
                 <div class="flex items-baseline gap-0.5">
-                    <span class="text-xl font-black text-white leading-none">{{ $item->rating }}</span>
-                    <span class="text-2xs font-bold text-white/40">/10</span>
+                    <span class="text-xl font-bold text-white leading-none">{{ $item->rating }}</span>
+                    <span class="text-xs font-medium text-slate-500 self-end pb-0.5">/10</span>
                 </div>
             </div>
         @endif
@@ -60,13 +60,13 @@
 
 
     {{-- Content --}}
-    <div class="pl-16 relative z-10">
+    <div
+        class="pl-16 relative z-10 {{ $activeTab === 'reviews' ? 'border-l-4 border-primary pl-6 py-2 ml-16 !pl-6' : '' }}">
         @if($activeTab === 'reviews' && $item->title)
             <div class="mb-3">
-                <h5 class="font-black text-xl text-white leading-tight tracking-tight relative inline-block">
+                <h4 class="font-bold text-xl text-white leading-tight tracking-tight">
                     {{ $item->title }}
-                    <div class="absolute -bottom-1 left-0 w-1/3 h-0.5 bg-primary/50 rounded-full"></div>
-                </h5>
+                </h4>
             </div>
         @endif
 
@@ -86,7 +86,8 @@
                 </div>
             </div>
         @else
-            <div class="text-white/80 text-[15px] leading-7 font-normal">
+            <div
+                class="{{ $activeTab === 'reviews' ? 'text-white/80 text-lg leading-relaxed' : 'text-white/80 text-[15px] leading-7 font-normal' }}">
                 @php
                     $content = e($item->content);
                     $content = preg_replace(

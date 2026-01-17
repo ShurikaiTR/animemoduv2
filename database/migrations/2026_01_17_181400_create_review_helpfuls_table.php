@@ -10,14 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('comment_likes', function (Blueprint $table) {
+        Schema::create('review_helpfuls', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignUuid('comment_id')->constrained()->cascadeOnDelete();
-            $table->boolean('is_like'); // true = like, false = dislike
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('review_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            $table->unique(['user_id', 'comment_id']);
+            $table->unique(['user_id', 'review_id']);
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('comment_likes');
+        Schema::dropIfExists('review_helpfuls');
     }
 };

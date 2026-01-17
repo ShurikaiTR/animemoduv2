@@ -4,8 +4,13 @@
     <div class="flex items-center gap-4">
         {{-- Avatar --}}
         <div class="relative group/avatar">
-            <img src="{{ $profile->avatar_url }}" alt="{{ $profile->username }}"
-                class="w-12 h-12 rounded-full object-cover ring-2 ring-white/5 group-hover/avatar:ring-primary/50 transition-all shadow-lg">
+            <div
+                class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/60 to-primary/20 p-0.5 shadow-lg ring-1 ring-white/5 group-hover/avatar:ring-primary/50 transition-all">
+                <div class="w-full h-full rounded-[14px] bg-bg-secondary overflow-hidden">
+                    <img src="{{ $profile->avatar_url }}" alt="{{ $profile->username }}"
+                        class="w-full h-full object-cover">
+                </div>
+            </div>
         </div>
 
         {{-- User Info --}}
@@ -17,9 +22,9 @@
                 </span>
                 @if($isAdmin)
                     <span
-                        class="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-2xs font-bold text-primary uppercase tracking-wider">
-                        <x-heroicon-s-shield-check class="w-3 h-3" />
-                        Yönetici
+                        class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase border border-primary/20 flex items-center gap-1">
+                        <x-heroicon-s-shield-check class="w-3.5 h-3.5" />
+                        YÖNETİCİ
                     </span>
                 @endif
             </div>

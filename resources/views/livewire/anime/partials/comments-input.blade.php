@@ -14,33 +14,43 @@
                 <div class="flex gap-6">
                     {{-- User Avatar --}}
                     <div class="hidden sm:block shrink-0">
-                        <img src="{{ auth()->user()->profile->avatar_url }}" alt="{{ auth()->user()->profile->username }}"
-                            class="w-14 h-14 rounded-2xl object-cover shadow-lg ring-1 ring-white/10">
+                        <div
+                            class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/50 to-primary/30 p-0.5 shadow-lg ring-1 ring-white/10 group-hover/form:ring-primary/30 transition-all">
+                            <div class="w-full h-full rounded-[14px] bg-bg-secondary overflow-hidden">
+                                <img src="{{ auth()->user()->profile->avatar_url }}"
+                                    alt="{{ auth()->user()->profile->username }}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex-1 flex flex-col gap-6">
 
                         @if($activeTab === 'reviews')
                             {{-- Review Title & Rating --}}
-                            <div class="relative mb-6">
+                            <div class="space-y-6">
                                 {{-- Top Row: Title & Rating --}}
-                                <div class="flex flex-col-reverse sm:flex-row items-start justify-between gap-6">
+                                <div
+                                    class="flex flex-col sm:flex-row items-start justify-between gap-6 pb-6 border-b border-white/5">
                                     {{-- Left: Title Input --}}
-                                    <div class="w-full sm:max-w-xl space-y-2">
-                                        <input type="text" wire:model="title" maxlength="100" placeholder="İnceleme Başlığı..."
-                                            class="w-full bg-transparent border-none p-0 text-3xl font-black text-white placeholder:text-white/20 focus:ring-0 focus:outline-none tracking-tight">
-                                        <div class="h-1 w-20 bg-primary/30 rounded-full"></div>
+                                    <div class="w-full sm:max-w-xl">
+                                        <div class="flex items-center gap-2 mb-2">
+                                            <div class="w-1 h-4 bg-primary rounded-full"></div>
+                                            <span class="text-2xs font-bold text-white/40 uppercase tracking-widest">İnceleme
+                                                Başlığı</span>
+                                        </div>
+                                        <input type="text" wire:model="title" maxlength="100" placeholder="Başlık ekleyin..."
+                                            class="w-full bg-transparent border-none p-0 text-xl font-bold text-white placeholder:text-white/20 focus:ring-0 focus:outline-none tracking-tight">
                                     </div>
 
                                     {{-- Right: Big Star Rating --}}
-                                    <div class="flex items-center gap-4 bg-black/20 p-3 rounded-2xl border border-white/5 backdrop-blur-sm"
+                                    <div class="flex items-center gap-4 bg-white/5 p-3 rounded-2xl border border-white/5 backdrop-blur-sm self-stretch sm:self-auto"
                                         x-data="{ hoverRating: 0 }">
                                         <div class="flex items-center gap-1">
                                             @foreach(range(1, 10) as $star)
                                                 <button type="button" @mouseenter="hoverRating = {{ $star }}"
                                                     @mouseleave="hoverRating = 0" wire:click="$set('rating', {{ $star }})"
                                                     class="group/star relative">
-                                                    <x-heroicon-s-star class="w-6 h-6 transition-all duration-200"
+                                                    <x-heroicon-s-star class="w-5 h-5 transition-all duration-200"
                                                         x-bind:class="(hoverRating ? {{ $star }} <= hoverRating : {{ $star }} <= $wire.rating) ? 'text-primary drop-shadow-glow scale-110' : 'text-white/10 group-hover/star:text-primary/50'" />
                                                 </button>
                                             @endforeach
@@ -49,18 +59,11 @@
                                         {{-- Big Score Display --}}
                                         <div class="flex items-center gap-1 pl-4 border-l border-white/10"
                                             x-show="$wire.rating > 0" x-transition>
-                                            <x-heroicon-s-star class="w-8 h-8 text-primary" />
-                                            <span class="text-3xl font-black text-white tabular-nums leading-none"
+                                            <span class="text-2xl font-black text-white tabular-nums leading-none"
                                                 x-text="$wire.rating"></span>
-                                            <span class="text-xs font-bold text-white/40 self-end mb-1">/10</span>
+                                            <span class="text-xs font-bold text-white/40 self-end mb-0.5">/10</span>
                                         </div>
                                     </div>
-                                </div>
-
-                                {{-- Character Limit --}}
-                                <div
-                                    class="absolute -bottom-4 left-0 text-[10px] font-bold text-white/20 uppercase tracking-widest">
-                                    {{ strlen($title) }}/100 KARAKTER
                                 </div>
                             </div>
                         @endif
@@ -99,7 +102,7 @@
                             {{-- Right: Submit Button --}}
                             <div class="w-full sm:w-auto">
                                 <x-ui.button wire:click="submit" wire:loading.attr="disabled" variant="primary" size="lg"
-                                    class="w-full sm:w-auto gap-2 font-bold px-8 hover:scale-105 active:scale-95 transition-all">
+                                    class="w-full sm:w-auto gap-2 font-bold px-8 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
                                     <span
                                         wire:loading.remove>{{ $activeTab === 'reviews' ? 'İNCELEMEYİ YAYINLA' : 'GÖNDER' }}</span>
                                     <div wire:loading flex items-center gap-1>

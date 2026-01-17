@@ -15,9 +15,15 @@
             </button>
         </div>
     @else
-        <div class="flex items-center gap-2 text-white/40">
-            <x-heroicon-s-hand-thumb-up class="w-4 h-4" />
-            <span class="text-xs">{{ $comment->helpful_count ?? 0 }} kişi bu incelemeyi yararlı buldu</span>
-        </div>
+        <button wire:click="toggleHelpful"
+            class="flex items-center gap-3 transition-all group/helpful {{ $isHelpful ? 'text-primary' : 'text-white/40 hover:text-primary' }}">
+            <div
+                class="p-2 rounded-xl transition-colors border {{ $isHelpful ? 'bg-primary/10 border-primary/20' : 'bg-white/5 border-white/5 group-hover/helpful:bg-primary/10 group-hover/helpful:border-primary/20' }}">
+                <x-heroicon-s-hand-thumb-up class="w-4 h-4" />
+            </div>
+            <span class="text-sm font-medium tracking-tight">
+                {{ $likeCount }} kişi bu incelemeyi yararlı buldu
+            </span>
+        </button>
     @endif
 </div>

@@ -23,16 +23,14 @@
         </x-ui.empty-state>
     @else
         {{-- Input Section (Scenario 2 & 3) --}}
-        @island('comment-input')
-            @include('livewire.anime.partials.comments-input', [
-                'activeTab' => $activeTab,
-                'title' => $title,
-                'rating' => $rating,
-                'content' => $content,
-                'isSpoiler' => $isSpoiler,
-                'message' => $errors->first('content')
-            ])
-        @endisland
+        @include('livewire.anime.partials.comments-input', [
+            'activeTab' => $activeTab,
+            'title' => $title,
+            'rating' => $rating,
+            'content' => $content,
+            'isSpoiler' => $isSpoiler,
+            'message' => $errors->first('content')
+        ])
 
         {{-- Items List --}}
         <ul class="block" wire:transition>

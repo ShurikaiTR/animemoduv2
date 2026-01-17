@@ -8,20 +8,21 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CommentLike extends Model
+class ReviewHelpful extends Model
 {
     use HasUuids;
-    protected $fillable = ['user_id', 'comment_id', 'is_like'];
-
-    protected $casts = ['is_like' => 'boolean'];
+    protected $fillable = [
+        'user_id',
+        'review_id',
+    ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function comment(): BelongsTo
+    public function review(): BelongsTo
     {
-        return $this->belongsTo(Comment::class);
+        return $this->belongsTo(Review::class);
     }
 }
