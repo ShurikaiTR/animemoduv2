@@ -19,10 +19,15 @@ class Home extends Component
     /** @var \Illuminate\Support\Collection */
     public $popularMovies;
 
+    /** @var array */
+    public $featuredAnimes = [];
+
     public function mount(): void
     {
         $this->latestEpisodes = \App\Models\Episode::with('anime')
-            ->latest()
+            ->orderBy('created_at', 'desc')
+            ->orderBy('season_number', 'desc')
+            ->orderBy('episode_number', 'desc')
             ->limit(10)
             ->get();
 
@@ -34,6 +39,11 @@ class Home extends Component
         $this->popularMovies = \App\Models\Anime::where('media_type', 'movie')
             ->orderBy('vote_average', 'desc')
             ->limit(10)
+            ->get();
+
+        $this->featuredAnimes = \App\Models\Anime::where('hero_order', '>', 0)
+            ->oldest('hero_order')
+            ->latest() // Backup tie-breaker
             ->get();
     }
 

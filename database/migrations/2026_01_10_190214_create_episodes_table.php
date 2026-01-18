@@ -26,6 +26,8 @@ return new class extends Migration
             $table->integer('duration')->nullable();
             $table->string('video_url')->nullable();
             $table->timestamps();
+
+            $table->index(['anime_id', 'season_number', 'episode_number'], 'episodes_anime_season_episode_idx');
         });
     }
 

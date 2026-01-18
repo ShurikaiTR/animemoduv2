@@ -32,7 +32,7 @@
                 {{-- Title --}}
                 <a href="{{ $href }}" class="block w-fit">
                     <h1
-                        class="text-4xl md:text-6xl lg:text-7xl font-rubik font-black text-white leading-[0.9] tracking-tighter uppercase drop-shadow-2xl hover:text-primary transition-colors">
+                        class="text-4xl md:text-6xl lg:text-7xl font-rubik font-black text-white leading-none tracking-tighter uppercase drop-shadow-2xl hover:text-primary transition-colors">
                         @php $titleParts = explode(' ', $anime->title, 2); @endphp
                         {{ $titleParts[0] }}
                         @if(isset($titleParts[1]))

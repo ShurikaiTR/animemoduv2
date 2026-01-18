@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace App\Livewire\Auth;
 
 use App\Livewire\Auth\Concerns\HasAuthModalConfig;
-use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -60,19 +59,27 @@ class AuthModal extends Component
 
     public function login(): void
     {
-        sleep(1);
+        $throttleKey = $this->throttleKey();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            $this->addError('auth_failed', "Çok fazla başarısız deneme. Lütfen {$seconds} saniye bekleyin.");
+
+            return;
+        }
+
+        sleep(1); // Loading animasyonu için
+
         $credentials = $this->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
         ]);
 
-        if (Auth::attempt($credentials, $this->remember)) {
-            session()->regenerate();
-
+        if (app(\App\Actions\Auth\LoginUserAction::class)->execute($credentials, $this->remember, $throttleKey)) {
             $this->close();
             $this->dispatch('authUpdated');
             session()->flash('toast', ['type' => 'success', 'message' => 'Başarıyla giriş yapıldı. Hoş geldin!']);
-            $this->redirect(request()->header('Referer') ?? route('home'), navigate: true);
+            $this->redirect($this->getSafeRedirectUrl(), navigate: true);
 
             return;
         }
@@ -82,23 +89,15 @@ class AuthModal extends Component
 
     public function register(): void
     {
-        sleep(1);
+        sleep(1); // Loading animasyonu için
+
         $data = $this->validate([
             'username' => ['required', 'string', 'min:3', 'max:20', 'unique:profiles,username'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        $user = User::create([
-            'name' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        // User observer otomatik profil oluşturduğu için mevcut profili güncelliyoruz
-        $user->profile()->update([
-            'username' => $data['username'],
-        ]);
+        $user = app(\App\Actions\Auth\RegisterUserAction::class)->execute($data);
 
         Auth::login($user);
         session()->regenerate();
@@ -106,7 +105,7 @@ class AuthModal extends Component
         $this->close();
         $this->dispatch('authUpdated');
         session()->flash('toast', ['type' => 'success', 'message' => 'Hesabın başarıyla oluşturuldu. Aramıza hoş geldin!']);
-        $this->redirect(request()->header('Referer') ?? route('home'), navigate: true);
+        $this->redirect($this->getSafeRedirectUrl(), navigate: true);
     }
 
     private function resetFields(): void
@@ -115,6 +114,23 @@ class AuthModal extends Component
         $this->username = '';
         $this->password = '';
         $this->remember = false;
+    }
+
+    private function throttleKey(): string
+    {
+        return 'auth-login:'.request()->ip();
+    }
+
+    private function getSafeRedirectUrl(): string
+    {
+        $referer = request()->header('Referer');
+        $appUrl = config('app.url');
+
+        if ($referer && str_starts_with($referer, $appUrl)) {
+            return $referer;
+        }
+
+        return route('home');
     }
 
     public function render(): View

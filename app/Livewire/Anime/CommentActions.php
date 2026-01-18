@@ -41,12 +41,13 @@ class CommentActions extends Component
 
     public function toggleLike(bool $isLike): void
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $this->dispatch('openAuthModal');
+
             return;
         }
 
-        if (!$this->comment instanceof Comment) {
+        if (! $this->comment instanceof Comment) {
             return;
         }
 
@@ -59,12 +60,13 @@ class CommentActions extends Component
 
     public function toggleHelpful(): void
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $this->dispatch('openAuthModal');
+
             return;
         }
 
-        if (!$this->comment instanceof Review) {
+        if (! $this->comment instanceof Review) {
             return;
         }
 
@@ -82,7 +84,7 @@ class CommentActions extends Component
             if (Auth::check()) {
                 $userLike = $this->comment->likes()->where('user_id', Auth::id())->first();
                 $this->isLiked = $userLike && $userLike->is_like;
-                $this->isDisliked = $userLike && !$userLike->is_like;
+                $this->isDisliked = $userLike && ! $userLike->is_like;
             }
         } elseif ($this->comment instanceof Review) {
             $this->likeCount = (int) ($this->comment->helpful_count ?? 0);

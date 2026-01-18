@@ -79,11 +79,11 @@ trait HasMovieInfolist
                             TextEntry::make('status')
                                 ->label('Yayın Durumu')
                                 ->badge(),
-                            TextEntry::make('is_featured')
-                                ->label('Vitrin İçeriği')
-                                ->formatStateUsing(fn ($state) => $state ? 'Evet' : 'Hayır')
+                            TextEntry::make('hero_order')
+                                ->label('Vitrin Sırası')
+                                ->formatStateUsing(fn ($state) => $state > 0 ? '#'.$state : 'Yok')
                                 ->badge()
-                                ->color(fn ($state) => $state ? 'warning' : 'gray'),
+                                ->color(fn ($state) => $state > 0 ? 'warning' : 'gray'),
                         ]),
 
                     Section::make('Sınıflandırma')

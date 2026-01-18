@@ -15,8 +15,8 @@ class Anime extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn(Anime $anime) => Cache::forget("anime_show_{$anime->slug}"));
-        static::deleted(fn(Anime $anime) => Cache::forget("anime_show_{$anime->slug}"));
+        static::saved(fn (Anime $anime) => Cache::forget("anime_show_{$anime->slug}"));
+        static::deleted(fn (Anime $anime) => Cache::forget("anime_show_{$anime->slug}"));
     }
 
     protected $fillable = [
@@ -27,6 +27,7 @@ class Anime extends Model
         'overview',
         'poster_path',
         'backdrop_path',
+        'logo_path',
         'vote_average',
         'release_date',
         'slug',
@@ -35,7 +36,7 @@ class Anime extends Model
         'status',
         'genres',
         'characters',
-        'is_featured',
+        'hero_order',
         'vote_count',
         'trailer_key',
     ];
@@ -43,7 +44,7 @@ class Anime extends Model
     protected $casts = [
         'genres' => 'array',
         'characters' => 'array',
-        'is_featured' => 'boolean',
+        'hero_order' => 'integer',
         'release_date' => 'date',
         'status' => \App\Enums\AnimeStatus::class,
     ];

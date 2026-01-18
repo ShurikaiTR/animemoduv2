@@ -15,7 +15,7 @@ class LatestAnimes extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(fn(): Builder => Anime::query())
+            ->query(fn (): Builder => Anime::query())
             ->columns([
                 //
             ])

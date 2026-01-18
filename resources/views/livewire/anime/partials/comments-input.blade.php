@@ -10,13 +10,13 @@
                 class="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none opacity-50 group-hover/form:opacity-100 transition-opacity duration-1000">
             </div>
 
-            <div class="bg-bg-main/50 rounded-[20px] p-6 relative z-10">
+            <div class="bg-bg-main/50 rounded-2xl p-6 relative z-10">
                 <div class="flex gap-6">
                     {{-- User Avatar --}}
                     <div class="hidden sm:block shrink-0">
                         <div
                             class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/50 to-primary/30 p-0.5 shadow-lg ring-1 ring-white/10 group-hover/form:ring-primary/30 transition-all">
-                            <div class="w-full h-full rounded-[14px] bg-bg-secondary overflow-hidden">
+                            <div class="w-full h-full rounded-xl bg-bg-secondary overflow-hidden">
                                 <img src="{{ auth()->user()->profile->avatar_url }}"
                                     alt="{{ auth()->user()->profile->username }}" class="w-full h-full object-cover">
                             </div>
@@ -91,7 +91,7 @@
                                     <div class="relative">
                                         <input type="checkbox" wire:model="isSpoiler" class="sr-only peer">
                                         <div
-                                            class="w-10 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary transition-colors">
+                                            class="w-10 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary transition-colors">
                                         </div>
                                     </div>
                                     <span

@@ -41,7 +41,7 @@ trait HasMovieMediaForm
                                 ->label('Poster Önizleme')
                                 ->content(function (Get $get, TmdbService $tmdbService) {
                                     $path = $get('poster_path');
-                                    if (!$path) {
+                                    if (! $path) {
                                         return new HtmlString('<div class="text-gray-400 text-sm italic">Görsel seçilmedi</div>');
                                     }
                                     $url = $tmdbService->getImageUrl($path);
@@ -57,7 +57,7 @@ trait HasMovieMediaForm
                                 ->label('Backdrop Önizleme')
                                 ->content(function (Get $get, TmdbService $tmdbService) {
                                     $path = $get('backdrop_path');
-                                    if (!$path) {
+                                    if (! $path) {
                                         return new HtmlString('<div class="text-gray-400 text-sm italic">Görsel seçilmedi</div>');
                                     }
                                     $url = $tmdbService->getImageUrl($path, 'w780');

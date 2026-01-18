@@ -3,7 +3,7 @@
 @endphp
 
 <div x-data="{ isOpen: @entangle('isOpen') }" x-show="isOpen" x-on:keydown.escape.window="isOpen = false"
-    class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300"
     x-cloak>
     <div class="bg-bg-dark w-full max-w-4xl h-auth-modal rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex relative transition-all duration-300 transform"
         x-show="isOpen" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"

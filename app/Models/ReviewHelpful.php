@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ReviewHelpful extends Model
 {
     use HasUuids;
+
     protected $fillable = [
         'user_id',
         'review_id',

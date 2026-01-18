@@ -76,11 +76,11 @@ trait HasAnimeInfolist
                             TextEntry::make('status')
                                 ->label('Durum')
                                 ->badge(),
-                            TextEntry::make('is_featured')
-                                ->label('Öne Çıkan')
-                                ->formatStateUsing(fn ($state) => $state ? 'Evet' : 'Hayır')
+                            TextEntry::make('hero_order')
+                                ->label('Vitrin Sırası')
+                                ->formatStateUsing(fn ($state) => $state > 0 ? '#'.$state : 'Yok')
                                 ->badge()
-                                ->color(fn ($state) => $state ? 'warning' : 'gray'),
+                                ->color(fn ($state) => $state > 0 ? 'warning' : 'gray'),
                         ]),
 
                     Section::make('Sınıflandırma')

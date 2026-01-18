@@ -13,9 +13,7 @@ use Livewire\Component;
 class Comments extends Component
 {
     #[On('comment-added')]
-    public function refresh(): void
-    {
-    }
+    public function refresh(): void {}
 
     public Anime $anime;
 

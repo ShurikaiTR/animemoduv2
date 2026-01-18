@@ -55,11 +55,12 @@ trait HasAnimeTable
                     ->icon('heroicon-m-star')
                     ->copyable()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('is_featured')
-                    ->label('Öne Çıkan')
-                    ->boolean()
-                    ->alignCenter()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('hero_order')
+                    ->label('Vitrin')
+                    ->badge()
+                    ->color(fn ($record) => $record->hero_order > 0 ? 'warning' : 'gray')
+                    ->sortable()
+                    ->alignCenter(),
                 Tables\Columns\TextColumn::make('episodes_count')
                     ->label('Bölüm')
                     ->counts('episodes')
@@ -101,8 +102,16 @@ trait HasAnimeTable
                             });
                         });
                     }),
-                Tables\Filters\TernaryFilter::make('is_featured')
-                    ->label('Öne Çıkan'),
+                Tables\Filters\TernaryFilter::make('hero_order')
+                    ->label('Vitrin')
+                    ->placeholder('Hepsi')
+                    ->trueLabel('Vitrindekiler')
+                    ->falseLabel('Vitrin Olmayanlar')
+                    ->queries(
+                        true: fn (Builder $query) => $query->where('hero_order', '>', 0),
+                        false: fn (Builder $query) => $query->where('hero_order', 0),
+                        blank: fn (Builder $query) => $query,
+                    ),
             ])
             ->actions([
                 ViewAction::make()

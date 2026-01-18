@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('is_spoiler')->default(false);
             $table->boolean('is_pinned')->default(false);
             $table->integer('like_count')->default(0);
+            $table->integer('dislike_count')->default(0);
             $table->timestamps();
         });
     }

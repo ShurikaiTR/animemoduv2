@@ -42,7 +42,7 @@
                         </span>
                         @if($isAdmin)
                             <span
-                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 {{ $isReply ? 'text-[8px]' : 'text-2xs' }} font-bold text-primary uppercase tracking-tight">
+                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 {{ $isReply ? 'text-xs' : 'text-2xs' }} font-bold text-primary uppercase tracking-tight">
                                 <x-heroicon-s-shield-check class="{{ $isReply ? 'w-2.5 h-2.5' : 'w-3.5 h-3.5' }}" />
                                 Yönetici
                             </span>
@@ -88,7 +88,7 @@
             <div class="text-white/70 text-sm leading-relaxed mb-4">
                 @if($item->is_spoiler && !$hasRevealed)
                     <div
-                        class="relative {{ $isReply ? 'min-h-[60px]' : 'min-h-[100px]' }} rounded-xl bg-bg-main/60 backdrop-blur-sm border border-primary/10 overflow-hidden group/spoiler">
+                        class="relative {{ $isReply ? 'min-h-16' : 'min-h-24' }} rounded-xl bg-bg-main/60 backdrop-blur-sm border border-primary/10 overflow-hidden group/spoiler">
                         <div class="p-5 blur-xl select-none opacity-30 transition-all duration-300">
                             {{ $item->content }}
                         </div>

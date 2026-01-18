@@ -15,7 +15,7 @@ trait InteractsWithComments
 {
     public function submit(?string $parentId = null): void
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $this->dispatch('openAuthModal');
 
             return;
@@ -32,7 +32,7 @@ trait InteractsWithComments
     {
         $this->validate([
             'content' => $parentId ? 'nullable' : 'required|string|min:3|max:1000',
-            'replyContent.' . $parentId => $parentId ? 'required|string|min:3|max:1000' : 'nullable',
+            'replyContent.'.$parentId => $parentId ? 'required|string|min:3|max:1000' : 'nullable',
             'isSpoiler' => 'boolean',
         ]);
 
@@ -80,7 +80,7 @@ trait InteractsWithComments
 
     public function toggleReply(string $commentId): void
     {
-        $this->showReplyInput[$commentId] = !($this->showReplyInput[$commentId] ?? false);
+        $this->showReplyInput[$commentId] = ! ($this->showReplyInput[$commentId] ?? false);
     }
 
     public function revealSpoiler(string $commentId): void
@@ -99,7 +99,7 @@ trait InteractsWithComments
 
     public function toggleLike(string $commentId, bool $isLike): void
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             $this->dispatch('openAuthModal');
 
             return;
@@ -114,7 +114,7 @@ trait InteractsWithComments
     public function quote(string $commentId): void
     {
         $comment = Comment::find($commentId);
-        if (!$comment) {
+        if (! $comment) {
             return;
         }
 

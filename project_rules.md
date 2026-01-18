@@ -1,6 +1,6 @@
 # AnimeModu v2 - Proje Kuralları ve Standartları
 
-> Bu belge, **Laravel 12.x**, **Filament v3** ve **Livewire v3** ile geliştirilen bu projenin "Anayasası" niteliğindedir.
+> Bu belge, **Laravel 12.x**, **Filament v5** ve **Livewire v4** ile geliştirilen bu projenin "Anayasası" niteliğindedir.
 > Tüm geliştirmeler bu standartlara **istisnasız** uymalıdır.
 
 ---
@@ -11,8 +11,8 @@
 |---------|-----------|----------|
 | **Framework** | Laravel | 12.x |
 | **Dil** | PHP | 8.2+ (Strict Mode) |
-| **Admin Panel** | FilamentPHP | 3.x |
-| **Frontend** | Livewire | 3.x |
+| **Admin Panel** | FilamentPHP | 5.x |
+| **Frontend** | Livewire | 4.x |
 | **CSS Motoru** | Tailwind CSS | 4.x |
 | **Veritabanı** | PostgreSQL / SQLite (Dev) | - |
 | **Video İşleme** | FFmpeg + Laravel Horizon | - |

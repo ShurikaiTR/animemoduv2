@@ -29,11 +29,11 @@ trait HasMovieMetadataForm
                             Action::make('fetchTmdbData')
                                 ->icon('heroicon-m-arrow-down-tray')
                                 ->action(function (Set $set, $state, TmdbService $tmdbService) {
-                                    if (!$state) {
+                                    if (! $state) {
                                         return;
                                     }
                                     $details = $tmdbService->getDetails((int) $state, 'movie');
-                                    if (!$details) {
+                                    if (! $details) {
                                         return;
                                     }
 

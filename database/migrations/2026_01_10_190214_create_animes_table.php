@@ -20,17 +20,21 @@ return new class extends Migration
             $table->text('overview')->nullable();
             $table->string('poster_path')->nullable();
             $table->string('backdrop_path')->nullable();
+            $table->string('logo_path')->nullable();
             $table->decimal('vote_average', 3, 1)->nullable();
             $table->date('release_date')->nullable();
             $table->string('slug')->unique();
-            $table->enum('media_type', ['movie', 'tv'])->default('tv');
+            $table->string('status')->index()->nullable();
+            $table->enum('media_type', ['movie', 'tv'])->default('tv')->index();
             $table->enum('structure_type', ['seasonal', 'absolute'])->default('seasonal');
             $table->json('genres')->nullable();
             $table->json('characters')->nullable();
-            $table->boolean('is_featured')->default(false);
+            $table->integer('hero_order')->default(0)->index();
             $table->integer('vote_count')->nullable();
             $table->string('trailer_key')->nullable();
             $table->timestamps();
+
+            $table->index('created_at');
         });
     }
 

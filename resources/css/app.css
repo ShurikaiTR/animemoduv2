@@ -137,6 +137,20 @@ body {
     animation-delay: 0.4s;
 }
 
+@keyframes slider-progress {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.animate-slider-progress {
+    animation: slider-progress 10s linear forwards;
+}
+
 @utility no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;

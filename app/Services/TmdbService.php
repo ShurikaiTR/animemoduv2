@@ -54,7 +54,8 @@ class TmdbService
             return Http::timeout(10)->get("{$this->baseUrl}/{$type}/{$id}", [
                 'api_key' => $this->apiKey,
                 'language' => 'tr-TR',
-                'append_to_response' => 'credits,videos,similar',
+                'append_to_response' => 'credits,videos,similar,images',
+                'include_image_language' => 'tr,en,null',
             ])->json();
         });
     }

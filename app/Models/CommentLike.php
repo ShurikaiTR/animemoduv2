@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CommentLike extends Model
 {
     use HasUuids;
+
     protected $fillable = ['user_id', 'comment_id', 'is_like'];
 
     protected $casts = ['is_like' => 'boolean'];

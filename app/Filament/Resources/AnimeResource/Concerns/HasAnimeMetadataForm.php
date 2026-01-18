@@ -31,12 +31,12 @@ trait HasAnimeMetadataForm
                                 ->icon('heroicon-m-arrow-down-tray')
                                 ->tooltip('TMDB verilerini çek ve formu doldur')
                                 ->action(function (Set $set, $state, TmdbService $tmdbService) {
-                                    if (!$state) {
+                                    if (! $state) {
                                         return;
                                     }
 
                                     $details = $tmdbService->getDetails((int) $state);
-                                    if (!$details) {
+                                    if (! $details) {
                                         return;
                                     }
 
@@ -53,6 +53,11 @@ trait HasAnimeMetadataForm
                                     if (isset($details['genres'])) {
                                         $genres = collect($details['genres'])->pluck('name')->toArray();
                                         $set('genres', $genres);
+                                    }
+
+                                    if (isset($details['images']['logos']) && count($details['images']['logos']) > 0) {
+                                        $logo = $details['images']['logos'][0]['file_path'];
+                                        $set('logo_path', $logo);
                                     }
 
                                     if (isset($details['videos']['results'])) {
@@ -98,12 +103,10 @@ trait HasAnimeMetadataForm
                         ->required()
                         ->native(false),
 
-                    Select::make('genres')
+                    \Filament\Forms\Components\TagsInput::make('genres')
                         ->label('Türler')
-                        ->multiple()
-                        ->searchable()
-                        ->options(Genre::all()->pluck('name', 'name'))
-                        ->preload(),
+                        ->suggestions(Genre::all()->pluck('name', 'name'))
+                        ->placeholder('Tür ekle...'),
                 ]),
 
             Section::make('İstatistikler')

@@ -15,9 +15,18 @@
         {{-- Backdrop Image --}}
         <div class="absolute top-0 left-0 right-0 h-96 w-full z-0">
             @if($backdrop)
-                <img src="{{ $backdrop }}" alt="{{ $anime->title }} arkaplan görseli"
-                    class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" loading="eager"
-                    fetchpriority="high" decoding="async" />
+                <img 
+                    src="{{ $backdrop }}" 
+                    srcset="{{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w300') }} 300w,
+                            {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w780') }} 780w,
+                            {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w1280') }} 1280w"
+                    sizes="100vw"
+                    alt="{{ $anime->title }} arkaplan görseli"
+                    class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" 
+                    loading="eager"
+                    fetchpriority="high" 
+                    decoding="async" 
+                />
             @endif
             <div class="absolute inset-0 bg-gradient-to-b from-bg-main/30 via-bg-main/80 to-bg-main z-10"></div>
         </div>
