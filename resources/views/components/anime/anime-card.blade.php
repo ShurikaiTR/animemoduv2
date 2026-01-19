@@ -14,14 +14,14 @@
 
 @php
     $href = $slug ? route('anime.show', $slug) : '#';
-    $altText = $title . ($year ? ' (' . $year . ')' : '') . ' poster görseli';
+    $altText = $title . ($year ? ' (' . $year . ')' : '') . ' anime kapak görseli';
 @endphp
 
 <div class="group relative w-full aspect-poster rounded-2xl overflow-hidden cursor-pointer bg-bg-secondary">
     {{-- Year Badge --}}
     @if($year)
-        <div class="absolute top-3 left-3 z-20 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 shadow-lg">
-            <span class="text-2xs sm:text-xs font-bold text-white">{{ $year }}</span>
+        <div class="absolute top-3 left-3 z-20 px-2 py-0.5 rounded-lg bg-black/40 backdrop-blur-md border border-white/10 shadow-lg">
+            <span class="text-2xs font-medium text-white/90">{{ $year }}</span>
         </div>
     @endif
 
@@ -46,7 +46,7 @@
         @endif
 
         {{-- Gradient Overlay --}}
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+        <div class="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-black via-black/80 to-transparent z-10 opacity-90 transition-opacity duration-500 group-hover:opacity-100"></div>
 
         {{-- Hover Inset Shadow --}}
         <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none shadow-inset-dark"></div>
@@ -60,9 +60,8 @@
             </div>
         </div>
 
-        {{-- Content --}}
         <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out z-20">
-            <h3 title="{{ $title }}" class="text-sm sm:text-base font-bold text-white font-rubik leading-tight mb-2 line-clamp-2 drop-shadow-lg group-hover:text-primary transition-colors duration-300">
+            <h3 title="{{ $title }}" class="text-[0.95rem] sm:text-base font-black text-white font-rubik leading-tight mb-2 line-clamp-2 drop-shadow-lg group-hover:text-primary transition-colors duration-300">
                 {{ $title }}
             </h3>
 

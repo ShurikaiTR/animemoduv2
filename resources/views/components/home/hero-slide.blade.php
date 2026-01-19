@@ -1,5 +1,7 @@
 @props(['anime', 'index', 'activeSlide', 'tmdbService'])
 
+@use('App\Enums\AnimeStatus')
+
 @php
     $backdropUrl = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : asset('img/placeholder-backdrop.jpg');
     $logoUrl = $anime->logo_path ? $tmdbService->getImageUrl($anime->logo_path, 'original') : null;
@@ -21,20 +23,25 @@
             <img
                 src="{{ $backdropUrl }}"
                 alt="{{ $anime->title }}"
+                @if($index === 0)
+                    fetchpriority="high"
+                @else
+                    loading="lazy"
+                @endif
                 class="w-full h-full object-cover object-center brightness-110 contrast-110 saturate-110"
             />
             {{-- Gradients --}}
             {{-- Bottom Gradient --}}
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/95 md:via-black/70 to-transparent"></div>
             {{-- Left Gradient (Desktop) --}}
-            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/30 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/30 to-transparent hidden md:block"></div>
             {{-- Top Vignette --}}
             <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-black/60 to-transparent opacity-40"></div>
         </div>
     </div>
 
     {{-- Content --}}
-    <div class="absolute inset-0 flex items-end pb-12 md:pb-20 lg:pb-24 pl-4 md:pl-12 lg:pl-16 pr-4 md:pr-12 pointer-events-none">
+    <div class="absolute inset-0 flex items-end pb-16 md:pb-20 lg:pb-24 pl-4 md:pl-12 lg:pl-16 pr-4 md:pr-12 pointer-events-none">
         {{-- Left Content Area --}}
         <div 
             class="w-fit max-w-full md:max-w-4xl flex flex-col items-start gap-4 md:gap-6 z-20 pointer-events-auto"
@@ -50,7 +57,7 @@
                         class="h-16 md:h-24 lg:h-32 object-contain w-auto max-w-4/5"
                     />
                 @else
-                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight drop-shadow-lg font-outfit">
+                    <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight drop-shadow-lg font-outfit">
                         {{ $anime->title }}
                     </h1>
                 @endif
@@ -66,10 +73,10 @@
                 @if($anime->status)
                     <span class="hidden md:inline-block w-1 h-1 rounded-full bg-gray-500"></span>
                     @php
-                        $isOngoing = $anime->status === \App\Enums\AnimeStatus::ONGOING;
+                        $isOngoing = $anime->status === AnimeStatus::ONGOING;
                         $badgeStyle = $isOngoing 
-                            ? 'bg-success/20 text-success border-success/30' 
-                            : 'bg-primary/20 text-primary border-primary/30';
+                            ? 'bg-success text-white border-success' 
+                            : 'bg-primary text-white border-primary';
                     @endphp
                     <span class="px-2.5 py-0.5 rounded {{ $badgeStyle }} text-xs font-bold border uppercase tracking-wide">
                         {{ $anime->status->value }}
@@ -102,20 +109,16 @@
             </div>
 
             {{-- Description --}}
-            <p class="text-sm md:text-lg text-gray-200 line-clamp-3 md:line-clamp-2 max-w-2xl leading-relaxed drop-shadow-md">
+            <p class="text-sm md:text-lg text-gray-200 line-clamp-2 md:line-clamp-3 max-w-2xl leading-relaxed drop-shadow-md">
                 {{ $anime->overview }}
             </p>
 
-            {{-- Actions --}}
             <div class="flex items-center gap-3 mt-2">
-                    {{-- Watch Button --}}
                 <x-ui.button tag="a" href="{{ route('anime.show', $anime->slug) }}" variant="primary" size="lg" class="px-8 font-extrabold uppercase tracking-wide">
                     <x-icons.play class="w-5 h-5 fill-current" />
                     HEMEN İZLE
                 </x-ui.button>
 
-
-                {{-- Watchlist Button --}}
                 <x-anime.watch-status-dropdown :anime="$anime" position="top" class="h-14 font-bold uppercase tracking-wide group/list">
                     <x-slot:trigger>
                         <x-ui.button tag="span" variant="glass" size="lg" class="w-14 h-14 px-0 flex items-center justify-center rounded-2xl" aria-label="Listeye Ekle">

@@ -13,7 +13,7 @@ class ImportAnimeAction
 {
     public function __construct(
         protected TmdbService $tmdb,
-        protected \App\Actions\Anime\SyncCharactersAction $syncCharacters
+        protected SyncCharactersAction $syncCharacters
     ) {}
 
     /**

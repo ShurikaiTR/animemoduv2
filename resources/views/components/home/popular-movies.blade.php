@@ -1,10 +1,11 @@
 @props(['movies'])
 
 @if($movies->isNotEmpty())
-    <section class="pb-12 pt-4">
+    @inject('tmdbService', 'App\Services\TmdbService')
+    <section class="pb-12 pt-4" aria-labelledby="popular-movies-title">
         <x-layout.container>
             <div class="flex items-center justify-between mb-8">
-                <h2
+                <h2 id="popular-movies-title"
                     class="text-2xl sm:text-3xl font-bold font-rubik text-white drop-shadow-md border-l-4 border-primary pl-4">
                     Filmler
                 </h2>
@@ -18,7 +19,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 sm:gap-8">
                 @foreach($movies as $movie)
                     <x-anime.anime-card :id="$movie->id" :title="$movie->title" :year="$movie->release_date?->format('Y')"
-                        :genres="$movie->genres" :rating="$movie->vote_average" :image="$movie->poster_path ? 'https://image.tmdb.org/t/p/w500' . $movie->poster_path : null" :slug="$movie->slug"
+                        :genres="$movie->genres" :rating="$movie->vote_average" :image="$movie->poster_path ? $tmdbService->getImageUrl($movie->poster_path, 'w500') : null" :slug="$movie->slug"
                         media-type="movie" />
                 @endforeach
             </div>

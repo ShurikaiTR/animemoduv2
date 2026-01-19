@@ -55,6 +55,7 @@ class Profile extends Model
      */
     protected $casts = [
         'social_media' => 'array',
+        'role' => \App\Enums\UserRole::class,
     ];
 
     /**

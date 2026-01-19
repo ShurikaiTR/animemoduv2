@@ -46,7 +46,7 @@
                     </a>
 
                     {{-- Desktop Navigation --}}
-                    <nav class="hidden xl:block">
+                    <nav class="hidden xl:block" aria-label="Ana Menü">
                         <ul class="flex flex-row items-center">
                             <li class="relative xl:mr-16">
                                 <a href="{{ url('/animeler') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors">Animeler</a>
@@ -62,6 +62,7 @@
                                     type="button"
                                     @click="open = !open"
                                     class="text-sm font-medium text-text-main hover:text-primary transition-colors outline-none cursor-pointer leading-5"
+                                    aria-label="Daha fazla seçenek"
                                 >
                                     <x-icons.more class="w-6 h-6 inline-block align-middle" />
                                 </button>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\Layout;
 
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class NavbarSearch extends Component
@@ -32,7 +33,7 @@ class NavbarSearch extends Component
         }
     }
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         return view('livewire.layout.navbar-search');
     }

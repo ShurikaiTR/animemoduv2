@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Livewire\Anime;
 
+use App\Enums\CommentTab;
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Services\CommentService;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -19,7 +21,7 @@ class Comments extends Component
 
     public ?Episode $episode = null;
 
-    public string $activeTab = \App\Enums\CommentTab::COMMENTS->value;
+    public string $activeTab = CommentTab::COMMENTS->value;
 
     public string $content = '';
 
@@ -50,13 +52,13 @@ class Comments extends Component
         $this->episode = $episode;
 
         if ($this->episode?->exists) {
-            $this->activeTab = \App\Enums\CommentTab::COMMENTS->value;
+            $this->activeTab = CommentTab::COMMENTS->value;
         }
     }
 
     public function setTab(string $tab): void
     {
-        if ($this->episode?->exists && $tab === \App\Enums\CommentTab::REVIEWS->value) {
+        if ($this->episode?->exists && $tab === CommentTab::REVIEWS->value) {
             return;
         }
 
@@ -74,10 +76,10 @@ class Comments extends Component
 
     public function render(): View
     {
-        $service = app(\App\Services\CommentService::class);
+        $service = app(CommentService::class);
         $counts = $service->getCounts($this->anime->id, $this->episode?->id);
         $items = $service->getItems(['anime_id' => $this->anime->id, 'episode_id' => $this->episode?->id, 'perPage' => $this->perPage, 'activeTab' => $this->activeTab]);
-        $this->hasMore = $items->count() < ($this->activeTab === \App\Enums\CommentTab::COMMENTS->value ? $counts['comments'] : $counts['reviews']);
+        $this->hasMore = $items->count() < ($this->activeTab === CommentTab::COMMENTS->value ? $counts['comments'] : $counts['reviews']);
 
         return view('livewire.anime.comments', [
             'items' => $items,

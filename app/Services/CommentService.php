@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\CommentTab;
 use App\Models\Comment;
 use App\Models\Review;
 use Illuminate\Database\Eloquent\Collection;
@@ -23,7 +24,7 @@ class CommentService
     {
         $userId = auth()->id();
 
-        if ($params['activeTab'] === \App\Enums\CommentTab::COMMENTS->value) {
+        if ($params['activeTab'] === CommentTab::COMMENTS->value) {
             $query = Comment::with([
                 'user.profile',
                 'replies.user.profile',

@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Comment extends Model
 {
@@ -29,7 +30,7 @@ class Comment extends Model
         'is_pinned' => 'boolean',
     ];
 
-    public function likes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function likes(): HasMany
     {
         return $this->hasMany(CommentLike::class);
     }
@@ -52,7 +53,7 @@ class Comment extends Model
     /**
      * Get the replies for the comment.
      */
-    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function replies(): HasMany
     {
         return $this->hasMany(Comment::class, 'parent_id')->with(['user.profile', 'replies']);
     }

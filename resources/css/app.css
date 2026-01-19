@@ -69,6 +69,25 @@ body {
     color: var(--color-text-main);
 }
 
+::selection {
+    color: var(--color-bg-secondary);
+    background: var(--color-text-heading);
+    text-shadow: none;
+}
+
+body::-webkit-scrollbar {
+    width: var(--spacing-4);
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    outline: var(--spacing-px) solid var(--color-bg-secondary);
+}
+
 [x-cloak] {
     display: none !important;
 }

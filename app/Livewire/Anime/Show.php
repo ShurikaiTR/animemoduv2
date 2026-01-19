@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Anime;
 
 use App\Models\Anime;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
@@ -15,7 +16,7 @@ class Show extends Component
 {
     public ?Anime $anime = null;
 
-    public function placeholder(): \Illuminate\Contracts\View\View
+    public function placeholder(): View
     {
         return view('livewire.anime.partials.show-skeleton');
     }
@@ -28,7 +29,7 @@ class Show extends Component
     }
 
     #[Layout('components.layout.app')]
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         return view('livewire.anime.show', [
             'anime' => $this->anime,
