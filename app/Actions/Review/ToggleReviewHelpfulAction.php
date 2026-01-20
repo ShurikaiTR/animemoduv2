@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions;
+namespace App\Actions\Review;
 
 use App\Models\Review;
 use App\Models\ReviewHelpful;

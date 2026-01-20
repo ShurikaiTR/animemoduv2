@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\Anime;
 
 use App\Models\Anime;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class EpisodeList extends Component
@@ -32,24 +33,34 @@ class EpisodeList extends Component
         $this->selectedSeason = $season;
     }
 
-    public function render()
+    #[Computed]
+    public function seasons()
     {
-        $allSeasons = $this->anime->episodes()
+        return $this->anime->episodes()
             ->where('season_number', '>', 0)
             ->select('season_number')
             ->distinct()
             ->orderBy('season_number')
             ->pluck('season_number');
+    }
 
-        $episodes = $this->anime->episodes()
+    #[Computed]
+    public function episodes()
+    {
+        return $this->anime->episodes()
             ->where('season_number', $this->selectedSeason)
             ->orderBy('episode_number')
             ->get();
+    }
 
-        return view('livewire.anime.episode-list', [
-            'seasons' => $allSeasons,
-            'episodes' => $episodes,
-            'structureType' => $this->anime->structure_type ?? 'seasonal',
-        ]);
+    #[Computed]
+    public function structureType(): string
+    {
+        return $this->anime->structure_type ?? 'seasonal';
+    }
+
+    public function render()
+    {
+        return view('livewire.anime.episode-list');
     }
 }

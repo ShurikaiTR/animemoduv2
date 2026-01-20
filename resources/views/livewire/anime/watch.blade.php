@@ -30,7 +30,7 @@
                         >
                             {{-- Real Player --}}
                             <template x-if="isPlaying">
-                                <x-video-player-custom
+                                <x-anime.video-player-custom
                                     :src="$episode->video_url" 
                                     :poster="$episode->still_path ? \App\Services\TmdbService::getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? \App\Services\TmdbService::getImageUrl($anime->backdrop_path, 'original') : null)"
                                     :anime="$anime"

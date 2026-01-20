@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions;
+namespace App\Actions\Comment;
 
 use App\Enums\UserRole;
 use App\Models\Comment;
@@ -17,7 +17,7 @@ class PinCommentAction
         }
 
         $comment = Comment::findOrFail($commentId);
-        $comment->update(['is_pinned' => ! $comment->is_pinned]);
+        $comment->update(['is_pinned' => !$comment->is_pinned]);
 
         return $comment;
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions;
+namespace App\Actions\Comment;
 
 use App\Models\Comment;
 use App\Models\CommentLike;
