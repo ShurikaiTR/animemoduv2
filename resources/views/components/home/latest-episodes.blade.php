@@ -26,7 +26,9 @@
                                 ? $tmdbService->getImageUrl($episode->anime->poster_path, 'w500')
                                 : null);
 
-                        $href = route('anime.show', $episode->anime->slug);
+                        $href = $isSeasonal
+                            ? route('anime.watch', ['anime' => $episode->anime->slug, 'segment1' => "sezon-{$episode->season_number}", 'segment2' => "bolum-{$episode->episode_number}"])
+                            : route('anime.watch', ['anime' => $episode->anime->slug, 'segment1' => "bolum-{$episode->absolute_episode_number}"]);
                     @endphp
 
                     <x-anime.episode-card :title="$episode->anime->title" :episode-number="$epNumberText" :image="$image"

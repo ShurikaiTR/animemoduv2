@@ -43,9 +43,12 @@
                     $epNum = ($structureType === 'absolute')
                         ? ($episode->absolute_episode_number ?? $episode->episode_number) . '. Bölüm'
                         : $episode->episode_number . '. Bölüm';
+                    $href = ($structureType === 'seasonal')
+                        ? route('anime.watch', ['anime' => $anime->slug, 'segment1' => "sezon-{$episode->season_number}", 'segment2' => "bolum-{$episode->episode_number}"])
+                        : route('anime.watch', ['anime' => $anime->slug, 'segment1' => "bolum-" . ($episode->absolute_episode_number ?? $episode->episode_number)]);
                 @endphp
                 <x-anime.episode-card :title="$epNum" :episodeNumber="$episode->title"
-                    :image="app(\App\Services\TmdbService::class)->getImageUrl($episode->still_path ?? $anime->backdrop_path, 'w500')" :timeAgo="''" :href="route('anime.show', ['slug' => $anime->slug]) . '#episode-' . $episode->episode_number" />
+                    :image="app(\App\Services\TmdbService::class)->getImageUrl($episode->still_path ?? $anime->backdrop_path, 'w500')" :timeAgo="''" :href="$href" />
             </div>
         @empty
             <x-ui.empty-state icon="heroicon-o-video-camera-slash" title="Bölüm Bulunamadı"

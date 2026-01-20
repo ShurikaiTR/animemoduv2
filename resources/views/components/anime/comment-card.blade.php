@@ -21,7 +21,8 @@
             <div
                 class="relative {{ $avatarSize }} rounded-full overflow-hidden bg-bg-secondary ring-offset-2 ring-offset-bg-main {{ $ringClass }}">
                 @if($profile->avatar_url)
-                    <img src="{{ $profile->avatar_url }}" class="w-full h-full object-cover">
+                    <img src="{{ $profile->avatar_url }}" alt="{{ $profile->username }} avatarı"
+                        class="w-full h-full object-cover">
                 @else
                     <div
                         class="w-full h-full flex items-center justify-center text-white font-bold bg-primary/20 uppercase">

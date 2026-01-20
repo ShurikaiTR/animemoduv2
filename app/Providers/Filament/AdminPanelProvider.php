@@ -29,7 +29,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
+                'danger' => '#ef4444',
+                'gray' => '#71717a', // Zinc
+                'info' => '#3b82f6',
                 'primary' => '#2f80ed',
+                'success' => '#22c55e',
+                'warning' => '#f59e0b',
             ])
             ->font('Inter')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

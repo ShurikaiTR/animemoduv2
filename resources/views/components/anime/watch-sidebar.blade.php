@@ -4,7 +4,7 @@
     'currentEpisode'
 ])
 
-<aside class="xl:block w-full" aria-label="Bölüm Navigasyonu">
+<aside {{ $attributes->merge(['class' => 'w-full']) }} aria-label="Bölüm Navigasyonu">
     <div class="sticky top-24 space-y-6">
         {{-- Anime Card --}}
         <a 
@@ -101,7 +101,7 @@
                                 @if($ep->still_path)
                                     <img 
                                         src="{{ \App\Services\TmdbService::getImageUrl($ep->still_path, 'w300') }}" 
-                                        alt="" 
+                                        alt="{{ $ep->season_number }}. Sezon {{ $ep->episode_number }}. Bölüm Önizlemesi" 
                                         class="w-full h-full object-cover {{ $isActive ? '' : 'opacity-70 group-hover:opacity-100 transition-opacity' }}"
                                         loading="lazy"
                                     >

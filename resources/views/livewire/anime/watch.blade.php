@@ -169,7 +169,7 @@
                         </div>
 
 
-                        {{-- Right Column: Sidebar --}}
+                        {{-- Mobile Sidebar (Displayed below video on small screens) --}}
                         <div class="xl:hidden mt-8">
                              <x-anime.watch-sidebar 
                                 :anime="$anime" 
@@ -184,11 +184,12 @@
                     {{-- <livewire:anime.comments :anime="$anime" :episode="$episode" /> --}}
                 </div>
 
-                {{-- Right Column: Sidebar --}}
+                {{-- Desktop Sidebar (Right column) --}}
                 <x-anime.watch-sidebar 
                     :anime="$anime" 
                     :episodes="$this->episodes" 
-                    :current-episode="$episode" 
+                    :current-episode="$episode"
+                    class="hidden xl:block"
                 />
 
             </div>
