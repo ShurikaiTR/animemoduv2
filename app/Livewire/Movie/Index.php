@@ -29,7 +29,15 @@ class Index extends Component
 
     public function updatedLetter(): void
     {
+        $this->limit = 24;
         $this->resetPage();
+    }
+
+    public int $limit = 24;
+
+    public function loadMore(): void
+    {
+        $this->limit += 24;
     }
 
     #[Computed]
@@ -53,7 +61,7 @@ class Index extends Component
                 // Default: Latest added/updated movies
                 $query->orderByDesc('release_date');
             })
-            ->paginate(24);
+            ->paginate($this->limit);
     }
 
     public function render()

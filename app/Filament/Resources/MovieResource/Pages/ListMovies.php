@@ -46,6 +46,15 @@ class ListMovies extends ListRecords
                                 })
                                 ->toArray();
                         })
+                        ->getOptionLabelUsing(function ($value): ?string {
+                            if (!$value) {
+                                return null;
+                            }
+
+                            $movie = app(\App\Services\TmdbService::class)->getDetails((int) $value, 'movie');
+
+                            return $movie['title'] ?? null;
+                        })
                         ->allowHtml()
                         ->required(),
                 ])

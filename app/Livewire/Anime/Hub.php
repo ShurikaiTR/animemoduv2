@@ -30,11 +30,19 @@ class Hub extends Component
 
     public function updatedLetter(): void
     {
+        $this->limit = 24;
         $this->resetPage();
     }
 
 
 
+
+    public int $limit = 24;
+
+    public function loadMore(): void
+    {
+        $this->limit += 24;
+    }
 
     #[Computed]
     public function animes()
@@ -57,6 +65,6 @@ class Hub extends Component
                 // If no letter selected, sort by popularity or update
                 $query->orderByDesc('updated_at');
             })
-            ->paginate(24);
+            ->paginate($this->limit);
     }
 }

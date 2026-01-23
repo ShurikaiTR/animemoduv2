@@ -54,7 +54,19 @@
             </div>
 
             <div class="mt-8">
-                {{ $this->movies->links() }}
+                @if($this->movies->hasMorePages())
+                    <div x-intersect.full="$wire.loadMore()">
+                        {{-- Loading State (Skeletons) --}}
+                        <div wire:loading wire:target="loadMore" wire:loading.delay
+                            class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 w-full mt-4">
+                            @foreach(range(1, 12) as $i)
+                                <div class="aspect-[2/3] w-full rounded-xl overflow-hidden">
+                                    <div class="w-full h-full bg-white/5 animate-pulse"></div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

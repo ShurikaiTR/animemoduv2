@@ -26,8 +26,8 @@
         <div class="absolute top-0 left-0 right-0 h-96 w-full z-0">
             @if($backdrop)
                 <img src="{{ $backdrop }}" srcset="{{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w300') }} 300w,
-                                {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w780') }} 780w,
-                                {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w1280') }} 1280w"
+                                    {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w780') }} 780w,
+                                    {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w1280') }} 1280w"
                     sizes="100vw" alt="{{ $anime->title }} arkaplan görseli"
                     class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" loading="eager"
                     fetchpriority="high" decoding="async" />
@@ -39,11 +39,23 @@
             <div class="flex flex-col xl:flex-row xl:items-start gap-8">
                 <div class="flex-1 min-w-0">
                     <div class="article__content flex flex-col mb-10">
-                        {{-- Title --}}
-                        <h1 id="anime-title"
-                            class="text-4xl lg:text-6xl text-white font-rubik font-semibold mb-6 leading-tight tracking-tight">
-                            {{ $anime->title }}
-                        </h1>
+                        {{-- Title or Logo --}}
+                        @php
+                            $logoUrl = $anime->logo_path ? $tmdb->getImageUrl($anime->logo_path, 'original') : null;
+                        @endphp
+
+                        @if($logoUrl)
+                            <div class="mb-6 md:mb-8">
+                                <img src="{{ $logoUrl }}" alt="{{ $anime->title }}"
+                                    class="h-16 md:h-20 lg:h-24 w-auto object-contain object-left drop-shadow-xl" />
+                                <h1 class="sr-only">{{ $anime->title }}</h1>
+                            </div>
+                        @else
+                            <h1 id="anime-title"
+                                class="text-4xl lg:text-5xl text-white font-rubik font-extrabold mb-6 leading-none tracking-tight drop-shadow-lg">
+                                {{ $anime->title }}
+                            </h1>
+                        @endif
 
                         {{-- Metadata --}}
                         <ul class="flex flex-wrap items-center gap-6 mb-8 text-text-main font-inter text-base">

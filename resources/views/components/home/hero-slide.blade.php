@@ -4,6 +4,8 @@
 
 @php
     $backdropUrl = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : asset('img/placeholder-backdrop.jpg');
+    $backdropW780 = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w780') : null;
+    $backdropW1280 = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w1280') : null;
     $logoUrl = $anime->logo_path ? $tmdbService->getImageUrl($anime->logo_path, 'original') : null;
 @endphp
 
@@ -22,6 +24,10 @@
         <div class="w-full h-full relative">
             <img
                 src="{{ $backdropUrl }}"
+                @if($backdropW780 && $backdropW1280)
+                    srcset="{{ $backdropW780 }} 780w, {{ $backdropW1280 }} 1280w, {{ $backdropUrl }} 1920w"
+                    sizes="100vw"
+                @endif
                 alt="{{ $anime->title }}"
                 @if($index === 0)
                     fetchpriority="high"
