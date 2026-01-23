@@ -23,7 +23,7 @@ trait HasAnimeTable
             ->columns([
                 Tables\Columns\ImageColumn::make('poster_path')
                     ->label('Poster')
-                    ->getStateUsing(fn ($record) => $record->poster_path
+                    ->getStateUsing(fn($record) => $record->poster_path
                         ? "https://image.tmdb.org/t/p/w92{$record->poster_path}"
                         : null)
                     ->width(50)
@@ -36,7 +36,7 @@ trait HasAnimeTable
                     ->sortable()
                     ->weight('medium')
                     ->color('primary')
-                    ->description(fn ($record) => $record->original_title)
+                    ->description(fn($record) => $record->original_title)
                     ->wrap(),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Durum')
@@ -58,7 +58,7 @@ trait HasAnimeTable
                 Tables\Columns\TextColumn::make('hero_order')
                     ->label('Vitrin')
                     ->badge()
-                    ->color(fn ($record) => $record->hero_order > 0 ? 'warning' : 'gray')
+                    ->color(fn($record) => $record->hero_order > 0 ? 'warning' : 'gray')
                     ->sortable()
                     ->alignCenter(),
                 Tables\Columns\TextColumn::make('episodes_count')
@@ -84,6 +84,7 @@ trait HasAnimeTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('created_at', 'desc')
+            ->striped()
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Durum')
@@ -108,9 +109,9 @@ trait HasAnimeTable
                     ->trueLabel('Vitrindekiler')
                     ->falseLabel('Vitrin Olmayanlar')
                     ->queries(
-                        true: fn (Builder $query) => $query->where('hero_order', '>', 0),
-                        false: fn (Builder $query) => $query->where('hero_order', 0),
-                        blank: fn (Builder $query) => $query,
+                        true: fn(Builder $query) => $query->where('hero_order', '>', 0),
+                        false: fn(Builder $query) => $query->where('hero_order', 0),
+                        blank: fn(Builder $query) => $query,
                     ),
             ])
             ->actions([

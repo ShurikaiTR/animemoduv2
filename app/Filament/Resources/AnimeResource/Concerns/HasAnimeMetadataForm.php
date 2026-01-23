@@ -31,12 +31,12 @@ trait HasAnimeMetadataForm
                                 ->icon('heroicon-m-arrow-down-tray')
                                 ->tooltip('TMDB verilerini çek ve formu doldur')
                                 ->action(function (Set $set, $state, TmdbService $tmdbService) {
-                                    if (! $state) {
+                                    if (!$state) {
                                         return;
                                     }
 
                                     $details = $tmdbService->getDetails((int) $state);
-                                    if (! $details) {
+                                    if (!$details) {
                                         return;
                                     }
 
@@ -79,7 +79,8 @@ trait HasAnimeMetadataForm
                     TextInput::make('slug')
                         ->label('URL Bağlantısı')
                         ->required()
-                        ->unique(table: 'animes', column: 'slug', ignoreRecord: true),
+                        ->unique(table: 'animes', column: 'slug', ignoreRecord: true)
+                        ->helperText('SEO dostu URL bağlantısı (ör: spy-x-family)'),
                 ]),
 
             Section::make('Sınıflandırma')

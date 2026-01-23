@@ -35,9 +35,10 @@ trait HasAnimeForm
                                 TextInput::make('title')
                                     ->label('Başlık')
                                     ->required()
+                                    ->autofocus()
                                     ->live(onBlur: true)
                                     ->afterStateUpdated(function (Set $set, ?string $state): void {
-                                        if (! $state) {
+                                        if (!$state) {
                                             return;
                                         }
                                         $set('slug', Str::slug($state));

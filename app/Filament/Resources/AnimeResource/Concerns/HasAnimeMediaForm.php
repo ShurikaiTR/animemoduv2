@@ -26,6 +26,7 @@ trait HasAnimeMediaForm
                             ->label('YouTube Fragman ID')
                             ->placeholder('Örn: mBaY3-0m8-g')
                             ->prefixIcon('heroicon-m-play-circle')
+                            ->helperText('YouTube video ID\'si (URL\'deki v= parametresi)')
                             ->columnSpanFull(),
 
                         Grid::make(1)
@@ -36,15 +37,15 @@ trait HasAnimeMediaForm
                                     ->suffixAction(
                                         Action::make('open_poster')
                                             ->icon('heroicon-m-arrow-top-right-on-square')
-                                            ->url(fn ($state, TmdbService $s) => $state ? $s->getImageUrl($state) : null, true)
-                                            ->visible(fn ($state) => filled($state))
+                                            ->url(fn($state, TmdbService $s) => $state ? $s->getImageUrl($state) : null, true)
+                                            ->visible(fn($state) => filled($state))
                                     ),
 
                                 Placeholder::make('poster_preview')
                                     ->label('Poster Önizleme')
                                     ->content(function (Get $get, TmdbService $tmdbService) {
                                         $path = $get('poster_path');
-                                        if (! $path) {
+                                        if (!$path) {
                                             return new HtmlString('<div class="text-gray-400 text-sm italic">Görsel seçilmedi</div>');
                                         }
                                         $url = $tmdbService->getImageUrl($path);
@@ -61,15 +62,15 @@ trait HasAnimeMediaForm
                                     ->suffixAction(
                                         Action::make('open_backdrop')
                                             ->icon('heroicon-m-arrow-top-right-on-square')
-                                            ->url(fn ($state, TmdbService $s) => $state ? $s->getImageUrl($state, 'w780') : null, true)
-                                            ->visible(fn ($state) => filled($state))
+                                            ->url(fn($state, TmdbService $s) => $state ? $s->getImageUrl($state, 'w780') : null, true)
+                                            ->visible(fn($state) => filled($state))
                                     ),
 
                                 Placeholder::make('backdrop_preview')
                                     ->label('Backdrop Önizleme')
                                     ->content(function (Get $get, TmdbService $tmdbService) {
                                         $path = $get('backdrop_path');
-                                        if (! $path) {
+                                        if (!$path) {
                                             return new HtmlString('<div class="text-gray-400 text-sm italic">Görsel seçilmedi</div>');
                                         }
                                         $url = $tmdbService->getImageUrl($path, 'w780');
@@ -86,15 +87,15 @@ trait HasAnimeMediaForm
                                     ->suffixAction(
                                         Action::make('open_logo')
                                             ->icon('heroicon-m-arrow-top-right-on-square')
-                                            ->url(fn ($state, TmdbService $s) => $state ? $s->getImageUrl($state, 'original') : null, true)
-                                            ->visible(fn ($state) => filled($state))
+                                            ->url(fn($state, TmdbService $s) => $state ? $s->getImageUrl($state, 'original') : null, true)
+                                            ->visible(fn($state) => filled($state))
                                     ),
 
                                 Placeholder::make('logo_preview')
                                     ->label('Logo Önizleme')
                                     ->content(function (Get $get, TmdbService $tmdbService) {
                                         $path = $get('logo_path');
-                                        if (! $path) {
+                                        if (!$path) {
                                             return new HtmlString('<div class="text-gray-400 text-sm italic">Görsel seçilmedi</div>');
                                         }
                                         $url = $tmdbService->getImageUrl($path, 'original');
