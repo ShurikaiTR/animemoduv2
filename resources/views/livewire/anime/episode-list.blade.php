@@ -4,10 +4,9 @@
         const amount = direction === 'left' ? -320 : 320;
         container.scrollBy({ left: amount, behavior: 'smooth' });
     }
-}">
+}" x-on:season-changed.window="$refs.episodeList.scrollTo({ left: 0, behavior: 'smooth' })">
     <div class="flex items-center justify-between mb-6">
-        <h3 class="flex items-center gap-3 text-2xl text-white font-rubik font-normal">
-            <x-icons.monitor-play class="w-6 h-6 text-primary" />
+        <h3 class="flex items-center gap-3 text-2xl text-white font-rubik font-bold">
             @if($this->structureType === 'seasonal')
                 {{ $selectedSeason }}. Sezon
             @else
@@ -36,7 +35,7 @@
     </div>
 
     <div x-ref="episodeList"
-        class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 no-scrollbar snap-x snap-mandatory scroll-smooth">
+        class="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide snap-x snap-mandatory scroll-smooth">
         @forelse($this->episodes as $episode)
             <div class="min-w-[85%] md:min-w-[20rem] snap-start">
                 @php

@@ -57,7 +57,7 @@
                         class="h-16 md:h-24 lg:h-32 object-contain w-auto max-w-4/5"
                     />
                 @else
-                    <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight drop-shadow-lg font-outfit">
+                    <h1 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight drop-shadow-xl font-rubik tracking-tight">
                         {{ $anime->title }}
                     </h1>
                 @endif

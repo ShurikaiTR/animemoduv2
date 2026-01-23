@@ -11,6 +11,7 @@ enum AnimeStatus: string implements HasColor, HasLabel
 {
     case ONGOING = 'Devam Ediyor';
     case COMPLETED = 'Tamamlandı';
+    case UPCOMING = 'Gelecek Sezon';
 
     public function getLabel(): ?string
     {
@@ -22,6 +23,7 @@ enum AnimeStatus: string implements HasColor, HasLabel
         return match ($this) {
             self::ONGOING => 'success',
             self::COMPLETED => 'primary',
+            self::UPCOMING => 'warning',
         };
     }
 

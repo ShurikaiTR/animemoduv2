@@ -5,10 +5,16 @@
     <section class="pb-8 pt-4 first:pt-4" aria-labelledby="latest-episodes-title">
         <x-layout.container>
             <div class="flex items-center justify-between mb-6">
-                <h2 id="latest-episodes-title"
-                    class="text-2xl sm:text-3xl font-bold font-rubik text-white drop-shadow-md border-l-4 border-primary pl-4">
-                    Bölümler
-                </h2>
+                <div>
+                    <h2 id="latest-episodes-title" class="text-2xl font-bold text-white font-rubik">
+                        Son Eklenen Bölümler
+                    </h2>
+                    <p class="text-text-main/60 text-sm mt-1">En yeni bölümleri kaçırma</p>
+                </div>
+                <a href="{{ route('anime.hub') }}"
+                    class="text-sm font-medium text-primary hover:text-white transition-colors">
+                    Tümünü Gör
+                </a>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-4 sm:gap-6">

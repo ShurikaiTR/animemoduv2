@@ -31,6 +31,7 @@ class EpisodeList extends Component
     public function selectSeason(int $season): void
     {
         $this->selectedSeason = $season;
+        $this->dispatch('season-changed');
     }
 
     #[Computed]

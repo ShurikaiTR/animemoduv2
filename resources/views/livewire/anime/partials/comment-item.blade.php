@@ -25,7 +25,7 @@
     @if(!$isReply && $item->is_pinned)
         <div class="flex items-center gap-2 mb-4 text-primary border-b border-primary/10 pb-3">
             <x-heroicon-s-bookmark class="w-4 h-4" />
-            <span class="text-xs font-black uppercase tracking-widest">SABİTLENMİŞ YORUM</span>
+            <span class="text-xs font-bold font-rubik uppercase tracking-widest">SABİTLENMİŞ YORUM</span>
         </div>
     @endif
 
@@ -50,7 +50,7 @@
             <div
                 class="flex items-center gap-2 bg-slate-800/80 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-700/50 shadow-lg">
                 <x-heroicon-s-star class="w-5 h-5 text-primary drop-shadow-glow" />
-                <div class="flex items-baseline gap-0.5">
+                <div class="flex items-baseline gap-0.5 font-rubik">
                     <span class="text-xl font-bold text-white leading-none">{{ $item->rating }}</span>
                     <span class="text-xs font-medium text-slate-500 self-end pb-0.5">/10</span>
                 </div>
@@ -60,11 +60,10 @@
 
 
     {{-- Content --}}
-    <div
-        class="pl-16 relative z-10 {{ $activeTab === 'reviews' ? 'border-l-4 border-primary pl-6 py-2 ml-16 !pl-6' : '' }}">
+    <div class="pl-16 relative z-10 {{ $activeTab === 'reviews' ? 'pl-6 py-2 ml-0 !pl-16' : '' }}">
         @if($activeTab === 'reviews' && $item->title)
             <div class="mb-3">
-                <h4 class="font-bold text-xl text-white leading-tight tracking-tight">
+                <h4 class="font-bold text-xl text-white leading-tight tracking-tight font-rubik">
                     {{ $item->title }}
                 </h4>
             </div>

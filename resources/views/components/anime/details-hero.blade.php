@@ -7,6 +7,16 @@
     $rating = (float) ($anime->vote_average ?? 0);
     $genres = is_array($anime->genres) ? $anime->genres : [];
     $year = $tmdb->getYear($anime->release_date?->format('Y-m-d'));
+
+    // Determine First Episode URL
+    $firstEpisode = $anime->episodes()->orderBy('season_number')->orderBy('episode_number')->first();
+    $watchUrl = '#episode-list';
+
+    if ($firstEpisode) {
+        $watchUrl = $anime->structure_type === 'seasonal' || $anime->structure_type === null
+            ? route('anime.watch', ['anime' => $anime->slug, 'segment1' => "sezon-{$firstEpisode->season_number}", 'segment2' => "bolum-{$firstEpisode->episode_number}"])
+            : route('anime.watch', ['anime' => $anime->slug, 'segment1' => "bolum-{$firstEpisode->absolute_episode_number}"]);
+    }
 @endphp
 
 <div x-data="{ showTrailer: false }">
@@ -15,18 +25,12 @@
         {{-- Backdrop Image --}}
         <div class="absolute top-0 left-0 right-0 h-96 w-full z-0">
             @if($backdrop)
-                <img 
-                    src="{{ $backdrop }}" 
-                    srcset="{{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w300') }} 300w,
-                            {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w780') }} 780w,
-                            {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w1280') }} 1280w"
-                    sizes="100vw"
-                    alt="{{ $anime->title }} arkaplan görseli"
-                    class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" 
-                    loading="eager"
-                    fetchpriority="high" 
-                    decoding="async" 
-                />
+                <img src="{{ $backdrop }}" srcset="{{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w300') }} 300w,
+                                {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w780') }} 780w,
+                                {{ $tmdb->getImageUrl($anime->backdrop_path ?? $anime->poster_path, 'w1280') }} 1280w"
+                    sizes="100vw" alt="{{ $anime->title }} arkaplan görseli"
+                    class="absolute inset-0 w-full h-full object-cover opacity-40 select-none" loading="eager"
+                    fetchpriority="high" decoding="async" />
             @endif
             <div class="absolute inset-0 bg-gradient-to-b from-bg-main/30 via-bg-main/80 to-bg-main z-10"></div>
         </div>

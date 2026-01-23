@@ -38,7 +38,6 @@
             <div class="p-4 border-b border-white/5 bg-white/[0.02] space-y-4 shrink-0">
                 <div class="flex items-center justify-between">
                     <h2 class="font-bold text-white font-rubik flex items-center gap-2 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                         Bölümler
                     </h2>
                     <span class="px-2 py-0.5 rounded-md border border-white/10 bg-white/5 text-xs text-white/60">
@@ -57,7 +56,6 @@
                 @if($seasons->count() > 1)
                     <nav class="flex items-center gap-2 mb-4 px-1" aria-label="Sezon seçimi">
                         <span class="text-xs font-semibold text-white/40 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
                             Sezon
                         </span>
                         <div class="flex items-center gap-1.5 flex-wrap">
