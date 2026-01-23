@@ -50,7 +50,7 @@ class ListAnimes extends ListRecords
                                                     <span class='px-1.5 py-0.5 rounded text-[10px] font-bold uppercase {$typeColor}'>{$type}</span>
                                                 </div>
                                                 <div class='text-xs text-gray-400 line-clamp-1 mt-0.5'>
-                                                    ".($item['overview'] ?? '').'
+                                                    " . ($item['overview'] ?? '') . '
                                                 </div>
                                             </div>
                                         </div>
@@ -59,7 +59,15 @@ class ListAnimes extends ListRecords
                                 })
                                 ->toArray();
                         })
-                        ->getOptionLabelUsing(fn ($value): ?string => (string) $value)
+                        ->getOptionLabelUsing(function ($value): ?string {
+                            if (!$value) {
+                                return null;
+                            }
+
+                            $result = app(\App\Services\TmdbService::class)->getDetails((int) $value, 'tv');
+
+                            return $result['name'] ?? $result['title'] ?? null;
+                        })
                         ->allowHtml()
                         ->required(),
 
