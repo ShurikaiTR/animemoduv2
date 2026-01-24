@@ -12,8 +12,8 @@ use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
+#[Lazy]
 #[Layout('components.layout.app')]
 #[Title('Animeler - AnimeModu')]
 class Hub extends Component
@@ -70,7 +70,6 @@ class Hub extends Component
                 ->forPage($this->page, 24)
                 ->get();
 
-            Log::info('Hub animes count for ' . $this->letter . ': ' . $data->count());
             return $data;
         });
     }
