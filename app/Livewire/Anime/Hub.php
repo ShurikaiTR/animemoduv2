@@ -30,18 +30,18 @@ class Hub extends Component
 
     public function updatedLetter(): void
     {
-        $this->page = 1;
+        $this->limit = 24;
         $this->resetPage();
     }
 
 
 
 
-    public int $page = 1;
+    public int $limit = 24;
 
     public function loadMore(): void
     {
-        $this->page++;
+        $this->limit += 24;
     }
 
     #[Computed]
