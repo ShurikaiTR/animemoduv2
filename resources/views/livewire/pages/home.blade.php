@@ -1,4 +1,5 @@
 <div class="pt-20 lg:pt-24 pb-8">
+    <x-slot:title>Ana Sayfa - AnimeModu</x-slot:title>
     {{-- Hero Section (Full width on mobile, constrained on desktop) --}}
     <div class="mb-12 md:max-w-7xl md:mx-auto md:px-8">
         <x-home.hero-slider :featuredAnimes="$featuredAnimes" />

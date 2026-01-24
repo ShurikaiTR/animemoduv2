@@ -32,7 +32,7 @@ class Hub extends Component
 
     public function updatedLetter(): void
     {
-        $this->page = 1;
+        $this->limit = 24;
         $this->resetPage();
     }
 
@@ -44,7 +44,7 @@ class Hub extends Component
     #[Computed]
     public function animes()
     {
-        $query = Anime::query()
+        return Anime::query()
             ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
             ->where('media_type', 'tv')
             ->when($this->letter, function ($query) {
@@ -60,9 +60,7 @@ class Hub extends Component
                 $query->orderBy('title');
             }, function ($query) {
                 $query->orderByDesc('updated_at');
-            });
-
-        // Use standard pagination or simple collection for Island
-        return $query->paginate(24, ['*'], 'page', $this->page);
+            })
+            ->paginate($this->limit);
     }
 }

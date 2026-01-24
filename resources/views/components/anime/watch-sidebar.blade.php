@@ -118,26 +118,20 @@
                                 @endif
                             </div>
                             
-                            <div class="flex flex-col justify-center min-w-0">
+                            <div class="flex flex-col justify-center min-w-0 flex-1">
                                 <span class="text-xs font-medium {{ $isActive ? 'text-primary' : 'text-white/80 group-hover:text-white' }}">
                                     {{ $ep->season_number }}. Sezon {{ $ep->episode_number }}. Bölüm
                                 </span>
-                                <h3 class="text-[11px] text-white/50 line-clamp-1 mt-0.5">
-                                    {{ $ep->name ?? 'Bölüm ' . $ep->episode_number }}
-                                </h3>
-                                <div class="flex items-center gap-2 mt-1.5">
-                                    <span class="text-[10px] text-white/40 bg-white/5 px-1.5 py-0.5 rounded">
-                                        {{ Carbon\Carbon::parse($ep->air_date)->year ?? '-' }}
-                                    </span>
-                                    <span class="text-[10px] text-white/40 flex items-center gap-1">
-                                       ★ {{ number_format($ep->vote_average, 1) }}
-                                    </span>
-                                </div>
+                                @if($ep->title)
+                                    <h3 class="text-[11px] text-white/50 line-clamp-1 mt-0.5">
+                                        {{ $ep->title }}
+                                    </h3>
+                                @endif
                             </div>
 
                              @if(!$isActive)
-                                <div class="flex items-center px-1">
-                                    <div class="rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-primary text-white">
+                                <div class="flex items-center px-1 ml-auto">
+                                    <div class="rounded-full w-8 h-8 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center bg-primary text-white shadow-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                                     </div>
                                 </div>

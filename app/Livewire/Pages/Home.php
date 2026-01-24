@@ -14,7 +14,6 @@ use Livewire\Component;
 
 #[Lazy]
 #[Layout('components.layout.app')]
-#[\Livewire\Attributes\Title('Ana Sayfa - AnimeModu')]
 class Home extends Component
 {
     /** @var \Illuminate\Support\Collection */
