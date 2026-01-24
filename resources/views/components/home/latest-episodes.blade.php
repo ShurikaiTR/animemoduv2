@@ -38,7 +38,7 @@
                     @endphp
 
                     <x-anime.episode-card :title="$episode->anime->title" :episode-number="$epNumberText" :image="$image"
-                        :time-ago="$episode->created_at->diffForHumans()" :href="$href" :attr="$loop->first ? 'fetchpriority=high' : ''" />
+                        :time-ago="$episode->created_at->diffForHumans()" :href="$href" :attr="$loop->index < 5 ? 'fetchpriority=high loading=eager' : 'loading=lazy'" />
                 @endforeach
             </div>
         </x-layout.container>

@@ -6,7 +6,7 @@
         @if($image)
             <img src="{{ $image }}" @if($imageW300) srcset="{{ $imageW300 }} 300w, {{ $image }} 500w"
             sizes="(max-width: 640px) 85vw, 320px" @endif alt="{{ $title }} - {{ $episodeNumber }} anime bölüm görseli"
-                loading="lazy" {{ $attr }}
+                {{ $attr }} width="400" height="225"
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
         @endif
 

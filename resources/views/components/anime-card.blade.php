@@ -1,6 +1,7 @@
 @props([
     'anime',
     'class' => '',
+    'attr' => '',
 ])
 
 @php
@@ -17,8 +18,9 @@
 
     $rating = number_format($anime->vote_average ?? 0, 1);
     $year = $anime->release_date ? $anime->release_date->format('Y') : '';
-    $genres = collect($anime->genres ?? [])->take(2);
-    $extraGenresCount = max(0, count($anime->genres ?? []) - 2);
+    $genresRaw = $anime->genres ?? [];
+    $genres = array_slice($genresRaw, 0, 2);
+    $extraGenresCount = max(0, count($genresRaw) - 2);
     $route = route('anime.show', ['slug' => $anime->slug]);
 @endphp
 
@@ -39,7 +41,8 @@
                 sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 15vw"
             @endif
             alt="{{ $anime->title }}"
-            loading="lazy"
+            {{ $attr }}
+            width="300" height="450"
             class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
 

@@ -40,7 +40,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
                     @foreach(range(1, 5) as $i)
                         <div class="space-y-3">
-                            <x-ui.skeleton width="w-full" height="h-40 md:h-48" class="rounded-2xl" />
+                            <x-ui.skeleton width="w-full" height="aspect-video" class="rounded-2xl" />
                             <x-ui.skeleton width="w-3/4" height="h-4" />
                             <x-ui.skeleton width="w-1/2" height="h-3" />
                         </div>

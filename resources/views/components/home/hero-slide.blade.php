@@ -3,10 +3,10 @@
 @use('App\Enums\AnimeStatus')
 
 @php
-    $backdropUrl = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : asset('img/placeholder-backdrop.jpg');
+    $backdropUrl = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w1280') : asset('img/placeholder-backdrop.jpg');
     $backdropW780 = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w780') : null;
     $backdropW1280 = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w1280') : null;
-    $logoUrl = $anime->logo_path ? $tmdbService->getImageUrl($anime->logo_path, 'original') : null;
+    $logoUrl = $anime->logo_path ? $tmdbService->getImageUrl($anime->logo_path, 'w500') : null;
 @endphp
 
 <div
@@ -26,8 +26,8 @@
                 src="{{ $backdropUrl }}"
                 @if($backdropW780 && $backdropW1280)
                     srcset="{{ $backdropW780 }} 780w, {{ $backdropW1280 }} 1280w, {{ $backdropUrl }} 1920w"
-                    sizes="100vw"
-                @endif
+                sizes="100vw"
+                width="1920" height="1080"
                 alt="{{ $anime->title }}"
                 @if($index === 0)
                     fetchpriority="high"

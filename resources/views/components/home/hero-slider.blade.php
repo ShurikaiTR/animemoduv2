@@ -2,49 +2,49 @@
 
 @if($featuredAnimes->isNotEmpty())
     <div x-data="{
-                                        activeSlide: 0,
-                                        slides: {{ $featuredAnimes->count() }},
-                                        progress: 0,
-                                        isPaused: false,
-                                        hoveringLeft: false,
-                                        touchStartX: 0,
-                                        touchEndX: 0,
-                                        next() {
-                                            this.progress = 0;
-                                            this.activeSlide = (this.activeSlide + 1) % this.slides;
-                                        },
-                                        prev() {
-                                            this.progress = 0;
-                                            this.activeSlide = (this.activeSlide - 1 + this.slides) % this.slides;
-                                        },
-                                        goTo(index) {
-                                            this.progress = 0;
-                                            this.activeSlide = index;
-                                        },
-                                        tick() {
-                                            if (!this.isPaused) {
-                                                this.progress += 0.5;
-                                                if (this.progress >= 100) {
+                                            activeSlide: 0,
+                                            slides: {{ $featuredAnimes->count() }},
+                                            progress: 0,
+                                            isPaused: false,
+                                            hoveringLeft: false,
+                                            touchStartX: 0,
+                                            touchEndX: 0,
+                                            next() {
+                                                this.progress = 0;
+                                                this.activeSlide = (this.activeSlide + 1) % this.slides;
+                                            },
+                                            prev() {
+                                                this.progress = 0;
+                                                this.activeSlide = (this.activeSlide - 1 + this.slides) % this.slides;
+                                            },
+                                            goTo(index) {
+                                                this.progress = 0;
+                                                this.activeSlide = index;
+                                            },
+                                            tick() {
+                                                if (!this.isPaused) {
+                                                    this.progress += 1;
+                                                    if (this.progress >= 100) {
+                                                        this.next();
+                                                    }
+                                                }
+                                            },
+                                            handleTouchStart(e) {
+                                                this.touchStartX = e.changedTouches[0].screenX;
+                                            },
+                                            handleTouchEnd(e) {
+                                                this.touchEndX = e.changedTouches[0].screenX;
+                                                this.handleSwipe();
+                                            },
+                                            handleSwipe() {
+                                                if (this.touchEndX < this.touchStartX - 50) {
                                                     this.next();
                                                 }
+                                                if (this.touchEndX > this.touchStartX + 50) {
+                                                    this.prev();
+                                                }
                                             }
-                                        },
-                                        handleTouchStart(e) {
-                                            this.touchStartX = e.changedTouches[0].screenX;
-                                        },
-                                        handleTouchEnd(e) {
-                                            this.touchEndX = e.changedTouches[0].screenX;
-                                            this.handleSwipe();
-                                        },
-                                        handleSwipe() {
-                                            if (this.touchEndX < this.touchStartX - 50) {
-                                                this.next();
-                                            }
-                                            if (this.touchEndX > this.touchStartX + 50) {
-                                                this.prev();
-                                            }
-                                        }
-                                    }" x-init="setInterval(() => tick(), 50)" @touchstart="handleTouchStart($event)"
+                                        }" x-init="setInterval(() => tick(), 100)" @touchstart="handleTouchStart($event)"
         @touchend="handleTouchEnd($event)" role="region" aria-label="Öne Çıkan Animeler" {{ $attributes->merge(['class' => 'relative w-full h-128 md:h-144 lg:h-160 min-h-128 overflow-hidden group bg-black rounded-none md:rounded-3xl shadow-none md:shadow-2xl ring-0 md:ring-1 ring-white/10']) }}>
         {{-- Slides --}}
         <div class="relative w-full h-full">
