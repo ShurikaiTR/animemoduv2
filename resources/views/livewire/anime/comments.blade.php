@@ -45,7 +45,7 @@
                 />
             @endforelse
 
-            @if($this->items->hasMorePages())
+            @if($this->hasMore)
                 <div class="flex justify-center pt-6">
                     <x-ui.button wire:click="loadMore" variant="ghost" class="text-primary hover:text-white group">
                         Daha Fazla Yükle

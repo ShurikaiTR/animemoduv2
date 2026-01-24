@@ -46,7 +46,6 @@ class Comments extends BaseComponent
 
     public int $perPage = 10;
 
-    public bool $hasMore = false;
 
     /** @var array<string, bool> */
     public array $showReplyInput = [];
@@ -83,6 +82,23 @@ class Comments extends BaseComponent
     public function loadMore(): void
     {
         $this->perPage += 10;
+    }
+
+    #[Computed]
+    public function items()
+    {
+        return app(CommentService::class)->getItems([
+            'anime_id' => $this->anime->id,
+            'episode_id' => $this->episode?->id,
+            'perPage' => $this->perPage,
+            'activeTab' => $this->activeTab,
+        ]);
+    }
+
+    #[Computed]
+    public function counts()
+    {
+        return app(CommentService::class)->getCounts($this->anime->id, $this->episode?->id);
     }
 
     #[Computed]

@@ -36,8 +36,8 @@ class CommentService
                 },
             ])
                 ->whereNull('parent_id')
-                ->where('anime_id', $params['anime_id'])
-                ->where('episode_id', $params['episode_id']);
+                ->where('anime_id', (string) $params['anime_id'])
+                ->where('episode_id', $params['episode_id'] ? (string) $params['episode_id'] : null);
         } else {
             $query = Review::with(['user.profile'])->where('anime_id', $params['anime_id']);
         }
@@ -48,8 +48,8 @@ class CommentService
     public function getCounts(string $animeId, ?string $episodeId): array
     {
         return [
-            'comments' => Comment::where('anime_id', $animeId)->where('episode_id', $episodeId)->whereNull('parent_id')->count(),
-            'reviews' => Review::where('anime_id', $animeId)->count(),
+            'comments' => Comment::where('anime_id', (string) $animeId)->where('episode_id', $episodeId ? (string) $episodeId : null)->whereNull('parent_id')->count(),
+            'reviews' => Review::where('anime_id', (string) $animeId)->count(),
         ];
     }
 }
