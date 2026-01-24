@@ -8,9 +8,11 @@ use App\Enums\AnimeGenre;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Lazy]
 #[Layout('components.layout.app')]
 class Discover extends Component
 {
@@ -42,7 +44,7 @@ class Discover extends Component
         return 'Animeleri Keşfet';
     }
 
-    protected function getPageTitle(): string
+    public function getPageTitle(): string
     {
         return config('app.name') . ': ' . $this->pageHeading;
     }

@@ -44,7 +44,7 @@ class Show extends Component
         return $this->anime?->trailer_key;
     }
 
-    protected function getPageTitle(): string
+    public function getPageTitle(): string
     {
         return ($this->anime?->title ?? 'Anime') . ' - ' . config('app.name');
     }

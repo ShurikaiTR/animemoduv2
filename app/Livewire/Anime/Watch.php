@@ -7,8 +7,11 @@ namespace App\Livewire\Anime;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Services\TmdbService;
-use Livewire\Attributes\Locked;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Locked;
+use Livewire\Component;
 
 #[Lazy]
 #[Layout('components.layout.app')]
@@ -109,7 +112,7 @@ class Watch extends Component
     }
 
 
-    protected function getPageTitle(): string
+    public function getPageTitle(): string
     {
         $epTitle = $this->episode->season_number . '. Sezon ' . $this->episode->episode_number . '. Bölüm';
         return $epTitle . ' - ' . $this->anime->title . ' - ' . config('app.name');
