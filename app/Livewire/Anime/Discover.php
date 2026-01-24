@@ -16,10 +16,6 @@ class Discover extends Component
 {
     use Concerns\HasAnimeFilters;
     use WithPagination;
-    public function render()
-    {
-        return view('livewire.anime.discover');
-    }
 
 
     #[Computed]

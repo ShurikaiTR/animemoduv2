@@ -7,19 +7,17 @@ namespace App\Livewire\Anime;
 use App\Models\Anime;
 use App\Models\Episode;
 use App\Services\TmdbService;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
-use Livewire\Component;
+use Livewire\Attributes\Locked;
+use Livewire\Attributes\Lazy;
 
+#[Lazy]
 #[Layout('components.layout.app')]
 class Watch extends Component
 {
-    public function render()
-    {
-        return view('livewire.anime.watch');
-    }
+    #[Locked]
     public Anime $anime;
 
+    #[Locked]
     public ?Episode $episode = null;
 
     public string $segment1;
