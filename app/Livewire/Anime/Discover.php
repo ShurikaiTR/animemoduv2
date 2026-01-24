@@ -18,10 +18,6 @@ class Discover extends Component
     use WithPagination;
 
 
-    public function render()
-    {
-        return view('livewire.anime.discover');
-    }
 
     #[Computed]
     public function pageHeading(): string

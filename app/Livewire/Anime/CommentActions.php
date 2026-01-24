@@ -12,12 +12,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Isolate;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 #[Isolate]
 class CommentActions extends Component
 {
     /** @var Comment|Review */
+    #[Locked]
     public Model $comment;
 
     public string $activeTab;
@@ -39,7 +41,7 @@ class CommentActions extends Component
         $this->updateState();
     }
 
-    public function toggleLike(bool $isLike): void
+    public function toggleLike(ToggleCommentLikeAction $action, bool $isLike): void
     {
         if (!Auth::check()) {
             $this->dispatch('openAuthModal');
@@ -51,14 +53,14 @@ class CommentActions extends Component
             return;
         }
 
-        $result = app(ToggleCommentLikeAction::class)->execute(Auth::id(), (string) $this->comment->id, $isLike);
+        $result = $action->execute(Auth::id(), (string) $this->comment->id, $isLike);
         $this->likeCount = $result['like_count'];
         $this->dislikeCount = $result['dislike_count'];
         $this->isLiked = $result['user_status'] === true;
         $this->isDisliked = $result['user_status'] === false;
     }
 
-    public function toggleHelpful(): void
+    public function toggleHelpful(ToggleReviewHelpfulAction $action): void
     {
         if (!Auth::check()) {
             $this->dispatch('openAuthModal');
@@ -70,7 +72,7 @@ class CommentActions extends Component
             return;
         }
 
-        $result = app(ToggleReviewHelpfulAction::class)->execute(Auth::id(), (string) $this->comment->id);
+        $result = $action->execute(Auth::id(), (string) $this->comment->id);
         $this->likeCount = $result['helpful_count'];
         $this->isHelpful = $result['is_helpful'];
     }

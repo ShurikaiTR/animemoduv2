@@ -10,6 +10,7 @@ use App\Models\Episode;
 use App\Services\CommentService;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Component;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component as BaseComponent;
@@ -84,18 +85,16 @@ class Comments extends BaseComponent
         $this->perPage += 10;
     }
 
-    public function render(): View
+    #[Computed]
+    public function hasMore(): bool
     {
-        $service = app(CommentService::class);
-        $counts = $service->getCounts($this->anime->id, $this->episode?->id);
-        $items = $service->getItems(['anime_id' => $this->anime->id, 'episode_id' => $this->episode?->id, 'perPage' => $this->perPage, 'activeTab' => $this->activeTab]);
-        $this->hasMore = $items->count() < ($this->activeTab === CommentTab::COMMENTS->value ? $counts['comments'] : $counts['reviews']);
+        $total = ($this->activeTab === CommentTab::COMMENTS->value ? $this->counts['comments'] : $this->counts['reviews']);
+        return $this->items->count() < $total;
+    }
 
-        return view('livewire.anime.comments', [
-            'items' => $items,
-            'commentsCount' => $counts['comments'],
-            'reviewsCount' => $counts['reviews'],
-            'showReviews' => empty($this->episode?->id),
-        ]);
+    #[Computed]
+    public function showReviews(): bool
+    {
+        return empty($this->episode?->id);
     }
 }

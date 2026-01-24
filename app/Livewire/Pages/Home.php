@@ -71,8 +71,4 @@ class Home extends Component
         });
     }
 
-    public function render(): View
-    {
-        return view('livewire.pages.home');
-    }
 }

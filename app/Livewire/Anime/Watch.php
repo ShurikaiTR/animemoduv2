@@ -11,6 +11,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layout.app')]
 class Watch extends Component
 {
     public Anime $anime;
@@ -105,11 +106,6 @@ class Watch extends Component
         }
     }
 
-    #[Layout('components.layout.app')]
-    public function render()
-    {
-        return view('livewire.anime.watch');
-    }
 
     protected function getPageTitle(): string
     {

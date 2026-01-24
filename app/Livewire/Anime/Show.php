@@ -12,6 +12,7 @@ use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Lazy]
+#[Layout('components.layout.app')]
 class Show extends Component
 {
     public ?Anime $anime = null;
@@ -28,14 +29,16 @@ class Show extends Component
         });
     }
 
-    #[Layout('components.layout.app')]
-    public function render(): View
+    #[Computed]
+    public function characters(): array
     {
-        return view('livewire.anime.show', [
-            'anime' => $this->anime,
-            'characters' => $this->anime?->characters ?? [],
-            'trailer' => $this->anime?->trailer_key,
-        ]);
+        return $this->anime?->characters ?? [];
+    }
+
+    #[Computed]
+    public function trailer(): ?string
+    {
+        return $this->anime?->trailer_key;
     }
 
     protected function getPageTitle(): string

@@ -2,13 +2,13 @@
     {{-- Tabs --}}
     @include('livewire.anime.partials.comments-tabs', [
         'activeTab' => $activeTab,
-        'commentsCount' => $commentsCount,
-        'reviewsCount' => $reviewsCount,
-        'showReviews' => $showReviews
+        'commentsCount' => $this->counts['comments'],
+        'reviewsCount' => $this->counts['reviews'],
+        'showReviews' => $this->showReviews
     ])
 
     {{-- Content Area --}}
-    @if(auth()->guest() && $items->isEmpty())
+    @if(auth()->guest() && $this->items->isEmpty())
         {{-- Scenario 1: Guest + No Items (Merged Box) --}}
         <x-ui.empty-state 
             :icon="$activeTab === 'comments' ? 'heroicon-o-chat-bubble-bottom-center-text' : 'heroicon-o-star'"
@@ -31,7 +31,7 @@
 
         {{-- Items List --}}
         <ul class="block" wire:transition>
-            @forelse($items as $item)
+            @forelse($this->items as $item)
                 <div wire:key="comment-{{ $item->id }}">
                     @include('livewire.anime.partials.comment-item', ['item' => $item, 'isReply' => false])
                 </div>
@@ -45,7 +45,7 @@
                 />
             @endforelse
 
-            @if($hasMore)
+            @if($this->items->hasMorePages())
                 <div class="flex justify-center pt-6">
                     <x-ui.button wire:click="loadMore" variant="ghost" class="text-primary hover:text-white group">
                         Daha Fazla Yükle
