@@ -15,8 +15,17 @@ class Episode extends Model
 
     protected static function booted(): void
     {
-        static::saved(fn() => Cache::forget('home_latest_episodes'));
-        static::deleted(fn() => Cache::forget('home_latest_episodes'));
+        static::saved(function ($episode) {
+            Cache::forget('home_latest_episodes');
+            Cache::forget("anime_seasons_{$episode->anime_id}");
+            Cache::forget("anime_episodes_{$episode->anime_id}_{$episode->season_number}");
+        });
+
+        static::deleted(function ($episode) {
+            Cache::forget('home_latest_episodes');
+            Cache::forget("anime_seasons_{$episode->anime_id}");
+            Cache::forget("anime_episodes_{$episode->anime_id}_{$episode->season_number}");
+        });
     }
 
     protected $fillable = [

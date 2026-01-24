@@ -9,6 +9,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
 
 class EpisodeList extends Component
 {
@@ -40,24 +41,28 @@ class EpisodeList extends Component
         $this->dispatch('season-changed');
     }
 
-    #[Computed(cache: true, key: 'anime-seasons', seconds: 3600)]
+    #[Computed]
     public function seasons()
     {
-        return $this->anime->episodes()
-            ->where('season_number', '>', 0)
-            ->select('season_number')
-            ->distinct()
-            ->orderBy('season_number')
-            ->pluck('season_number');
+        return Cache::remember("anime_seasons_{$this->anime->id}", 3600, function () {
+            return $this->anime->episodes()
+                ->where('season_number', '>', 0)
+                ->select('season_number')
+                ->distinct()
+                ->orderBy('season_number')
+                ->pluck('season_number');
+        });
     }
 
-    #[Computed(cache: true, seconds: 3600)]
+    #[Computed]
     public function episodes()
     {
-        return $this->anime->episodes()
-            ->where('season_number', $this->selectedSeason)
-            ->orderBy('episode_number')
-            ->get();
+        return Cache::remember("anime_episodes_{$this->anime->id}_{$this->selectedSeason}", 3600, function () {
+            return $this->anime->episodes()
+                ->where('season_number', $this->selectedSeason)
+                ->orderBy('episode_number')
+                ->get();
+        });
     }
 
     #[Computed]
