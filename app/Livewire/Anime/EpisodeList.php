@@ -16,7 +16,7 @@ class EpisodeList extends Component
     #[Locked]
     public Anime $anime;
 
-    #[Url(as: 'season', history: true)]
+    #[Url(as: 'sezon', history: true)]
     public int $selectedSeason = 1;
 
     public function mount(Anime $anime): void
@@ -24,7 +24,7 @@ class EpisodeList extends Component
         $this->anime = $anime;
 
         // Find the first available season if not provided in URL
-        if (request()->query('season') === null) {
+        if (request()->query('sezon') === null) {
             $firstSeason = $this->anime->episodes()
                 ->where('season_number', '>', 0)
                 ->min('season_number');

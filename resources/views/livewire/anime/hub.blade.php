@@ -33,14 +33,15 @@
                         <h2 class="text-2xl font-bold text-white font-rubik">Tüm Animeler</h2>
                     @endif
                     <p class="text-text-main/60 text-sm mt-1">Toplam <span
-                            class="text-primary font-bold">{{ $this->animes->total() }}</span> içerik
+                            class="text-primary font-bold">{{ $this->totalCount }}</span> içerik
                         listeleniyor</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                @island(name: 'anime-feed')
                 @forelse($this->animes as $anime)
-                    <x-anime-card :anime="$anime" />
+                    <x-anime-card :anime="$anime" wire:key="hub-{{ $anime->id }}" />
                 @empty
                     <div class="col-span-full py-20 text-center">
                         <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
@@ -50,13 +51,15 @@
                         <p class="text-text-main/60 text-sm">Aradığınız kriterlere uygun içerik bulunamadı.</p>
                     </div>
                 @endforelse
+                @endisland
             </div>
 
             <div class="mt-8">
-                @if($this->animes->hasMorePages())
-                    <div x-intersect.full="$wire.loadMore()">
+                @if($this->hasMorePages())
+                    <div x-intersect.full="$wire.loadMore()" wire:island.append="anime-feed">
                         {{-- Loading State (Skeletons) --}}
-                        <div wire:loading wire:target="loadMore" wire:loading.delay class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 w-full mt-4">
+                        <div wire:loading wire:target="loadMore" wire:loading.delay
+                            class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 w-full mt-4">
                             @foreach(range(1, 12) as $i)
                                 <div class="aspect-[2/3] w-full rounded-xl overflow-hidden">
                                     <div class="w-full h-full bg-white/5 animate-pulse"></div>

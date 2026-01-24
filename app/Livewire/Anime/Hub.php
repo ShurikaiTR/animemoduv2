@@ -12,6 +12,7 @@ use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Facades\Cache;
 
 #[Lazy]
 #[Layout('components.layout.app')]
@@ -30,42 +31,74 @@ class Hub extends Component
 
     public function updatedLetter(): void
     {
-        $this->limit = 24;
+        $this->page = 1;
         $this->resetPage();
     }
 
 
 
 
-    public int $limit = 24;
+    public int $page = 1;
 
     public function loadMore(): void
     {
-        $this->limit += 24;
+        $this->page++;
     }
 
     #[Computed]
     public function animes()
     {
-        return Anime::query()
-            ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
-            ->where('media_type', 'tv')
-            ->when($this->letter, function ($query) {
-                if ($this->letter === '#') {
-                    $query->where(function ($q) {
-                        foreach (range(0, 9) as $i) {
-                            $q->orWhere('title', 'like', $i . '%');
-                        }
-                    });
-                } else {
-                    $query->where('title', 'like', $this->letter . '%');
-                }
-                $query->orderBy('title');
-            }, function ($query) {
-                // If no letter selected, sort by popularity or update
-                $query->orderByDesc('updated_at');
-            })
-            ->paginate($this->limit);
+        $cacheKey = 'hub_list_' . ($this->letter ?: 'vitrin') . '_page_' . $this->page;
+
+        return Cache::remember($cacheKey, 3600, function () {
+            return Anime::query()
+                ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
+                ->where('media_type', 'tv')
+                ->when($this->letter, function ($query) {
+                    if ($this->letter === '#') {
+                        $query->where(function ($q) {
+                            foreach (range(0, 9) as $i) {
+                                $q->orWhere('title', 'like', $i . '%');
+                            }
+                        });
+                    } else {
+                        $query->where('title', 'like', $this->letter . '%');
+                    }
+                    $query->orderBy('title');
+                }, function ($query) {
+                    $query->orderByDesc('updated_at');
+                })
+                ->forPage($this->page, 24)
+                ->get();
+        });
+    }
+
+    #[Computed]
+    public function totalCount(): int
+    {
+        $cacheKey = 'hub_total_' . ($this->letter ?: 'vitrin');
+
+        return Cache::remember($cacheKey, 3600, function () {
+            return Anime::query()
+                ->where('media_type', 'tv')
+                ->when($this->letter, function ($query) {
+                    if ($this->letter === '#') {
+                        $query->where(function ($q) {
+                            foreach (range(0, 9) as $i) {
+                                $q->orWhere('title', 'like', $i . '%');
+                            }
+                        });
+                    } else {
+                        $query->where('title', 'like', $this->letter . '%');
+                    }
+                })
+                ->count();
+        });
+    }
+
+    public function hasMorePages(): bool
+    {
+        return $this->page * 24 < $this->totalCount;
     }
 
     public function render()
