@@ -7,6 +7,7 @@ namespace App\Livewire\Anime;
 use App\Models\Anime;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
@@ -39,6 +40,11 @@ class Show extends Component
     public function trailer(): ?string
     {
         return $this->anime?->trailer_key;
+    }
+
+    public function render()
+    {
+        return view('livewire.anime.show');
     }
 
     protected function getPageTitle(): string

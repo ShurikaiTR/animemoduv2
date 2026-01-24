@@ -14,6 +14,10 @@ use Livewire\Component;
 #[Layout('components.layout.app')]
 class Watch extends Component
 {
+    public function render()
+    {
+        return view('livewire.anime.watch');
+    }
     public Anime $anime;
 
     public ?Episode $episode = null;

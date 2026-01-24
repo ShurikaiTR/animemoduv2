@@ -64,4 +64,8 @@ class Index extends Component
             ->paginate($this->limit);
     }
 
+    public function render()
+    {
+        return view('livewire.movie.index');
+    }
 }

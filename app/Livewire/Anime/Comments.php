@@ -97,4 +97,9 @@ class Comments extends BaseComponent
     {
         return empty($this->episode?->id);
     }
+
+    public function render(): View
+    {
+        return view('livewire.anime.comments');
+    }
 }

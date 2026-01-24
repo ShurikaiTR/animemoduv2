@@ -67,4 +67,9 @@ class Hub extends Component
             })
             ->paginate($this->limit);
     }
+
+    public function render()
+    {
+        return view('livewire.anime.hub');
+    }
 }
