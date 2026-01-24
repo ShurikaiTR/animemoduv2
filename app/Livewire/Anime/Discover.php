@@ -8,11 +8,9 @@ use App\Enums\AnimeGenre;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Url;
-use Livewire\Attributes\Lazy;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Lazy]
 #[Layout('components.layout.app')]
 class Discover extends Component
 {

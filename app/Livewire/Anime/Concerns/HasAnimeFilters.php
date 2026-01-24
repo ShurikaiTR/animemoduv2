@@ -27,16 +27,19 @@ trait HasAnimeFilters
     public function updatedSearch(): void
     {
         $this->resetPage();
+        $this->dispatch('scroll-to-top');
     }
 
     public function updatedGenres(): void
     {
         $this->resetPage();
+        $this->dispatch('scroll-to-top');
     }
 
     public function updatedSort(): void
     {
         $this->resetPage();
+        $this->dispatch('scroll-to-top');
     }
 
     #[Computed]

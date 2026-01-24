@@ -1,4 +1,4 @@
-<div x-data="{ isScrolled: false, mobileMenuOpen: false }" x-init="window.addEventListener('scroll', () => { isScrolled = window.scrollY > 20 })">
+<div x-data="{ isScrolled: false, mobileMenuOpen: false }" x-init="window.addEventListener('scroll', () => { isScrolled = window.scrollY > 20 }, { passive: true })">
     {{-- Main Header --}}
     <header
         :class="{

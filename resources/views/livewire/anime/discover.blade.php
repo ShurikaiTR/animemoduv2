@@ -1,4 +1,5 @@
-<div class="min-h-screen pb-16 bg-bg-main">
+<div class="min-h-screen pb-16 bg-bg-main" x-data x-init="window.scrollTo({top: 0, behavior: 'instant'})"
+    @scroll-to-top.window="window.scrollTo({top: 0, behavior: 'smooth'})">
     <x-slot:title>
         {{ $this->getPageTitle() }}
     </x-slot:title>
@@ -79,7 +80,11 @@
                         <div wire:loading.remove wire:target="sort, genre, search, toggleGenre, updatedSearch">
                             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-5">
                                 @forelse($this->animes as $anime)
-                                    <x-anime-card :anime="$anime" wire:key="anime-{{ $anime->id }}" />
+                                    <x-anime-card 
+                                        :anime="$anime" 
+                                        wire:key="anime-{{ $anime->id }}" 
+                                        :attr="$loop->index < 10 ? 'fetchpriority=high loading=eager' : 'loading=lazy'"
+                                    />
                                 @empty
                                     <div
                                         class="col-span-full flex flex-col items-center justify-center py-20 text-center animate-in fade-in duration-700">

@@ -9,10 +9,8 @@ use App\Models\Episode;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
-#[Lazy]
 #[Layout('components.layout.app')]
 class Home extends Component
 {
