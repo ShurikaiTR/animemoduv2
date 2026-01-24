@@ -44,14 +44,6 @@ class Show extends Component
         return $this->anime?->trailer_key;
     }
 
-    public function render()
-    {
-        /** @var \Livewire\Features\SupportPageComponents\View $view */
-        $view = view('livewire.anime.show');
-
-        return $view->title($this->getPageTitle());
-    }
-
     protected function getPageTitle(): string
     {
         return ($this->anime?->title ?? 'Anime') . ' - ' . config('app.name');
