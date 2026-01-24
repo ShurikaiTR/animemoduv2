@@ -39,24 +39,24 @@
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                @island(name: 'anime-feed')
-                @forelse($this->animes as $anime)
-                    <x-anime-card :anime="$anime" wire:key="hub-{{ $anime->id }}" />
-                @empty
-                    <div class="col-span-full py-20 text-center">
-                        <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
-                            <span class="text-2xl text-white/20 font-bold">{{ $letter ?: '?' }}</span>
+                @island(name: 'hub-feed')
+                    @forelse($this->animes as $anime)
+                        <x-anime-card :anime="$anime" wire:key="hub-{{ $anime->id }}" />
+                    @empty
+                        <div class="col-span-full py-20 text-center">
+                            <div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-4">
+                                <span class="text-2xl text-white/20 font-bold">{{ $letter ?: '?' }}</span>
+                            </div>
+                            <h3 class="text-white font-bold mb-2">Sonuç Bulunamadı</h3>
+                            <p class="text-text-main/60 text-sm">Aradığınız kriterlere uygun içerik bulunamadı.</p>
                         </div>
-                        <h3 class="text-white font-bold mb-2">Sonuç Bulunamadı</h3>
-                        <p class="text-text-main/60 text-sm">Aradığınız kriterlere uygun içerik bulunamadı.</p>
-                    </div>
-                @endforelse
+                    @endforelse
                 @endisland
             </div>
 
             <div class="mt-8">
                 @if($this->hasMorePages())
-                    <div x-intersect.full="$wire.loadMore()" wire:island.append="anime-feed">
+                    <div x-intersect.full="$wire.loadMore()" wire:island.append="hub-feed">
                         {{-- Loading State (Skeletons) --}}
                         <div wire:loading wire:target="loadMore" wire:loading.delay
                             class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 w-full mt-4">

@@ -10,11 +10,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
-#[Lazy]
 #[Layout('components.layout.app')]
 #[Title('Animeler - AnimeModu')]
 class Hub extends Component
@@ -51,7 +50,7 @@ class Hub extends Component
         $cacheKey = 'hub_list_' . ($this->letter ?: 'vitrin') . '_page_' . $this->page;
 
         return Cache::remember($cacheKey, 3600, function () {
-            return Anime::query()
+            $data = Anime::query()
                 ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
                 ->where('media_type', 'tv')
                 ->when($this->letter, function ($query) {
@@ -70,6 +69,9 @@ class Hub extends Component
                 })
                 ->forPage($this->page, 24)
                 ->get();
+
+            Log::info('Hub animes count for ' . $this->letter . ': ' . $data->count());
+            return $data;
         });
     }
 
