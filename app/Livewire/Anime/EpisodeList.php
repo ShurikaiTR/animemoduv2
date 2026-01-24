@@ -6,25 +6,31 @@ namespace App\Livewire\Anime;
 
 use App\Models\Anime;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 class EpisodeList extends Component
 {
+    #[Locked]
     public Anime $anime;
 
+    #[Url(as: 'season', history: true)]
     public int $selectedSeason = 1;
 
     public function mount(Anime $anime): void
     {
         $this->anime = $anime;
 
-        // Find the first available season
-        $firstSeason = $this->anime->episodes()
-            ->where('season_number', '>', 0)
-            ->min('season_number');
+        // Find the first available season if not provided in URL
+        if (request()->query('season') === null) {
+            $firstSeason = $this->anime->episodes()
+                ->where('season_number', '>', 0)
+                ->min('season_number');
 
-        if ($firstSeason) {
-            $this->selectedSeason = $firstSeason;
+            if ($firstSeason) {
+                $this->selectedSeason = (int) $firstSeason;
+            }
         }
     }
 
@@ -34,7 +40,7 @@ class EpisodeList extends Component
         $this->dispatch('season-changed');
     }
 
-    #[Computed]
+    #[Computed(cache: true, key: 'anime-seasons', seconds: 3600)]
     public function seasons()
     {
         return $this->anime->episodes()
@@ -45,7 +51,7 @@ class EpisodeList extends Component
             ->pluck('season_number');
     }
 
-    #[Computed]
+    #[Computed(cache: true, seconds: 3600)]
     public function episodes()
     {
         return $this->anime->episodes()
