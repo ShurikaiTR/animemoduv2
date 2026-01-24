@@ -27,9 +27,9 @@
 
                         // Fallback image logic using TmdbService
                         $image = $episode->still_path
-                            ? $tmdbService->getImageUrl($episode->still_path, 'w500')
+                            ? $tmdbService->getImageUrl($episode->still_path, 'w342')
                             : ($episode->anime->poster_path
-                                ? $tmdbService->getImageUrl($episode->anime->poster_path, 'w500')
+                                ? $tmdbService->getImageUrl($episode->anime->poster_path, 'w342')
                                 : null);
 
                         $href = $isSeasonal
@@ -38,7 +38,7 @@
                     @endphp
 
                     <x-anime.episode-card :title="$episode->anime->title" :episode-number="$epNumberText" :image="$image"
-                        :time-ago="$episode->created_at->diffForHumans()" :href="$href" />
+                        :time-ago="$episode->created_at->diffForHumans()" :href="$href" :attr="$loop->first ? 'fetchpriority=high' : ''" />
                 @endforeach
             </div>
         </x-layout.container>

@@ -1,4 +1,4 @@
-@props(['title', 'episodeNumber', 'image', 'imageW300' => null, 'href' => '#', 'timeAgo' => ''])
+@props(['title', 'episodeNumber', 'image', 'imageW300' => null, 'href' => '#', 'timeAgo' => '', 'attr' => ''])
 
 <div class="group relative w-full aspect-video rounded-2xl overflow-hidden cursor-pointer bg-bg-secondary">
     <a href="{{ $href }}" class="block w-full h-full relative">
@@ -6,7 +6,7 @@
         @if($image)
             <img src="{{ $image }}" @if($imageW300) srcset="{{ $imageW300 }} 300w, {{ $image }} 500w"
             sizes="(max-width: 640px) 85vw, 320px" @endif alt="{{ $title }} - {{ $episodeNumber }} anime bölüm görseli"
-                loading="lazy"
+                loading="lazy" {{ $attr }}
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
         @endif
 

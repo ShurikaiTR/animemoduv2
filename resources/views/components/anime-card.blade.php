@@ -8,10 +8,11 @@
     $isExternal = $posterPath && str_starts_with($posterPath, 'http');
     
     $imageUrl = $posterPath 
-        ? ($isExternal ? $posterPath : 'https://image.tmdb.org/t/p/w780' . $posterPath)
+        ? ($isExternal ? $posterPath : 'https://image.tmdb.org/t/p/w342' . $posterPath)
         : asset('images/placeholder.jpg');
     
-    $imageW300 = $posterPath && !$isExternal ? 'https://image.tmdb.org/t/p/w300' . $posterPath : null;
+    $imageW185 = $posterPath && !$isExternal ? 'https://image.tmdb.org/t/p/w185' . $posterPath : null;
+    $imageW342 = $posterPath && !$isExternal ? 'https://image.tmdb.org/t/p/w342' . $posterPath : null;
     $imageW500 = $posterPath && !$isExternal ? 'https://image.tmdb.org/t/p/w500' . $posterPath : null;
 
     $rating = number_format($anime->vote_average ?? 0, 1);
@@ -33,9 +34,9 @@
         {{-- Image with srcset --}}
         <img 
             src="{{ $imageUrl }}" 
-            @if($imageW300 && $imageW500)
-                srcset="{{ $imageW300 }} 300w, {{ $imageW500 }} 500w, {{ $imageUrl }} 780w"
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            @if($imageW185 && $imageW342)
+                srcset="{{ $imageW185 }} 185w, {{ $imageW342 }} 342w, {{ $imageW500 }} 500w"
+                sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 15vw"
             @endif
             alt="{{ $anime->title }}"
             loading="lazy"
