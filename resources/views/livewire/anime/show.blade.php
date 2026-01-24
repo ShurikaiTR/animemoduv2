@@ -1,4 +1,7 @@
 <div>
+    <x-slot:title>
+        {{ $this->getPageTitle() }}
+    </x-slot:title>
     <x-anime.details-hero :anime="$anime" :trailer="$trailer" />
 
     <section class="relative overflow-hidden pb-16 pt-8 bg-bg-main">
@@ -14,7 +17,7 @@
                     <x-anime.cast-list :characters="$characters" />
 
                     {{-- Comments Section --}}
-                    <livewire:anime.comments :anime="$anime" />
+                    <livewire:anime.comments :anime="$anime" lazy />
                 </div>
             </div>
         </x-layout.container>

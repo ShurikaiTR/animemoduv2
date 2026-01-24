@@ -1,6 +1,6 @@
 @props([
     'sort',
-    'genre',
+    'genres',
     'search',
     'availableGenres',
 ])
@@ -34,13 +34,13 @@
     <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         <button 
             wire:click="toggleGenre('hepsi')"
-            class="px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-300 {{ empty($genre) ? 'bg-primary text-white shadow-[0_0_15px_rgba(var(--primary),0.4)]' : 'bg-bg-secondary text-text-main hover:text-white border border-white/5' }}"
+            class="px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-300 {{ empty($genres) ? 'bg-primary text-white shadow-[0_0_15px_rgba(var(--primary),0.4)]' : 'bg-bg-secondary text-text-main hover:text-white border border-white/5' }}"
         >
             Hepsi
         </button>
         @foreach($availableGenres as $genreEnum)
             @php
-                $isActive = in_array($genreEnum->value, explode(',', $genre));
+                $isActive = in_array($genreEnum->value, $genres);
             @endphp
             <button 
                 wire:click="toggleGenre('{{ $genreEnum->value }}')"

@@ -1,4 +1,7 @@
 <div>
+    <x-slot:title>
+        {{ $this->getPageTitle() }}
+    </x-slot:title>
     {{-- Hero Section --}}
     <x-anime.watch-hero :anime="$anime" />
 
@@ -180,8 +183,8 @@
 
                     </div>
 
-                    {{-- Comments Section (Placeholder) --}}
-                    {{-- <livewire:anime.comments :anime="$anime" :episode="$episode" /> --}}
+                    {{-- Comments Section --}}
+                    <livewire:anime.comments :anime="$anime" :episode="$episode" lazy />
                 </div>
 
                 {{-- Desktop Sidebar (Right column) --}}

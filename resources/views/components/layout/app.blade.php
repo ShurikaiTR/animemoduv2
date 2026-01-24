@@ -7,6 +7,12 @@
     <meta name="description" content="{{ config('site.description') }}">
     <meta name="theme-color" content="#131720">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    @if(request()->query())
+        <meta name="robots" content="noindex, follow">
+    @endif
+    <link rel="canonical" href="{{ request()->url() }}">
+
     @production
         <meta http-equiv="Content-Security-Policy"
             content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https://image.tmdb.org https://s4.anilist.co data:; frame-src https://www.youtube.com; connect-src 'self';">

@@ -17,19 +17,10 @@ class Discover extends Component
     use Concerns\HasAnimeFilters;
     use WithPagination;
 
-    #[Url(as: 'tur')]
-    public string $genre = '';
-
-    #[Url(as: 'sirala')]
-    public string $sort = 'yeni';
-
-    #[Url(as: 'ara')]
-    public string $search = '';
 
     public function render()
     {
-        return view('livewire.anime.discover')
-            ->title($this->getPageTitle());
+        return view('livewire.anime.discover');
     }
 
     #[Computed]
@@ -39,11 +30,10 @@ class Discover extends Component
             return '"' . $this->search . '" sonuçları';
         }
 
-        if ($this->genre) {
-            $genres = explode(',', $this->genre);
+        if (!empty($this->genres)) {
             $labels = [];
 
-            foreach ($genres as $g) {
+            foreach ($this->genres as $g) {
                 if ($enum = AnimeGenre::tryFrom($g)) {
                     $labels[] = $enum->label();
                 }

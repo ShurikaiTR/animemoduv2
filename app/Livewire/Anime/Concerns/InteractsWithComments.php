@@ -13,69 +13,65 @@ use Illuminate\Support\Facades\Auth;
 
 trait InteractsWithComments
 {
-    public function submit(?string $parentId = null): void
-    {
+    public function submit(
+        CreateCommentAction $commentAction,
+        CreateReviewAction $reviewAction,
+        ?string $parentId = null
+    ): void {
         if (!Auth::check()) {
             $this->dispatch('openAuthModal');
-
             return;
         }
 
         if ($this->activeTab === 'comments') {
-            $this->handleCommentSubmission($parentId);
+            $this->handleCommentSubmission($commentAction, $parentId);
         } else {
-            $this->handleReviewSubmission();
+            $this->handleReviewSubmission($reviewAction);
         }
     }
 
-    private function handleCommentSubmission(?string $parentId): void
+    private function handleCommentSubmission(CreateCommentAction $action, ?string $parentId): void
     {
-        $this->validate([
-            'content' => $parentId ? 'nullable' : 'required|string|min:3|max:1000',
-            'replyContent.' . $parentId => $parentId ? 'required|string|min:3|max:1000' : 'nullable',
-            'isSpoiler' => 'boolean',
-        ]);
+        if ($parentId) {
+            $this->validate(['replyContent.' . $parentId => 'required|string|min:3|max:1000']);
+        } else {
+            $this->commentForm->validate();
+        }
 
-        app(CreateCommentAction::class)->execute([
+        $action->execute([
             'anime_id' => $this->anime->id,
             'episode_id' => $this->episode?->id,
             'parent_id' => $parentId,
-            'content' => $parentId ? $this->replyContent[$parentId] : $this->content,
-            'is_spoiler' => $this->isSpoiler,
+            'content' => $parentId ? $this->replyContent[$parentId] : $this->commentForm->content,
+            'is_spoiler' => $parentId ? false : $this->commentForm->isSpoiler,
         ]);
 
         if ($parentId) {
             unset($this->replyContent[$parentId]);
         } else {
-            $this->content = '';
+            $this->commentForm->resetFields();
         }
 
         $this->showReplyInput = [];
         $this->dispatch('comment-added');
         session()->flash('toast', ['type' => 'success', 'message' => 'Yorumun gönderildi!']);
-        $this->resetFields();
     }
 
-    private function handleReviewSubmission(): void
+    private function handleReviewSubmission(CreateReviewAction $action): void
     {
-        $this->validate([
-            'content' => 'required|string|min:10|max:2000',
-            'title' => 'nullable|string|max:100',
-            'rating' => 'required|integer|min:1|max:10',
-            'isSpoiler' => 'boolean',
-        ]);
+        $this->reviewForm->validate();
 
-        app(CreateReviewAction::class)->execute([
+        $action->execute([
             'anime_id' => $this->anime->id,
-            'title' => $this->title,
-            'content' => $this->content,
-            'rating' => $this->rating,
-            'is_spoiler' => $this->isSpoiler,
+            'title' => $this->reviewForm->title,
+            'content' => $this->reviewForm->content,
+            'rating' => $this->reviewForm->rating,
+            'is_spoiler' => $this->reviewForm->isSpoiler,
         ]);
 
         $this->dispatch('comment-added');
+        $this->reviewForm->resetFields();
         session()->flash('toast', ['type' => 'success', 'message' => 'İncelemen paylaşıldı!']);
-        $this->resetFields();
     }
 
     public function toggleReply(string $commentId): void
@@ -88,25 +84,24 @@ trait InteractsWithComments
         $this->revealedSpoilers[$commentId] = true;
     }
 
-    public function pinComment(string $commentId): void
+    public function pinComment(PinCommentAction $action, string $commentId): void
     {
         try {
-            $comment = app(PinCommentAction::class)->execute($commentId);
+            $comment = $action->execute($commentId);
             session()->flash('toast', ['type' => 'success', 'message' => $comment->is_pinned ? 'Sabitlendi!' : 'Kaldırıldı!']);
         } catch (\Exception $e) {
         }
     }
 
-    public function toggleLike(string $commentId, bool $isLike): void
+    public function toggleLike(ToggleCommentLikeAction $action, string $commentId, bool $isLike): void
     {
         if (!Auth::check()) {
             $this->dispatch('openAuthModal');
-
             return;
         }
 
         try {
-            app(ToggleCommentLikeAction::class)->execute(Auth::id(), $commentId, $isLike);
+            $action->execute(Auth::id(), $commentId, $isLike);
         } catch (\Exception $e) {
         }
     }
@@ -120,13 +115,5 @@ trait InteractsWithComments
 
         $this->showReplyInput[$commentId] = true;
         $this->replyContent[$commentId] = "[quote]{$comment->content}[/quote]\n\n";
-    }
-
-    private function resetFields(): void
-    {
-        $this->content = '';
-        $this->isSpoiler = false;
-        $this->title = '';
-        $this->rating = 0;
     }
 }

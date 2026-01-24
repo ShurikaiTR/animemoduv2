@@ -9,27 +9,36 @@ use App\Models\Anime;
 use App\Models\Episode;
 use App\Services\CommentService;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Component;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
-use Livewire\Component;
+use Livewire\Component as BaseComponent;
+use App\Livewire\Forms\CommentForm;
+use App\Livewire\Forms\ReviewForm;
 
-class Comments extends Component
+class Comments extends BaseComponent
 {
-    #[On('comment-added')]
-    public function refresh(): void {}
+    public function placeholder(): View
+    {
+        return view('livewire.anime.partials.comments-skeleton');
+    }
 
+    #[On('comment-added')]
+    public function refresh(): void
+    {
+    }
+
+    #[Locked]
     public Anime $anime;
 
+    #[Locked]
     public ?Episode $episode = null;
 
     public string $activeTab = CommentTab::COMMENTS->value;
 
-    public string $content = '';
+    public CommentForm $commentForm;
 
-    public string $title = '';
-
-    public int $rating = 0;
-
-    public bool $isSpoiler = false;
+    public ReviewForm $reviewForm;
 
     /** @var array<string, string> */
     public array $replyContent = [];
@@ -65,8 +74,9 @@ class Comments extends Component
         $this->activeTab = $tab;
         $this->perPage = 10;
         $this->resetValidation();
-        $this->resetFields();
-        $this->showReplyInput = []; // Added this line
+        $this->commentForm->resetFields();
+        $this->reviewForm->resetFields();
+        $this->showReplyInput = [];
     }
 
     public function loadMore(): void

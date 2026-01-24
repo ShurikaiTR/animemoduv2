@@ -1,6 +1,6 @@
 @props([
     'sort',
-    'genre',
+    'genres',
     'search',
     'availableGenres',
 ])
@@ -47,7 +47,7 @@
     <div class="space-y-3">
         <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-white/50 uppercase tracking-wider font-rubik">Türler</h3>
-            @if(!empty($genre))
+            @if(!empty($genres))
                 <button 
                     wire:click="toggleGenre('hepsi')"
                     class="text-xs text-primary hover:underline"
@@ -60,16 +60,16 @@
         <div class="space-y-1 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
             <button 
                 wire:click="toggleGenre('hepsi')"
-                class="w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center justify-between group {{ empty($genre) ? 'bg-primary/10 text-primary font-medium' : 'text-text-main hover:bg-primary/5 hover:text-primary' }}"
+                class="w-full text-left px-3 py-2 rounded-lg text-sm transition-all flex items-center justify-between group {{ empty($genres) ? 'bg-primary/10 text-primary font-medium' : 'text-text-main hover:bg-primary/5 hover:text-primary' }}"
             >
                 Hepsi
-                @if(empty($genre))
+                @if(empty($genres))
                     <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
                 @endif
             </button>
             @foreach($availableGenres as $genreEnum)
                 @php
-                    $isActive = in_array($genreEnum->value, explode(',', $genre));
+                    $isActive = in_array($genreEnum->value, $genres);
                 @endphp
                 <button 
                     wire:click="toggleGenre('{{ $genreEnum->value }}')"

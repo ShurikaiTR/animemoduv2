@@ -9,26 +9,33 @@ use App\Models\Anime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 
 trait HasAnimeFilters
 {
     public int $limit = 24;
 
+    #[Url(as: 'q', except: '')]
+    public string $search = '';
+
+    #[Url(as: 'tur', except: [])]
+    public array $genres = [];
+
+    #[Url(as: 'sirala', except: 'created_at')]
+    public string $sort = 'created_at';
+
     public function updatedSearch(): void
     {
-        $this->limit = 24;
         $this->resetPage();
     }
 
-    public function updatedGenre(): void
+    public function updatedGenres(): void
     {
-        $this->limit = 24;
         $this->resetPage();
     }
 
     public function updatedSort(): void
     {
-        $this->limit = 24;
         $this->resetPage();
     }
 
@@ -37,31 +44,33 @@ trait HasAnimeFilters
     {
         return Anime::query()
             ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
-            ->when($this->search, fn(Builder $query) => $this->applySearchFilter($query))
-            ->when($this->genre, fn(Builder $query) => $this->applyGenreFilter($query))
-            ->when($this->sort, fn(Builder $query) => $this->applySortOrder($query))
+            ->when($this->search, fn(Builder $q) => $this->applySearchFilter($q))
+            ->when(!empty($this->genres), fn(Builder $q) => $this->applyGenreFilter($q))
+            ->when($this->sort, fn(Builder $q) => $this->applySortOrder($q))
             ->paginate($this->limit);
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset(['genres', 'search', 'sort']);
+        $this->resetPage();
     }
 
     public function toggleGenre(string $genreValue): void
     {
         if ($genreValue === 'hepsi') {
-            $this->genre = '';
-            $this->limit = 24;
+            $this->genres = [];
             $this->resetPage();
             return;
         }
 
-        $currentGenres = array_filter(explode(',', $this->genre));
-
-        if (in_array($genreValue, $currentGenres)) {
-            $currentGenres = array_diff($currentGenres, [$genreValue]);
+        if (in_array($genreValue, $this->genres)) {
+            $this->genres = array_diff($this->genres, [$genreValue]);
         } else {
-            $currentGenres[] = $genreValue;
+            $this->genres[] = $genreValue;
         }
 
-        $this->genre = implode(',', $currentGenres);
-        $this->limit = 24;
+        $this->genres = array_values($this->genres);
         $this->resetPage();
     }
 
@@ -86,17 +95,13 @@ trait HasAnimeFilters
 
     protected function applyGenreFilter(Builder $query): void
     {
-        if ($this->genre === 'hepsi') {
-            return;
-        }
-
-        $genres = explode(',', $this->genre);
-
-        foreach ($genres as $genre) {
-            if ($enum = AnimeGenre::tryFrom($genre)) {
-                $query->whereJsonContains('genres', $enum->label());
+        $query->where(function (Builder $q) {
+            foreach ($this->genres as $genre) {
+                if ($enum = AnimeGenre::tryFrom($genre)) {
+                    $q->orWhereJsonContains('genres', $enum->label());
+                }
             }
-        }
+        });
     }
 
     protected function applySortOrder(Builder $query): void

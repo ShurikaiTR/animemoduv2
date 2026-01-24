@@ -1,13 +1,16 @@
 <div class="min-h-screen pb-16 bg-bg-main">
+    <x-slot:title>
+        {{ $this->getPageTitle() }}
+    </x-slot:title>
     <div class="container mx-auto px-4 md:px-6">
         <div class="flex flex-col lg:flex-row gap-0 lg:gap-10 items-start pt-24 lg:pt-32">
 
             {{-- Mobile Filter Bar --}}
-            <x-anime.discover-mobile-filters :sort="$sort" :genre="$genre" :search="$search"
+            <x-anime.discover-mobile-filters :sort="$sort" :genres="$genres" :search="$search"
                 :available-genres="$this->availableGenres" class="lg:hidden" />
 
             {{-- Desktop Sidebar --}}
-            <x-anime.discover-sidebar :sort="$sort" :genre="$genre" :search="$search"
+            <x-anime.discover-sidebar :sort="$sort" :genres="$genres" :search="$search"
                 :available-genres="$this->availableGenres" class="hidden lg:block" />
 
             {{-- Main Content --}}
@@ -16,7 +19,8 @@
                 <div class="hidden lg:block mb-8">
                     <h1
                         class="text-3xl md:text-4xl font-extrabold text-white font-rubik tracking-tight mb-2 drop-shadow-md">
-                        {{ $this->pageHeading }}</h1>
+                        {{ $this->pageHeading }}
+                    </h1>
                     <p class="text-text-main/60 text-sm">
                         Toplam <span class="text-primary font-bold">{{ $this->animes->total() }}</span> içerik
                         listeleniyor
@@ -29,9 +33,9 @@
                 {{-- Active Filters & Content --}}
                 <div class="mb-6">
                     {{-- Active Chips --}}
-                    @if($genre)
+                    @if(!empty($genres))
                         <div class="flex flex-wrap gap-2 mb-6 animate-in fade-in slide-in-from-top-2">
-                            @foreach(explode(',', $genre) as $g)
+                            @foreach($genres as $g)
                                 @if($enum = \App\Enums\AnimeGenre::tryFrom($g))
                                     <button wire:click="toggleGenre('{{ $g }}')"
                                         class="flex items-center gap-2 pl-3 pr-2 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors group">
@@ -41,7 +45,7 @@
                                 @endif
                             @endforeach
                             @if($this->animes->isNotEmpty())
-                                <button wire:click="$set('genre', '')"
+                                <button wire:click="resetFilters"
                                     class="text-xs text-text-main hover:text-white underline underline-offset-4 decoration-white/20 hover:decoration-white transition-all ml-2">
                                     Hepsini Temizle
                                 </button>
@@ -93,7 +97,7 @@
                                             Aradığınız kriterlere uygun içerik bulunamadı. Filtreleri temizleyip tekrar
                                             deneyin.
                                         </p>
-                                        <button wire:click="$set('genre', ''); $set('search', '');"
+                                        <button wire:click="resetFilters"
                                             class="mt-6 px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm font-medium transition-colors">
                                             Filtreleri Temizle
                                         </button>

@@ -25,11 +25,8 @@
         {{-- Input Section (Scenario 2 & 3) --}}
         @include('livewire.anime.partials.comments-input', [
             'activeTab' => $activeTab,
-            'title' => $title,
-            'rating' => $rating,
-            'content' => $content,
-            'isSpoiler' => $isSpoiler,
-            'message' => $errors->first('content')
+            'commentForm' => $commentForm,
+            'reviewForm' => $reviewForm,
         ])
 
         {{-- Items List --}}

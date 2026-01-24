@@ -36,7 +36,7 @@ class Watch extends Component
             ? TmdbService::getImageUrl($this->episode->still_path, 'original')
             : ($this->anime->backdrop_path ? TmdbService::getImageUrl($this->anime->backdrop_path, 'original') : null),
             anime_title: $this->anime->title,
-            episode_title: $this->episode->season_number.'. Sezon '.$this->episode->episode_number.'. Bölüm',
+            episode_title: $this->episode->season_number . '. Sezon ' . $this->episode->episode_number . '. Bölüm',
             logo: $this->anime->poster_path
             ? TmdbService::getImageUrl($this->anime->poster_path, 'w500')
             : null
@@ -109,5 +109,11 @@ class Watch extends Component
     public function render()
     {
         return view('livewire.anime.watch');
+    }
+
+    protected function getPageTitle(): string
+    {
+        $epTitle = $this->episode->season_number . '. Sezon ' . $this->episode->episode_number . '. Bölüm';
+        return $epTitle . ' - ' . $this->anime->title . ' - ' . config('app.name');
     }
 }

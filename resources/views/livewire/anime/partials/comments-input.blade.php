@@ -1,4 +1,4 @@
-@props(['activeTab', 'title', 'rating', 'content', 'isSpoiler', 'message'])
+@props(['activeTab', 'commentForm', 'reviewForm'])
 
 <div class="relative group" wire:key="input-section-{{ $activeTab }}">
     @auth
@@ -38,7 +38,8 @@
                                             <span class="text-2xs font-bold text-white/40 uppercase tracking-widest">İnceleme
                                                 Başlığı</span>
                                         </div>
-                                        <input type="text" wire:model="title" maxlength="100" placeholder="Başlık ekleyin..."
+                                        <input type="text" wire:model="reviewForm.title" maxlength="100"
+                                            placeholder="Başlık ekleyin..."
                                             class="w-full bg-transparent border-none p-0 text-xl font-bold text-white placeholder:text-white/20 focus:ring-0 focus:outline-none tracking-tight">
                                     </div>
 
@@ -51,16 +52,16 @@
                                                     @mouseleave="hoverRating = 0" wire:click="$set('rating', {{ $star }})"
                                                     class="group/star relative">
                                                     <x-heroicon-s-star class="w-5 h-5 transition-all duration-200"
-                                                        x-bind:class="(hoverRating ? {{ $star }} <= hoverRating : {{ $star }} <= $wire.rating) ? 'text-primary drop-shadow-glow scale-110' : 'text-white/10 group-hover/star:text-primary/50'" />
+                                                        x-bind:class="(hoverRating ? {{ $star }} <= hoverRating : {{ $star }} <= $wire.reviewForm.rating) ? 'text-primary drop-shadow-glow scale-110' : 'text-white/10 group-hover/star:text-primary/50'" />
                                                 </button>
                                             @endforeach
                                         </div>
 
                                         {{-- Big Score Display --}}
                                         <div class="flex items-center gap-1 pl-4 border-l border-white/10"
-                                            x-show="$wire.rating > 0" x-transition>
+                                            x-show="$wire.reviewForm.rating > 0" x-transition>
                                             <span class="text-2xl font-black text-white tabular-nums leading-none"
-                                                x-text="$wire.rating"></span>
+                                                x-text="$wire.reviewForm.rating"></span>
                                             <span class="text-xs font-bold text-white/40 self-end mb-0.5">/10</span>
                                         </div>
                                     </div>
@@ -70,7 +71,8 @@
 
                         {{-- Textarea Container --}}
                         <div class="relative group/input">
-                            <textarea wire:model="content"
+                            <textarea
+                                wire:model="{{ $activeTab === 'reviews' ? 'reviewForm.content' : 'commentForm.content' }}"
                                 class="w-full bg-transparent !border-0 !ring-0 !outline-none text-white placeholder:text-white/20 p-2 min-h-36 text-lg leading-relaxed resize-none"
                                 placeholder="{{ $activeTab === 'reviews' ? 'Bu yapım hakkında neler düşünüyorsunuz? Detaylı bir inceleme yazın...' : 'Düşüncelerini paylaş... Tartışmaya katıl!' }}"></textarea>
                         </div>
@@ -89,7 +91,9 @@
 
                                 <label class="flex items-center gap-3 cursor-pointer group/toggle select-none">
                                     <div class="relative">
-                                        <input type="checkbox" wire:model="isSpoiler" class="sr-only peer">
+                                        <input type="checkbox"
+                                            wire:model="{{ $activeTab === 'reviews' ? 'reviewForm.isSpoiler' : 'commentForm.isSpoiler' }}"
+                                            class="sr-only peer">
                                         <div
                                             class="w-10 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary transition-colors">
                                         </div>
@@ -102,7 +106,7 @@
                             {{-- Right: Submit Button --}}
                             <div class="w-full sm:w-auto">
                                 <x-ui.button wire:click="submit" wire:loading.attr="disabled" variant="primary" size="lg"
-                                    class="w-full sm:w-auto gap-2 font-bold px-8 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                                    class="w-full sm:w-auto gap-2 font-bold px-8 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20 data-loading:opacity-50 data-loading:pointer-events-none">
                                     <span
                                         wire:loading.remove>{{ $activeTab === 'reviews' ? 'İNCELEMEYİ YAYINLA' : 'GÖNDER' }}</span>
                                     <div wire:loading flex items-center gap-1>
@@ -116,7 +120,7 @@
                     </div>
                 </div>
 
-                @error('content')
+                @error($activeTab === 'reviews' ? 'reviewForm.content' : 'commentForm.content')
                     <div class="absolute bottom-4 left-6 animate-in slide-in-from-bottom-2 fade-in">
                         <span
                             class="text-xs text-red-400 font-bold bg-red-400/10 px-3 py-1 rounded-full border border-red-400/20">{{ $message }}</span>
