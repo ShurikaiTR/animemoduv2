@@ -1,4 +1,7 @@
 <div class="min-h-screen pb-20 bg-bg-main">
+    <x-slot:title>
+        {{ $letter ? "\"$letter\" İle Başlayan Animeler" : 'Tüm Animeler' }} - AnimeModu
+    </x-slot:title>
     {{-- Hero Section --}}
 
     <div class="container mx-auto px-4 md:px-6 pt-24 md:pt-32 pb-10 font-rubik">

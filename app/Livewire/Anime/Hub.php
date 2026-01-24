@@ -4,40 +4,37 @@ declare(strict_types=1);
 
 namespace App\Livewire\Anime;
 
-use App\Enums\AnimeStatus;
 use App\Models\Anime;
-use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
-use Illuminate\Support\Facades\Cache;
+use Livewire\WithPagination;
 
 #[Lazy]
 #[Layout('components.layout.app')]
 #[Title('Animeler - AnimeModu')]
 class Hub extends Component
 {
-    use \Livewire\WithPagination;
+    use WithPagination;
 
     public function placeholder()
     {
         return view('livewire.anime.hub-skeleton');
     }
 
-    #[\Livewire\Attributes\Url(as: 'harf')]
+    #[Url(as: 'harf')]
     public string $letter = '';
+
+    public int $limit = 24;
 
     public function updatedLetter(): void
     {
         $this->limit = 24;
         $this->resetPage();
     }
-
-
-
-
-    public int $limit = 24;
 
     public function loadMore(): void
     {
@@ -65,10 +62,5 @@ class Hub extends Component
                 $query->orderByDesc('updated_at');
             })
             ->paginate($this->limit);
-    }
-
-    public function render()
-    {
-        return view('livewire.anime.hub');
     }
 }

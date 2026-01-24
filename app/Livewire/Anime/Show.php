@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Cache;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 #[Lazy]
 #[Layout('components.layout.app')]
 class Show extends Component
 {
+    #[Locked]
     public ?Anime $anime = null;
 
     public function placeholder(): View
@@ -44,7 +46,10 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.anime.show');
+        /** @var \Livewire\Features\SupportPageComponents\View $view */
+        $view = view('livewire.anime.show');
+
+        return $view->title($this->getPageTitle());
     }
 
     protected function getPageTitle(): string
