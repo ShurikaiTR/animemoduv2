@@ -47,59 +47,24 @@ class Hub extends Component
     #[Computed]
     public function animes()
     {
-        $cacheKey = 'hub_list_' . ($this->letter ?: 'vitrin') . '_page_' . $this->page;
-
-        return Cache::remember($cacheKey, 3600, function () {
-            $data = Anime::query()
-                ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
-                ->where('media_type', 'tv')
-                ->when($this->letter, function ($query) {
-                    if ($this->letter === '#') {
-                        $query->where(function ($q) {
-                            foreach (range(0, 9) as $i) {
-                                $q->orWhere('title', 'like', $i . '%');
-                            }
-                        });
-                    } else {
-                        $query->where('title', 'like', $this->letter . '%');
-                    }
-                    $query->orderBy('title');
-                }, function ($query) {
-                    $query->orderByDesc('updated_at');
-                })
-                ->forPage($this->page, 24)
-                ->get();
-
-            return $data;
-        });
-    }
-
-    #[Computed]
-    public function totalCount(): int
-    {
-        $cacheKey = 'hub_total_' . ($this->letter ?: 'vitrin');
-
-        return Cache::remember($cacheKey, 3600, function () {
-            return Anime::query()
-                ->where('media_type', 'tv')
-                ->when($this->letter, function ($query) {
-                    if ($this->letter === '#') {
-                        $query->where(function ($q) {
-                            foreach (range(0, 9) as $i) {
-                                $q->orWhere('title', 'like', $i . '%');
-                            }
-                        });
-                    } else {
-                        $query->where('title', 'like', $this->letter . '%');
-                    }
-                })
-                ->count();
-        });
-    }
-
-    public function hasMorePages(): bool
-    {
-        return $this->page * 24 < $this->totalCount;
+        return Anime::query()
+            ->select(['id', 'title', 'slug', 'poster_path', 'vote_average', 'release_date', 'genres'])
+            ->where('media_type', 'tv')
+            ->when($this->letter, function ($query) {
+                if ($this->letter === '#') {
+                    $query->where(function ($q) {
+                        foreach (range(0, 9) as $i) {
+                            $q->orWhere('title', 'like', $i . '%');
+                        }
+                    });
+                } else {
+                    $query->where('title', 'like', $this->letter . '%');
+                }
+                $query->orderBy('title');
+            }, function ($query) {
+                $query->orderByDesc('updated_at');
+            })
+            ->paginate($this->limit);
     }
 
     public function render()
