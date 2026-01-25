@@ -26,6 +26,7 @@ class EpisodeList extends Component
         // Find the first available season if not provided in URL
         if (request()->query('sezon') === null) {
             $firstSeason = $this->anime->episodes()
+                ->released()
                 ->where('season_number', '>', 0)
                 ->min('season_number');
 
@@ -46,6 +47,7 @@ class EpisodeList extends Component
     {
         return Cache::remember("anime_seasons_{$this->anime->id}", 3600, function () {
             return $this->anime->episodes()
+                ->released()
                 ->where('season_number', '>', 0)
                 ->select('season_number')
                 ->distinct()
@@ -59,6 +61,7 @@ class EpisodeList extends Component
     {
         return Cache::remember("anime_episodes_{$this->anime->id}_{$this->selectedSeason}", 3600, function () {
             return $this->anime->episodes()
+                ->released()
                 ->where('season_number', $this->selectedSeason)
                 ->orderBy('episode_number')
                 ->get();

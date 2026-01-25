@@ -19,7 +19,7 @@ trait HasEpisodeTable
             ->columns([
                 Tables\Columns\ImageColumn::make('still_path')
                     ->label('Görsel')
-                    ->getStateUsing(fn ($record) => $record->still_path
+                    ->getStateUsing(fn($record) => $record->still_path
                         ? "https://image.tmdb.org/t/p/w185{$record->still_path}"
                         : null)
                     ->width(100)
@@ -47,7 +47,7 @@ trait HasEpisodeTable
                         return "S{$record->season_number} B{$record->episode_number}";
                     })
                     ->badge()
-                    ->color(fn ($record) => ($record->anime?->structure_type ?? 'seasonal') === 'absolute' ? 'warning' : 'primary')
+                    ->color(fn($record) => ($record->anime?->structure_type ?? 'seasonal') === 'absolute' ? 'warning' : 'primary')
                     ->alignCenter()
                     ->sortable(query: function ($query, string $direction) {
                         return $query
@@ -68,7 +68,7 @@ trait HasEpisodeTable
                     ->label('Durum')
                     ->tooltip('Video Durumu')
                     ->boolean()
-                    ->getStateUsing(fn ($record) => filled($record->video_url))
+                    ->getStateUsing(fn($record) => filled($record->video_url))
                     ->trueIcon('heroicon-o-play-circle')
                     ->falseIcon('heroicon-o-no-symbol')
                     ->trueColor('success')
@@ -112,11 +112,24 @@ trait HasEpisodeTable
                     ->searchable()
                     ->preload()
                     ->label('Animeye Göre Filtrele'),
+                Tables\Filters\TernaryFilter::make('video_status')
+                    ->label('Video Durumu')
+                    ->placeholder('Hepsi')
+                    ->trueLabel('Videosu Var')
+                    ->falseLabel('Videosu Yok')
+                    ->queries(
+                        true: fn($query) => $query->whereNotNull('video_url'),
+                        false: fn($query) => $query->whereNull('video_url'),
+                    ),
+                Tables\Filters\Filter::make('needing_video')
+                    ->label('Yüklenecekler Listesi')
+                    ->toggle()
+                    ->query(fn($query) => $query->needingVideo()),
             ])
             ->actions([
                 EditAction::make(),
             ])
-            ->recordUrl(fn ($record) => Pages\EditEpisode::getUrl([$record]))
+            ->recordUrl(fn($record) => Pages\EditEpisode::getUrl([$record]))
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

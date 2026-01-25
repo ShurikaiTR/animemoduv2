@@ -14,7 +14,8 @@ class ImportAnimeAction
     public function __construct(
         protected TmdbService $tmdb,
         protected SyncCharactersAction $syncCharacters
-    ) {}
+    ) {
+    }
 
     /**
      * Import or update an anime from TMDB ID.
@@ -23,7 +24,7 @@ class ImportAnimeAction
     {
         $details = $this->tmdb->getDetails($tmdbId, $type);
 
-        if (! $details) {
+        if (!$details) {
             throw new \Exception('TMDB verisi çekilemedi.');
         }
 
@@ -80,15 +81,12 @@ class ImportAnimeAction
 
             $seasonDetails = $this->tmdb->getSeasonDetails((int) $anime->tmdb_id, $season['season_number']);
 
-            if (! $seasonDetails || ! isset($seasonDetails['episodes'])) {
+            if (!$seasonDetails || !isset($seasonDetails['episodes'])) {
                 continue;
             }
 
             foreach ($seasonDetails['episodes'] as $ep) {
-                // Only import episodes that have already aired
-                if (isset($ep['air_date']) && now()->parse($ep['air_date'])->isAfter($now)) {
-                    continue;
-                }
+                // Artık gelecek bölümleri de çekiyoruz
 
                 Episode::updateOrCreate(
                     [
@@ -116,7 +114,7 @@ class ImportAnimeAction
      */
     protected function getTrailerKey(array $details): ?string
     {
-        if (! isset($details['videos']['results'])) {
+        if (!isset($details['videos']['results'])) {
             return null;
         }
 

@@ -64,6 +64,8 @@ class Anime extends Model
         'hero_order',
         'vote_count',
         'trailer_key',
+        'broadcast_day',
+        'broadcast_time',
     ];
 
     protected $casts = [
@@ -72,6 +74,7 @@ class Anime extends Model
         'hero_order' => 'integer',
         'release_date' => 'date',
         'status' => AnimeStatus::class,
+        'broadcast_day' => \App\Enums\DayOfWeek::class,
     ];
 
     public function episodes(): HasMany
