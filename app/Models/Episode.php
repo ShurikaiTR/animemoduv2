@@ -21,12 +21,14 @@ class Episode extends Model
             Cache::forget('home_latest_episodes');
             Cache::forget("anime_seasons_{$episode->anime_id}");
             Cache::forget("anime_episodes_{$episode->anime_id}_{$episode->season_number}");
+            Cache::forget('weekly_schedule');
         });
 
         static::deleted(function ($episode) {
             Cache::forget('home_latest_episodes');
             Cache::forget("anime_seasons_{$episode->anime_id}");
             Cache::forget("anime_episodes_{$episode->anime_id}_{$episode->season_number}");
+            Cache::forget('weekly_schedule');
         });
     }
 
@@ -84,7 +86,7 @@ class Episode extends Model
     protected function isReleased(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->air_date && $this->air_date <= now(),
+            get: fn () => $this->air_date && $this->air_date <= now(),
         );
     }
 }

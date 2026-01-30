@@ -23,6 +23,7 @@ class Anime extends Model
             Cache::forget('home_popular_movies');
             Cache::forget('home_featured_animes');
             Cache::forget('home_latest_episodes');
+            Cache::forget('weekly_schedule');
             // Clear Hub Cache (Vitrin first few pages)
             foreach (range(1, 10) as $page) {
                 Cache::forget("hub_list_vitrin_page_{$page}");
@@ -36,6 +37,7 @@ class Anime extends Model
             Cache::forget('home_popular_movies');
             Cache::forget('home_featured_animes');
             Cache::forget('home_latest_episodes');
+            Cache::forget('weekly_schedule');
             // Clear Hub Cache
             foreach (range(1, 10) as $page) {
                 Cache::forget("hub_list_vitrin_page_{$page}");

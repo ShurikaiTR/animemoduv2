@@ -10,6 +10,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -80,6 +81,30 @@ class User extends Authenticatable implements FilamentUser
     public function profile(): HasOne
     {
         return $this->hasOne(Profile::class);
+    }
+
+    /**
+     * Get the watchlist entries for the user.
+     */
+    public function watchlist(): HasMany
+    {
+        return $this->hasMany(Watchlist::class);
+    }
+
+    /**
+     * Get the favorites for the user.
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    /**
+     * Get the activities for the user.
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
     }
 
     /**

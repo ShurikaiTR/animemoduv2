@@ -14,8 +14,7 @@ class ImportAnimeAction
     public function __construct(
         protected TmdbService $tmdb,
         protected SyncCharactersAction $syncCharacters
-    ) {
-    }
+    ) {}
 
     /**
      * Import or update an anime from TMDB ID.
@@ -24,7 +23,7 @@ class ImportAnimeAction
     {
         $details = $this->tmdb->getDetails($tmdbId, $type);
 
-        if (!$details) {
+        if (! $details) {
             throw new \Exception('TMDB verisi çekilemedi.');
         }
 
@@ -60,6 +59,24 @@ class ImportAnimeAction
         // If it's a TV show, import episodes for the first season by default
         if ($type === 'tv' && isset($details['seasons'])) {
             $this->importEpisodes($anime, $details['seasons']);
+
+            // Guess broadcast day if not set
+            if (! $anime->broadcast_day) {
+                $firstAirDate = $anime->episodes()
+                    ->whereNotNull('air_date')
+                    ->orderBy('air_date')
+                    ->value('air_date');
+
+                if ($firstAirDate) {
+                    $anime->update([
+                        'broadcast_day' => \App\Enums\DayOfWeek::fromDate(
+                            $firstAirDate instanceof \DateTimeInterface
+                            ? $firstAirDate
+                            : new \DateTime((string) $firstAirDate)
+                        ),
+                    ]);
+                }
+            }
         }
 
         return $anime;
@@ -81,7 +98,7 @@ class ImportAnimeAction
 
             $seasonDetails = $this->tmdb->getSeasonDetails((int) $anime->tmdb_id, $season['season_number']);
 
-            if (!$seasonDetails || !isset($seasonDetails['episodes'])) {
+            if (! $seasonDetails || ! isset($seasonDetails['episodes'])) {
                 continue;
             }
 
@@ -114,7 +131,7 @@ class ImportAnimeAction
      */
     protected function getTrailerKey(array $details): ?string
     {
-        if (!isset($details['videos']['results'])) {
+        if (! isset($details['videos']['results'])) {
             return null;
         }
 

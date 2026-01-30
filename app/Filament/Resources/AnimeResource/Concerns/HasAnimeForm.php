@@ -75,6 +75,16 @@ trait HasAnimeForm
                                     ->required()
                                     ->native(false),
 
+                                Select::make('broadcast_day')
+                                    ->label('Yayın Günü')
+                                    ->options(\App\Enums\DayOfWeek::class)
+                                    ->native(false),
+
+                                TextInput::make('broadcast_time')
+                                    ->label('Yayın Saati')
+                                    ->placeholder('00:00')
+                                    ->extraAttributes(['step' => 60]),
+
                                 TextInput::make('hero_order')
                                     ->label('Vitrin Sırası')
                                     ->numeric()

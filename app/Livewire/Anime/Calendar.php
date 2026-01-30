@@ -6,7 +6,9 @@ namespace App\Livewire\Anime;
 
 use App\Actions\Anime\GetWeeklyScheduleAction;
 use App\Enums\DayOfWeek;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -25,22 +27,31 @@ class Calendar extends Component
         $this->activeDay = $this->activeDay ?? DayOfWeek::fromDate(now())->value;
     }
 
-    #[Layout('components.layout.app')]
-    #[Title('Anime Yayın Takvimi')]
-    public function render(GetWeeklyScheduleAction $getWeeklySchedule): View
+    #[Computed]
+    public function schedule(): Collection
     {
-        $schedule = $getWeeklySchedule();
+        return app(GetWeeklyScheduleAction::class)();
+    }
 
-        $animes = $schedule->get($this->activeDay, collect());
+    #[Computed]
+    public function animes(): Collection
+    {
+        $animes = $this->schedule->get($this->activeDay, collect());
 
         if ($this->showOnlyWatchlist && auth()->check()) {
-            // Watchlist relationship logic would go here
-            // For now, let's assume a basic placeholder filtering
-            // $animes = $animes->filter(fn ($anime) => auth()->user()->isFollowing($anime));
+            $watchlistIds = auth()->user()->watchlist()->pluck('anime_id')->toArray();
+            $animes = $animes->filter(fn ($anime) => in_array($anime->id, $watchlistIds));
         }
 
+        return $animes;
+    }
+
+    #[Layout('components.layout.app')]
+    #[Title('Anime Yayın Takvimi')]
+    public function render(): View
+    {
         return view('livewire.anime.calendar', [
-            'animes' => $animes,
+            'animes' => $this->animes,
             'days' => DayOfWeek::cases(),
         ]);
     }
