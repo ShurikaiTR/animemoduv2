@@ -9,21 +9,21 @@ use Illuminate\Support\Facades\Http;
 
 class AnilistService
 {
-    protected string $baseUrl = 'https://graphql.anilist.co';
+  protected string $baseUrl = 'https://graphql.anilist.co';
 
-    /**
-     * Search for anime on AniList.
-     */
-    public function search(string $query): array
-    {
-        if (strlen($query) < 2) {
-            return [];
-        }
+  /**
+   * Search for anime on AniList.
+   */
+  public function search(string $query): array
+  {
+    if (strlen($query) < 2) {
+      return [];
+    }
 
-        $cacheKey = 'anilist_search_'.md5($query);
+    $cacheKey = 'anilist_search_' . md5($query);
 
-        return Cache::remember($cacheKey, now()->addMinutes(5), function () use ($query) {
-            $queryGraphql = <<<'GRAPHQL'
+    return Cache::remember($cacheKey, now()->addMinutes(5), function () use ($query) {
+      $queryGraphql = <<<'GRAPHQL'
                 query ($search: String) {
                   Page(page: 1, perPage: 5) {
                     media(search: $search, type: ANIME) {
@@ -41,21 +41,54 @@ class AnilistService
                 }
             GRAPHQL;
 
-            $response = Http::timeout(10)->post($this->baseUrl, [
-                'query' => $queryGraphql,
-                'variables' => ['search' => $query],
-            ]);
+      $response = Http::timeout(10)->post($this->baseUrl, [
+        'query' => $queryGraphql,
+        'variables' => ['search' => $query],
+      ]);
 
-            return $response->json('data.Page.media') ?? [];
-        });
-    }
+      return $response->json('data.Page.media') ?? [];
+    });
+  }
 
-    /**
-     * Get characters for an anime by its AniList ID.
-     */
-    public function getCharacters(int $anilistId): array
-    {
-        $queryGraphql = <<<'GRAPHQL'
+  /**
+   * Get airing schedule for an anime by its AniList ID.
+   */
+  public function getMediaSchedule(int $anilistId): ?array
+  {
+    $queryGraphql = <<<'GRAPHQL'
+            query ($id: Int) {
+              Media(id: $id) {
+                nextAiringEpisode {
+                  airingAt
+                  episode
+                }
+                status
+                airingSchedule(perPage: 1, notYetAired: false) {
+                    nodes {
+                        airingAt
+                        episode
+                    }
+                }
+              }
+            }
+        GRAPHQL;
+
+    return Cache::remember("anilist_schedule_{$anilistId}", now()->addHours(1), function () use ($anilistId, $queryGraphql) {
+      $response = Http::timeout(10)->post($this->baseUrl, [
+        'query' => $queryGraphql,
+        'variables' => ['id' => $anilistId],
+      ]);
+
+      return $response->json('data.Media') ?? null;
+    });
+  }
+
+  /**
+   * Get characters for an anime by its AniList ID.
+   */
+  public function getCharacters(int $anilistId): array
+  {
+    $queryGraphql = <<<'GRAPHQL'
             query ($id: Int) {
               Media(id: $id) {
                 characters(sort: [ROLE, RELEVANCE]) {
@@ -78,22 +111,22 @@ class AnilistService
             }
         GRAPHQL;
 
-        return Cache::remember("anilist_chars_{$anilistId}", now()->addDays(7), function () use ($anilistId, $queryGraphql) {
-            $response = Http::timeout(10)->post($this->baseUrl, [
-                'query' => $queryGraphql,
-                'variables' => ['id' => $anilistId],
-            ]);
+    return Cache::remember("anilist_chars_{$anilistId}", now()->addDays(7), function () use ($anilistId, $queryGraphql) {
+      $response = Http::timeout(10)->post($this->baseUrl, [
+        'query' => $queryGraphql,
+        'variables' => ['id' => $anilistId],
+      ]);
 
-            $edges = $response->json('data.Media.characters.edges') ?? [];
+      $edges = $response->json('data.Media.characters.edges') ?? [];
 
-            return collect($edges)->map(function ($edge) {
-                return [
-                    'id' => $edge['node']['id'],
-                    'name' => $edge['node']['name']['full'] ?? ($edge['node']['name']['native'] ?? ''),
-                    'image' => $edge['node']['image']['large'] ?? ($edge['node']['image']['medium'] ?? ''),
-                    'role' => $edge['role'] ?? 'BACKGROUND',
-                ];
-            })->toArray();
-        });
-    }
+      return collect($edges)->map(function ($edge) {
+        return [
+          'id' => $edge['node']['id'],
+          'name' => $edge['node']['name']['full'] ?? ($edge['node']['name']['native'] ?? ''),
+          'image' => $edge['node']['image']['large'] ?? ($edge['node']['image']['medium'] ?? ''),
+          'role' => $edge['role'] ?? 'BACKGROUND',
+        ];
+      })->toArray();
+    });
+  }
 }

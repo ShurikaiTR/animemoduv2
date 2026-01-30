@@ -6,6 +6,7 @@ namespace App\Actions\Anime;
 
 use App\Models\Anime;
 use App\Models\Episode;
+use App\Services\AnilistService;
 use App\Services\TmdbService;
 use Illuminate\Support\Str;
 
@@ -13,8 +14,10 @@ class ImportAnimeAction
 {
     public function __construct(
         protected TmdbService $tmdb,
+        protected AnilistService $anilist,
         protected SyncCharactersAction $syncCharacters
-    ) {}
+    ) {
+    }
 
     /**
      * Import or update an anime from TMDB ID.
@@ -23,7 +26,7 @@ class ImportAnimeAction
     {
         $details = $this->tmdb->getDetails($tmdbId, $type);
 
-        if (! $details) {
+        if (!$details) {
             throw new \Exception('TMDB verisi çekilemedi.');
         }
 
@@ -49,6 +52,14 @@ class ImportAnimeAction
             ]
         );
 
+        // Try to find AniList ID if missing
+        if (!$anime->anilist_id) {
+            $anilistResults = $this->anilist->search($title);
+            if (!empty($anilistResults)) {
+                $anime->update(['anilist_id' => $anilistResults[0]['id']]);
+            }
+        }
+
         // Sync characters from AniList
         try {
             $this->syncCharacters->execute($anime);
@@ -61,7 +72,7 @@ class ImportAnimeAction
             $this->importEpisodes($anime, $details['seasons']);
 
             // Guess broadcast day if not set
-            if (! $anime->broadcast_day) {
+            if (!$anime->broadcast_day) {
                 $firstAirDate = $anime->episodes()
                     ->whereNotNull('air_date')
                     ->orderBy('air_date')
@@ -98,7 +109,7 @@ class ImportAnimeAction
 
             $seasonDetails = $this->tmdb->getSeasonDetails((int) $anime->tmdb_id, $season['season_number']);
 
-            if (! $seasonDetails || ! isset($seasonDetails['episodes'])) {
+            if (!$seasonDetails || !isset($seasonDetails['episodes'])) {
                 continue;
             }
 
@@ -131,7 +142,7 @@ class ImportAnimeAction
      */
     protected function getTrailerKey(array $details): ?string
     {
-        if (! isset($details['videos']['results'])) {
+        if (!isset($details['videos']['results'])) {
             return null;
         }
 

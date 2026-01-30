@@ -8,13 +8,13 @@ use Filament\Support\Contracts\HasLabel;
 
 enum DayOfWeek: string implements HasLabel
 {
-    case MONDAY = 'monday';
-    case TUESDAY = 'tuesday';
-    case WEDNESDAY = 'wednesday';
-    case THURSDAY = 'thursday';
-    case FRIDAY = 'friday';
-    case SATURDAY = 'saturday';
-    case SUNDAY = 'sunday';
+    case MONDAY = 'pazartesi';
+    case TUESDAY = 'sali';
+    case WEDNESDAY = 'carsamba';
+    case THURSDAY = 'persembe';
+    case FRIDAY = 'cuma';
+    case SATURDAY = 'cumartesi';
+    case SUNDAY = 'pazar';
 
     public function getLabel(): ?string
     {
@@ -31,6 +31,16 @@ enum DayOfWeek: string implements HasLabel
 
     public static function fromDate(\DateTimeInterface $date): self
     {
-        return self::from(strtolower($date->format('l')));
+        $englishDay = strtolower($date->format('l'));
+
+        return match ($englishDay) {
+            'monday' => self::MONDAY,
+            'tuesday' => self::TUESDAY,
+            'wednesday' => self::WEDNESDAY,
+            'thursday' => self::THURSDAY,
+            'friday' => self::FRIDAY,
+            'saturday' => self::SATURDAY,
+            'sunday' => self::SUNDAY,
+        };
     }
 }
