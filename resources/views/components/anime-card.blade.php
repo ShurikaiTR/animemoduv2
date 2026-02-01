@@ -32,7 +32,7 @@
     </div>
     @endif
 
-    <a href="{{ $route }}" class="block w-full h-full relative" wire:navigate>
+    <a href="{{ $route }}" class="block w-full h-full relative" wire:navigate.hover>
         {{-- Image with srcset --}}
         <img 
             src="{{ $imageUrl }}" 

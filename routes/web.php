@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/animeler', App\Livewire\Anime\Hub::class)->name('anime.hub');
-Route::get('/filmler', App\Livewire\Movie\Index::class)->name('movie.index');
-Route::get('/', App\Livewire\Pages\Home::class)->name('home');
-Route::get('/profil/{username?}', Show::class)->name('profile.show');
-Route::get('/anime/{slug}', App\Livewire\Anime\Show::class)->name('anime.show');
-Route::get('/izle/{anime:slug}/{segment1}/{segment2?}', App\Livewire\Anime\Watch::class)->name('anime.watch');
-Route::get('/kesfet', App\Livewire\Anime\Discover::class)->name('anime.discover');
-Route::get('/takvim', App\Livewire\Anime\Calendar::class)->name('anime.calendar');
+Route::livewire('/animeler', 'anime.hub')->name('anime.hub');
+Route::livewire('/filmler', 'movie.index')->name('movie.index');
+Route::livewire('/', 'pages.home')->name('home');
+Route::livewire('/profil/{username?}', 'profile.show')->name('profile.show');
+Route::livewire('/anime/{slug}', 'anime.show')->name('anime.show');
+Route::livewire('/izle/{anime:slug}/{segment1}/{segment2?}', 'anime.watch')->name('anime.watch');
+Route::livewire('/kesfet', 'anime.discover')->name('anime.discover');
+Route::livewire('/takvim', 'anime.calendar')->name('anime.calendar');

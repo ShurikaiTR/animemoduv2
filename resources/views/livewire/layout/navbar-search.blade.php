@@ -1,3 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+use Livewire\Component;
+
+new class extends Component {
+    public string $query = '';
+
+    public bool $isOpen = false;
+
+    public bool $showResults = false;
+
+    public function updatedQuery(): void
+    {
+        if (strlen($this->query) >= 2) {
+            $this->showResults = true;
+        } else {
+            $this->showResults = false;
+        }
+    }
+
+    public function toggleSearch(): void
+    {
+        $this->isOpen = !$this->isOpen;
+        if (!$this->isOpen) {
+            $this->query = '';
+            $this->showResults = false;
+        }
+    }
+}; ?>
+
 <div class="flex items-center" x-data="{ isOpen: @entangle('isOpen') }">
     {{-- Mobil Arama Butonu --}}
     <button type="button" @click="isOpen = !isOpen"
@@ -26,11 +58,11 @@
             </button>
 
             {{-- Arama Sonuçları --}}
-            @if($showResults && strlen($query) >= 2)
+            @if($this->showResults && strlen($this->query) >= 2)
                 <div
                     class="absolute top-full left-0 right-0 xl:right-auto mt-2 w-full xl:w-96 bg-bg-secondary/95 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl overflow-hidden z-[100]">
                     <div class="p-4 text-center text-white/40 text-sm">
-                        "{{ $query }}" için sonuçlar yakında burada...
+                        "{{ $this->query }}" için sonuçlar yakında burada...
                     </div>
                 </div>
             @endif

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\AnimeResource\Concerns;
 
 use App\Enums\AnimeStatus;
+use App\Enums\DayOfWeek;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
@@ -77,7 +78,7 @@ trait HasAnimeForm
 
                                 Select::make('broadcast_day')
                                     ->label('Yayın Günü')
-                                    ->options(\App\Enums\DayOfWeek::class)
+                                    ->options(DayOfWeek::class)
                                     ->native(false),
 
                                 TextInput::make('broadcast_time')

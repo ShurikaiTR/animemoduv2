@@ -1,3 +1,73 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Models\Anime;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use App\Services\TmdbService;
+
+new class extends Component {
+    #[Locked]
+    public Anime $anime;
+
+    #[Url(as: 'sezon', history: true)]
+    public int $selectedSeason = 1;
+
+    public function mount(Anime $anime): void
+    {
+        $this->anime = $anime;
+
+        // Find the first available season if not provided in URL
+        if (request()->query('sezon') === null) {
+            $firstSeason = $this->anime->episodes()
+                ->released()
+                ->where('season_number', '>', 0)
+                ->min('season_number');
+
+            if ($firstSeason) {
+                $this->selectedSeason = (int) $firstSeason;
+            }
+        }
+    }
+
+    public function selectSeason(int $season): void
+    {
+        $this->selectedSeason = $season;
+        $this->dispatch('season-changed');
+    }
+
+    #[Computed(cache: true, seconds: 3600)]
+    public function seasons()
+    {
+        return $this->anime->episodes()
+            ->released()
+            ->where('season_number', '>', 0)
+            ->select('season_number')
+            ->distinct()
+            ->orderBy('season_number')
+            ->pluck('season_number');
+    }
+
+    #[Computed(cache: true, seconds: 3600)]
+    public function episodes()
+    {
+        return $this->anime->episodes()
+            ->released()
+            ->where('season_number', $this->selectedSeason)
+            ->orderBy('episode_number')
+            ->get();
+    }
+
+    #[Computed]
+    public function structureType(): string
+    {
+        return $this->anime->structure_type ?? 'seasonal';
+    }
+}; ?>
+
 <div class="mb-12 relative group/list" x-data="{ 
     scroll(direction) {
         const container = $refs.episodeList;
@@ -8,7 +78,7 @@
     <div class="flex items-center justify-between mb-6">
         <h3 class="flex items-center gap-3 text-2xl text-white font-rubik font-bold">
             @if($this->structureType === 'seasonal')
-                {{ $selectedSeason }}. Sezon
+                {{ $this->selectedSeason }}. Sezon
             @else
                 Bölümler
             @endif
@@ -19,8 +89,9 @@
                 <div class="flex gap-2 mr-2">
                     @foreach($this->seasons as $season)
                         <button type="button" wire:click="selectSeason({{ $season }})"
-                            aria-pressed="{{ $selectedSeason === $season ? 'true' : 'false' }}" aria-label="Sezon {{ $season }}"
-                            class="px-3 py-1 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg-main {{ $selectedSeason === $season ? 'bg-primary text-white' : 'bg-bg-secondary text-text-main hover:bg-white hover:text-bg-secondary' }}">
+                            aria-pressed="{{ $this->selectedSeason === $season ? 'true' : 'false' }}"
+                            aria-label="Sezon {{ $season }}"
+                            class="px-3 py-1 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-bg-main {{ $this->selectedSeason === $season ? 'bg-primary text-white' : 'bg-bg-secondary text-text-main hover:bg-white hover:text-bg-secondary' }}">
                             S{{ $season }}
                         </button>
                     @endforeach
@@ -43,11 +114,11 @@
                         ? ($episode->absolute_episode_number ?? $episode->episode_number) . '. Bölüm'
                         : $episode->episode_number . '. Bölüm';
                     $href = ($this->structureType === 'seasonal')
-                        ? route('anime.watch', ['anime' => $anime->slug, 'segment1' => "sezon-{$episode->season_number}", 'segment2' => "bolum-{$episode->episode_number}"])
-                        : route('anime.watch', ['anime' => $anime->slug, 'segment1' => "bolum-" . ($episode->absolute_episode_number ?? $episode->episode_number)]);
+                        ? route('anime.watch', ['anime' => $this->anime->slug, 'segment1' => "sezon-{$episode->season_number}", 'segment2' => "bolum-{$episode->episode_number}"])
+                        : route('anime.watch', ['anime' => $this->anime->slug, 'segment1' => "bolum-" . ($episode->absolute_episode_number ?? $episode->episode_number)]);
                 @endphp
                 <x-anime.episode-card :title="$epNum" :episodeNumber="$episode->title"
-                    :image="\App\Services\TmdbService::getImageUrl($episode->still_path ?? $anime->backdrop_path, 'w500')"
+                    :image="TmdbService::getImageUrl($episode->still_path ?? $this->anime->backdrop_path, 'w500')"
                     :timeAgo="''" :href="$href" />
             </div>
         @empty

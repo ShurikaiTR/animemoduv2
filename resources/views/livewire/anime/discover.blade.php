@@ -1,17 +1,76 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Enums\AnimeGenre;
+use App\Livewire\Anime\Concerns\HasAnimeFilters;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+new #[Layout('components.layout.app')]
+class extends Component
+{
+    use HasAnimeFilters;
+    use WithPagination;
+
+    #[Computed]
+    public function pageHeading(): string
+    {
+        if ($this->search) {
+            return '"' . $this->search . '" sonuçları';
+        }
+
+        if (!empty($this->genres)) {
+            $labels = [];
+
+            foreach ($this->genres as $g) {
+                if ($enum = AnimeGenre::tryFrom($g)) {
+                    $labels[] = $enum->label();
+                }
+            }
+
+            if (!empty($labels)) {
+                return implode(', ', array_slice($labels, 0, 3)) . (count($labels) > 3 ? '...' : '') . ' Animeleri';
+            }
+        }
+
+        return 'Animeleri Keşfet';
+    }
+
+    #[Computed]
+    public function pageTitle(): string
+    {
+        return config('app.name') . ': ' . $this->pageHeading;
+    }
+
+    public function loadMore(): void
+    {
+        $this->limit += 24;
+    }
+
+    #[Computed]
+    public function availableGenres(): array
+    {
+        return AnimeGenre::cases();
+    }
+}; ?>
+
 <div class="min-h-screen pb-16 bg-bg-main" x-data x-init="window.scrollTo({top: 0, behavior: 'instant'})"
     @scroll-to-top.window="window.scrollTo({top: 0, behavior: 'smooth'})">
     <x-slot:title>
-        {{ $this->getPageTitle() }}
+        {{ $this->pageTitle }}
     </x-slot:title>
     <div class="container mx-auto px-4 md:px-6">
         <div class="flex flex-col lg:flex-row gap-0 lg:gap-10 items-start pt-24 lg:pt-32">
 
             {{-- Mobile Filter Bar --}}
-            <x-anime.discover-mobile-filters :sort="$sort" :genres="$genres" :search="$search"
+            <x-anime.discover-mobile-filters :sort="$this->sort" :genres="$this->genres" :search="$this->search"
                 :available-genres="$this->availableGenres" class="lg:hidden" />
 
             {{-- Desktop Sidebar --}}
-            <x-anime.discover-sidebar :sort="$sort" :genres="$genres" :search="$search"
+            <x-anime.discover-sidebar :sort="$this->sort" :genres="$this->genres" :search="$this->search"
                 :available-genres="$this->availableGenres" class="hidden lg:block" />
 
             {{-- Main Content --}}
@@ -34,10 +93,10 @@
                 {{-- Active Filters & Content --}}
                 <div class="mb-6">
                     {{-- Active Chips --}}
-                    @if(!empty($genres))
+                    @if(!empty($this->genres))
                         <div class="flex flex-wrap gap-2 mb-6 animate-in fade-in slide-in-from-top-2">
-                            @foreach($genres as $g)
-                                @if($enum = \App\Enums\AnimeGenre::tryFrom($g))
+                            @foreach($this->genres as $g)
+                                @if($enum = AnimeGenre::tryFrom($g))
                                     <button wire:click="toggleGenre('{{ $g }}')"
                                         class="flex items-center gap-2 pl-3 pr-2 py-1.5 bg-primary/10 text-primary border border-primary/20 rounded-lg text-sm font-medium hover:bg-primary/20 transition-colors group">
                                         {{ $enum->label() }}

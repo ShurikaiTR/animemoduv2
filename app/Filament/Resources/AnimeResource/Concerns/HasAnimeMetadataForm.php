@@ -9,6 +9,7 @@ use App\Services\TmdbService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
@@ -104,7 +105,7 @@ trait HasAnimeMetadataForm
                         ->required()
                         ->native(false),
 
-                    \Filament\Forms\Components\TagsInput::make('genres')
+                    TagsInput::make('genres')
                         ->label('Türler')
                         ->suggestions(Genre::all()->pluck('name', 'name'))
                         ->placeholder('Tür ekle...'),

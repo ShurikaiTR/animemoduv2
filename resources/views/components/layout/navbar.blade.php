@@ -49,13 +49,13 @@
                     <nav class="hidden xl:block" aria-label="Ana Menü">
                         <ul class="flex flex-row items-center">
                             <li class="relative xl:mr-16">
-                                <a href="{{ url('/animeler') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors">Animeler</a>
+                                <a href="{{ url('/animeler') }}" wire:navigate.hover class="text-sm font-medium text-text-main hover:text-primary transition-colors">Animeler</a>
                             </li>
                             <li class="relative xl:mr-16">
-                                <a href="{{ url('/filmler') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors">Filmler</a>
+                                <a href="{{ url('/filmler') }}" wire:navigate.hover class="text-sm font-medium text-text-main hover:text-primary transition-colors">Filmler</a>
                             </li>
                             <li class="relative xl:mr-16">
-                                <a href="{{ url('/kesfet') }}" class="text-sm font-medium text-text-main hover:text-primary transition-colors">Keşfet</a>
+                                <a href="{{ url('/kesfet') }}" wire:navigate.hover class="text-sm font-medium text-text-main hover:text-primary transition-colors">Keşfet</a>
                             </li>
                             <li class="relative" x-data="{ open: false }" @click.outside="open = false">
                             <button 

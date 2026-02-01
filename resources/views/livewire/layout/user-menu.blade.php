@@ -1,4 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
+
+new class extends Component {
+    #[Computed]
+    public function user()
+    {
+        return Auth::user();
+    }
+
+    #[Computed]
+    public function profile()
+    {
+        return $this->user?->profile;
+    }
+
+    public function logout(): void
+    {
+        Auth::logout();
+
+        session()->invalidate();
+        session()->regenerateToken();
+
+        $this->redirect(route('home'), navigate: true);
+    }
+}; ?>
+
 @php
+    $user = $this->user;
+    $profile = $this->profile;
     $displayUsername = $profile?->username ?? ($profile?->full_name ?? ($user?->name ?? 'User'));
     $avatarUrl = $profile?->avatar_url;
     $initial = strtoupper(substr($displayUsername, 0, 1));
@@ -11,7 +45,8 @@
         :class="{ 'bg-white/5 border-white/5': open }">
         <div
             class="w-8 h-8 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/30 group-hover:from-primary/30 group-hover:to-primary/10 transition-all shadow-primary-mini overflow-hidden">
-            <img src="{{ $avatarUrl ?: asset('default-avatar.webp') }}" alt="{{ $displayUsername }}" class="w-full h-full object-cover">
+            <img src="{{ $avatarUrl ?: asset('default-avatar.webp') }}" alt="{{ $displayUsername }}"
+                class="w-full h-full object-cover">
         </div>
         <div class="hidden sm:flex flex-col items-start text-left">
             <span class="text-sm font-medium text-white max-w-32 truncate group-hover:text-primary transition-colors">
@@ -24,12 +59,9 @@
     </button>
 
     {{-- Dropdown Menu --}}
-    <div x-show="open" x-cloak 
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 translate-y-2" 
-        x-transition:enter-end="opacity-100 translate-y-0"
-        x-transition:leave="transition ease-in duration-150" 
-        x-transition:leave-start="opacity-100 translate-y-0"
+    <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0"
         x-transition:leave-end="opacity-0 translate-y-2"
         class="absolute right-0 mt-2 w-64 bg-bg-secondary border-none text-white p-1.5 shadow-2xl rounded-2xl z-[100]">
         <div class="font-normal p-0 mb-2">
