@@ -12,6 +12,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables;
+use Filament\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -115,6 +116,21 @@ trait HasAnimeTable
                     ),
             ])
             ->actions([
+                Action::make('refresh')
+                    ->label('Yenile')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalHeading('Bölümleri Yenile')
+                    ->modalDescription('TMDB\'den bölüm bilgileri (resim, özet) güncellenecek.')
+                    ->action(function ($record) {
+                        $count = app(\App\Actions\Anime\RefreshEpisodesAction::class)->execute($record);
+
+                        \Filament\Notifications\Notification::make()
+                            ->title("{$count} bölüm güncellendi")
+                            ->success()
+                            ->send();
+                    }),
                 ViewAction::make()
                     ->iconButton(),
                 EditAction::make()

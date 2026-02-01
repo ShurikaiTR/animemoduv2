@@ -36,7 +36,8 @@ class Home extends Component
         $this->latestEpisodes = Cache::remember('home_latest_episodes', 3600, function () {
             return Episode::select(['id', 'anime_id', 'title', 'still_path', 'season_number', 'episode_number', 'absolute_episode_number', 'created_at'])
                 ->with(['anime:id,title,slug,poster_path,structure_type'])
-                ->orderBy('created_at', 'desc')
+                ->released()
+                ->orderBy('air_date', 'desc')
                 ->orderBy('season_number', 'desc')
                 ->orderBy('episode_number', 'desc')
                 ->limit(10)

@@ -129,4 +129,116 @@ class AnilistService
       })->toArray();
     });
   }
+
+  /**
+   * Get season chain (PREQUEL/SEQUEL) for episode splitting.
+   * Recursively traverses the entire chain.
+   *
+   * @return array<int, array{id: int, title: string, episodes: int}>
+   */
+  public function getSeasonChain(int $anilistId): array
+  {
+    $cacheKey = "anilist_chain_{$anilistId}";
+
+    return Cache::remember($cacheKey, now()->addDays(1), function () use ($anilistId) {
+      $visited = [];
+      $seasons = collect();
+
+      $this->traverseChain($anilistId, $visited, $seasons);
+
+      return $seasons
+        ->sortBy('start_date')
+        ->values()
+        ->map(fn($s) => [
+          'id' => $s['id'],
+          'title' => $s['title'],
+          'episodes' => $s['episodes'],
+        ])
+        ->toArray();
+    });
+  }
+
+  /**
+   * Recursively traverse PREQUEL/SEQUEL chain.
+   */
+  protected function traverseChain(int $anilistId, array &$visited, &$seasons): void
+  {
+    if (in_array($anilistId, $visited)) {
+      return;
+    }
+    $visited[] = $anilistId;
+
+    $queryGraphql = <<<'GRAPHQL'
+      query ($id: Int) {
+        Media(id: $id) {
+          id
+          title { romaji }
+          episodes
+          format
+          startDate { year month day }
+          relations {
+            edges {
+              relationType
+              node {
+                id
+                format
+              }
+            }
+          }
+        }
+      }
+    GRAPHQL;
+
+    $response = Http::timeout(10)->post($this->baseUrl, [
+      'query' => $queryGraphql,
+      'variables' => ['id' => $anilistId],
+    ]);
+
+    $media = $response->json('data.Media');
+    if (!$media) {
+      return;
+    }
+
+    // Add current media if TV with episodes
+    if ($media['format'] === 'TV' && $media['episodes']) {
+      $seasons->push([
+        'id' => $media['id'],
+        'title' => $media['title']['romaji'],
+        'episodes' => $media['episodes'],
+        'start_date' => $this->parseStartDate($media['startDate']),
+      ]);
+    }
+
+    // Recursively traverse PREQUEL/SEQUEL
+    $relations = $media['relations']['edges'] ?? [];
+    foreach ($relations as $edge) {
+      $relationType = $edge['relationType'];
+      $node = $edge['node'];
+
+      if (!in_array($relationType, ['PREQUEL', 'SEQUEL'])) {
+        continue;
+      }
+      if ($node['format'] !== 'TV') {
+        continue;
+      }
+
+      $this->traverseChain($node['id'], $visited, $seasons);
+    }
+  }
+
+
+  protected function parseStartDate(?array $date): string
+  {
+    if (!$date || !$date['year']) {
+      return '9999-01-01';
+    }
+
+    return sprintf(
+      '%04d-%02d-%02d',
+      $date['year'],
+      $date['month'] ?? 1,
+      $date['day'] ?? 1
+    );
+  }
 }
+
