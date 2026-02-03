@@ -16,14 +16,7 @@
     })"
     class="w-full h-full rounded-xl overflow-hidden bg-black relative z-10 group"
 >
-    {{-- Loading State --}}
-    <template x-if="!isReady">
-        <div class="w-full h-full flex items-center justify-center bg-black">
-            <div class="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-        </div>
-    </template>
-
-    {{-- Player Header Overlay (Custom) --}}
+    {{-- Background Backdrop (Fake Player ile aynı şık stil) --}}
     <div 
         x-show="!isReady || showOverlay" 
         x-transition:enter="transition ease-out duration-500"
@@ -32,12 +25,38 @@
         x-transition:leave="transition ease-in duration-300"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
+        class="absolute inset-0 z-0 pointer-events-none"
+    >
+        <template x-if="config.poster">
+            <div class="absolute inset-0 w-full h-full">
+                <img :src="config.poster" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-[2px] transition-all duration-700 scale-105" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>
+            </div>
+        </template>
+    </div>
+
+    {{-- Loading State --}}
+    <template x-if="!isReady">
+        <div class="w-full h-full flex items-center justify-center bg-transparent relative z-50">
+            <div class="w-16 h-16 border-4 border-white/20 border-t-primary rounded-full animate-spin"></div>
+        </div>
+    </template>
+
+    {{-- Player Header Overlay --}}
+    <div 
+        x-show="!isReady || showOverlay" 
+        x-transition:enter="transition ease-out duration-500"
+        x-transition:enter-start="opacity-0 -translate-y-4"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-300"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-4"
         class="absolute top-6 left-6 z-40 flex items-center gap-4 pointer-events-none select-none"
     >
         <template x-if="logo">
             <div class="relative">
                 <div class="absolute inset-0 rounded-full bg-primary/40 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] opacity-50"></div>
-                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-white/10 shadow-xl bg-black/50 backdrop-blur-md z-10">
+                <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-white/10 shadow-xl bg-black/50 backdrop-blur-md z-11">
                     <img :src="logo" :alt="animeTitle" class="w-full h-full object-cover">
                 </div>
             </div>
@@ -50,7 +69,7 @@
     </div>
 
     {{-- Player Container --}}
-    <div class="w-full h-full relative">
+    <div x-show="isReady" class="w-full h-full relative z-10">
         <video
             x-ref="video"
             class="video-js vjs-big-play-centered"
@@ -61,39 +80,37 @@
     </div>
 </div>
 
-{{-- Scriptleri Lazy yerine normal yüklüyoruz ki player hemen gelsin --}}
 @assets
 <script src="/player/video.min.js"></script>
 <script src="/player/nuevo.min.js"></script>
 <link href="/player/skins/flow/videojs.min.css" rel="stylesheet">
 <style>
-    /* Sadece oynatıcı kapağının (poster) tam yayılmasını sağlar */
-    .video-js .vjs-poster {
-        background-size: cover;
-        background-position: center;
-    }
+    /* VideoJS'in kendi ham posterini gizliyoruz, çünkü arkada bizim özel backdrop'umuz var */
+    .video-js .vjs-poster { display: none !important; }
+    .video-js { background-color: transparent !important; }
+    /* Video içeriği her zaman konteyneri doldursun */
+    .video-js video { object-fit: contain; }
 </style>
 @endassets
 
 @script
 <script>
-    Alpine.data('videoPlayer', (config) => ({
+     Alpine.data('videoPlayer', (config) => ({
         player: null,
         isReady: false,
         showOverlay: true,
         animeTitle: config.animeTitle,
         episodeTitle: config.episodeTitle,
         logo: config.logo,
+        config: config,
         
         init() {
-            // DOM'un hazır olduğundan emin ol
             this.$nextTick(() => {
                 this.loadLanguages().then(() => {
                     this.initPlayer();
                 });
             });
 
-            // Bölüm Değişikliği Eventi
             Livewire.on('play-episode', (data) => {
                 this.handleEpisodeChange(data);
             });
@@ -103,17 +120,16 @@
             this.animeTitle = data.anime_title;
             this.episodeTitle = data.episode_title;
             this.logo = data.logo;
+            this.config.poster = data.poster;
 
             if (this.player) {
-                // 1. Kaynağı Değiştir
-                this.player.poster(data.poster);
+                // Kaynağı Değiştir
                 this.player.src({ 
                     type: data.src.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4', 
                     src: data.src 
                 });
 
-                // 2. Nuevo Başlığını Güncelle (Çok Önemli)
-                // Nuevo'nun başlık DOM elementini bulup güncelliyoruz çünkü API'si bazen kısıtlıdır
+                // Nuevo Başlığını Güncelle
                 const titleEl = this.player.el().querySelector('.vjs-nuevo-title');
                 if(titleEl) titleEl.innerHTML = data.anime_title;
 
@@ -122,16 +138,13 @@
         },
 
         async loadLanguages() {
-            // VideoJS'i bekle
             let checkCount = 0;
             while(!window.videojs && checkCount < 50) {
                 await new Promise(r => setTimeout(r, 100));
                 checkCount++;
             }
 
-            // Türkçe Dil Dosyası Kontrolü
             if(window.videojs && (!window.videojs.languages || !window.videojs.languages['tr'])) {
-                // Eğer daha önce yüklenmediyse yükle
                 if (!document.querySelector('script[src*="tr.js"]')) {
                     const script = document.createElement('script');
                     script.src = '/player/lang/tr.js';
@@ -144,29 +157,16 @@
         initPlayer() {
             if (!window.videojs) return;
 
-            // KORUMA: Eğer player zaten varsa tekrar başlatma (Hata kaynağı burasıydı)
             if (this.player) {
-                // Zaten varsa sadece kaynağı güncelle (eğer config değiştiyse)
-                if (this.player.src() !== config.src) {
-                    this.handleEpisodeChange({
-                        src: config.src,
-                        poster: config.poster,
-                        anime_title: config.animeTitle,
-                        episode_title: config.episodeTitle,
-                        logo: config.logo
-                    });
-                }
                 this.isReady = true;
                 return;
             }
 
-            // Player Yoksa Sıfırdan Kur
             this.player = videojs(this.$refs.video, {
                 controls: true,
                 autoplay: false,
                 preload: 'auto',
                 fluid: true,
-                poster: config.poster,
                 sources: [{
                     src: config.src,
                     type: config.src?.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4'
@@ -207,7 +207,6 @@
             });
         },
 
-        // Alpine bileşeni yok edildiğinde (sayfa değişirse vs) player'ı temizle
         destroy() {
             if (this.player) {
                 this.player.dispose();
