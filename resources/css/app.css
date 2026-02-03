@@ -141,6 +141,9 @@ body::-webkit-scrollbar-thumb {
     animation: toast-out 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@variant data-loading (&[data-loading]);
+@variant in-data-loading (:where([data-loading]) &);
+
 .bg-glass {
     background: rgba(21, 31, 48, 0.7);
     backdrop-filter: blur(12px);
