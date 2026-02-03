@@ -29,7 +29,7 @@
             </template>
             @if(!isset($__alpine_only))
                 <template x-if="!logo && '{{ $logo }}'">
-                    <div class="relative">
+                    <div class="relative text-left">
                         <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-white/10 shadow-xl bg-black/50 backdrop-blur-md z-10">
                             <img src="{{ $logo }}" alt="{{ $animeTitle }}" class="w-full h-full object-cover">
                         </div>
@@ -53,15 +53,20 @@
     {{-- Poster Section (Arka Plan Anime Backdrop Olacak) --}}
     <div class="absolute inset-0 w-full h-full z-0">
         <template x-if="backdrop">
-            <img :src="backdrop" :alt="animeTitle + ' anime kapağı'"
-                class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-all duration-700 scale-105 group-hover:scale-100 blur-sm group-hover:blur-0" />
+            <div class="absolute inset-0 w-full h-full">
+                <img :src="backdrop" :alt="animeTitle + ' anime kapağı'"
+                    class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-all duration-700 scale-105 group-hover:scale-100 blur-sm group-hover:blur-0" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>
+            </div>
         </template>
         {{-- Static Fallback --}}
         @if($backdrop)
-            <img x-show="!backdrop" src="{{ $backdrop }}" alt="{{ $animeTitle }} anime kapağı"
-                class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-all duration-700 scale-105 group-hover:scale-100 blur-sm group-hover:blur-0" />
+            <div x-show="!backdrop" class="absolute inset-0 w-full h-full">
+                <img src="{{ $backdrop }}" alt="{{ $animeTitle }} anime kapağı"
+                    class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-all duration-700 scale-105 group-hover:scale-100 blur-sm group-hover:blur-0" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>
+            </div>
         @endif
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>
     </div>
 
     {{-- Play Button Container --}}

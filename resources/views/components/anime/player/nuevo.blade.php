@@ -18,13 +18,11 @@
     })"
     class="w-full h-full rounded-xl overflow-hidden bg-black relative z-10 group"
 >
-    {{-- Background Backdrop (Anime Genel Görseli - Her Zaman En Arkada Kalır) --}}
-    <div 
-        class="absolute inset-0 z-0 pointer-events-none"
-    >
-        <template x-if="config.backdrop">
+    {{-- Background Backdrop (Anime Genel Görseli) --}}
+    <div class="absolute inset-0 z-0 pointer-events-none">
+        <template x-if="backdrop">
             <div class="absolute inset-0 w-full h-full">
-                <img :src="config.backdrop" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-[2px] transition-all duration-700 scale-105" />
+                <img :src="backdrop" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-[2px] transition-all duration-700 scale-105" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>
             </div>
         </template>
@@ -44,8 +42,6 @@
         x-transition:enter-start="opacity-0 -translate-y-4"
         x-transition:enter-end="opacity-100 translate-y-0"
         x-transition:leave="transition ease-in duration-300"
-        x-transition:leave-start="opacity-100 translate-y-0"
-        x-transition:leave-end="opacity-0 -translate-y-4"
         class="absolute top-6 left-6 z-40 flex items-center gap-4 pointer-events-none select-none"
     >
         <template x-if="logo">
@@ -93,10 +89,14 @@
         player: null,
         isReady: false,
         showOverlay: true,
+        
+        // Root-level properties for reactivity
+        src: config.src,
+        backdrop: config.backdrop,
+        poster: config.poster,
+        logo: config.logo,
         animeTitle: config.animeTitle,
         episodeTitle: config.episodeTitle,
-        logo: config.logo,
-        config: config,
         
         init() {
             this.$nextTick(() => {
@@ -119,8 +119,9 @@
             this.animeTitle = data.anime_title;
             this.episodeTitle = data.episode_title;
             this.logo = data.logo;
-            this.config.backdrop = data.backdrop || this.config.backdrop;
-            this.config.poster = data.poster;
+            this.backdrop = data.backdrop || this.backdrop;
+            this.poster = data.poster;
+            this.src = data.src;
 
             if (this.player) {
                 this.player.src({ 
@@ -160,8 +161,8 @@
             if (!window.videojs) return;
 
             if (this.player) {
-                if (this.player.src() !== config.src) {
-                    this.player.src({ type: this.getVideoType(config.src), src: config.src });
+                if (this.player.src() !== this.src) {
+                    this.player.src({ type: this.getVideoType(this.src), src: this.src });
                 }
                 this.isReady = true;
                 return;
@@ -173,8 +174,8 @@
                 preload: 'auto',
                 fluid: true,
                 sources: [{
-                    src: config.src,
-                    type: this.getVideoType(config.src)
+                    src: this.src,
+                    type: this.getVideoType(this.src)
                 }],
                 language: 'tr',
                 html5: {
