@@ -18,15 +18,8 @@
     })"
     class="w-full h-full rounded-xl overflow-hidden bg-black relative z-10 group"
 >
-    {{-- Background Backdrop (Anime Genel Görseli - Her Zaman Bu Görünür) --}}
+    {{-- Background Backdrop (Anime Genel Görseli - Her Zaman En Arkada Kalır) --}}
     <div 
-        x-show="!isReady || showOverlay" 
-        x-transition:enter="transition ease-out duration-500"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-300"
-        x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
         class="absolute inset-0 z-0 pointer-events-none"
     >
         <template x-if="config.backdrop">
