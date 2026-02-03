@@ -267,18 +267,18 @@ new #[Defer] class extends Component {
 
                 <x-ui.button type="submit" variant="{{ $this->current['btnVariant'] }}" data-loading.attr="disabled"
                     class="w-full h-12 text-base font-bold mt-2 transition-all duration-300 data-loading:opacity-70 group/btn">
-                    <span class="in-data-loading:hidden">
+                    <span class="group-data-loading/btn:hidden">
                         {{ $this->current['submitLabel'] }}
                     </span>
-                    <div class="hidden in-data-loading:flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <div class="hidden group-data-loading/btn:flex items-center justify-center gap-1.5 whitespace-nowrap">
                         <span>{{ $this->current['loadingLabel'] }}</span>
-                        <div class="flex gap-1" data-loading>
+                        <div class="flex gap-1">
                             <span class="animate-dot-bounce w-1.5 h-1.5 bg-current rounded-full"></span>
                             <span class="animate-dot-bounce delay-200 w-1.5 h-1.5 bg-current rounded-full"></span>
                             <span class="animate-dot-bounce delay-400 w-1.5 h-1.5 bg-current rounded-full"></span>
                         </div>
                     </div>
-                    <x-heroicon-o-arrow-right class="w-5 h-5 ml-2 in-data-loading:hidden" />
+                    <x-heroicon-o-arrow-right class="w-5 h-5 ml-2 group-data-loading/btn:hidden" />
                 </x-ui.button>
             </form>
 
