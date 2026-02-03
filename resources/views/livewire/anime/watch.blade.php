@@ -17,7 +17,7 @@
                     <div class="flex flex-col gap-4">
                         {{-- Video Player Container --}}
                         {{-- Video Player Container --}}
-                        <x-anime.player.index :anime="$anime" :episode="$episode" />
+                        <x-anime.player.wrapper :anime="$anime" :episode="$episode" />
 
                         {{-- Controls Bar --}}
                         @php

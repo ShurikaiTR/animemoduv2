@@ -22,7 +22,7 @@
         
         {{-- Real Player --}}
         <template x-if="isPlaying">
-            <x-anime.player.custom 
+            <x-anime.player.nuevo 
                 :src="$episode->video_url"
                 :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
                 :anime="$anime" 
@@ -33,7 +33,7 @@
 
         {{-- Fake Player (Cover) --}}
         <div x-show="!isPlaying" class="w-full h-full">
-            <x-anime.player.cover 
+            <x-anime.player.fake 
                 @click="isPlaying = true"
                 :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
                 :anime-title="$anime->title"
