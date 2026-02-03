@@ -1,4 +1,5 @@
 @props([
+    'backdrop' => null,
     'poster' => null,
     'animeTitle' => null,
     'episodeTitle' => null,
@@ -26,7 +27,6 @@
                     </div>
                 </div>
             </template>
-            {{-- Fallback for first render --}}
             @if(!isset($__alpine_only))
                 <template x-if="!logo && '{{ $logo }}'">
                     <div class="relative">
@@ -50,15 +50,15 @@
         </div>
     </div>
 
-    {{-- Poster Section --}}
+    {{-- Poster Section (Arka Plan Anime Backdrop Olacak) --}}
     <div class="absolute inset-0 w-full h-full z-0">
-        <template x-if="poster">
-            <img :src="poster" :alt="animeTitle + ' video kapağı'"
+        <template x-if="backdrop">
+            <img :src="backdrop" :alt="animeTitle + ' anime kapağı'"
                 class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-all duration-700 scale-105 group-hover:scale-100 blur-sm group-hover:blur-0" />
         </template>
         {{-- Static Fallback --}}
-        @if($poster)
-            <img x-show="!poster" src="{{ $poster }}" alt="{{ $animeTitle }} video kapağı"
+        @if($backdrop)
+            <img x-show="!backdrop" src="{{ $backdrop }}" alt="{{ $animeTitle }} anime kapağı"
                 class="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-all duration-700 scale-105 group-hover:scale-100 blur-sm group-hover:blur-0" />
         @endif
         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>

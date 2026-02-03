@@ -9,12 +9,14 @@
             isPlaying: false,
             animeTitle: {{ json_encode($anime->title) }},
             episodeTitle: {{ json_encode($episode->season_number . '. Sezon ' . $episode->episode_number . '. Bölüm') }},
-            poster: {{ json_encode($episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)) }},
+            backdrop: {{ json_encode($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null) }},
+            poster: {{ json_encode($episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : null) }},
             logo: {{ json_encode($anime->poster_path ? $tmdbService->getImageUrl($anime->poster_path, 'w500') : null) }}
         }" x-on:play-episode.window="
             isPlaying = isPlaying || $event.detail.force_play;
             animeTitle = $event.detail.anime_title;
             episodeTitle = $event.detail.episode_title;
+            backdrop = $event.detail.backdrop || backdrop;
             poster = $event.detail.poster;
             logo = $event.detail.logo;
         "
@@ -25,7 +27,8 @@
             @if(str_contains($episode->video_url ?? '', '.m3u8') || str_contains($episode->video_url ?? '', '.mp4') || str_contains($episode->video_url ?? '', '.mpd') || str_contains($episode->video_url ?? '', '.mkv'))
                 <x-anime.player.nuevo 
                     :src="$episode->video_url"
-                    :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
+                    :backdrop="$anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null"
+                    :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : null"
                     :anime="$anime" 
                     :episode="$episode" 
                     :logo="$anime->poster_path ? $tmdbService->getImageUrl($anime->poster_path, 'w500') : null" 
@@ -42,7 +45,8 @@
         <div x-show="!isPlaying" class="w-full h-full">
             <x-anime.player.fake 
                 @click="isPlaying = true"
-                :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
+                :backdrop="$anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null"
+                :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : null"
                 :anime-title="$anime->title"
                 :episode-title="$episode->season_number . '. Sezon ' . $episode->episode_number . '. Bölüm'"
                 :logo="$anime->poster_path ? $tmdbService->getImageUrl($anime->poster_path, 'w500') : null"

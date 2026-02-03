@@ -155,9 +155,8 @@ class Watch extends Component
         $this->dispatch(
             'play-episode',
             src: $this->episode->video_url,
-            poster: $this->episode->still_path
-            ? TmdbService::getImageUrl($this->episode->still_path, 'original')
-            : ($this->anime->backdrop_path ? TmdbService::getImageUrl($this->anime->backdrop_path, 'original') : null),
+            backdrop: $this->anime->backdrop_path ? TmdbService::getImageUrl($this->anime->backdrop_path, 'original') : null,
+            poster: $this->episode->still_path ? TmdbService::getImageUrl($this->episode->still_path, 'original') : null,
             anime_title: $this->anime->title,
             episode_title: $this->episode->season_number . '. Sezon ' . $this->episode->episode_number . '. Bölüm',
             logo: $this->anime->poster_path

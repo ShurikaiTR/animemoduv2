@@ -1,5 +1,6 @@
 @props([
     'src' => null,
+    'backdrop' => null,
     'poster' => null,
     'anime' => null,
     'episode' => null,
@@ -9,6 +10,7 @@
 <div 
     x-data="videoPlayer({
         src: '{{ $src }}',
+        backdrop: '{{ $backdrop }}',
         poster: '{{ $poster }}',
         logo: '{{ $logo }}',
         animeTitle: {{ json_encode($anime?->title ?? '') }},
@@ -16,7 +18,7 @@
     })"
     class="w-full h-full rounded-xl overflow-hidden bg-black relative z-10 group"
 >
-    {{-- Background Backdrop (Fake Player ile aynı şık stil) --}}
+    {{-- Background Backdrop (Anime Genel Görseli - Her Zaman Bu Görünür) --}}
     <div 
         x-show="!isReady || showOverlay" 
         x-transition:enter="transition ease-out duration-500"
@@ -27,9 +29,9 @@
         x-transition:leave-end="opacity-0"
         class="absolute inset-0 z-0 pointer-events-none"
     >
-        <template x-if="config.poster">
+        <template x-if="config.backdrop">
             <div class="absolute inset-0 w-full h-full">
-                <img :src="config.poster" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-[2px] transition-all duration-700 scale-105" />
+                <img :src="config.backdrop" class="absolute inset-0 w-full h-full object-cover opacity-30 blur-[2px] transition-all duration-700 scale-105" />
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/40"></div>
             </div>
         </template>
@@ -82,7 +84,6 @@
 </div>
 
 @assets
-{{-- Sıralama Önemli: Önce VideoJS Core, Sonra Nuevo Plugin --}}
 <script src="/player/video.min.js"></script>
 <script src="/player/nuevo.min.js"></script>
 <link href="/player/skins/flow/videojs.min.css" rel="stylesheet">
@@ -114,7 +115,6 @@
             Livewire.on('play-episode', (data) => this.handleEpisodeChange(data));
         },
 
-        // Video Türünü Algıla (Geliştirilmiş)
         getVideoType(url) {
             if (!url) return 'video/mp4';
             if (url.includes('.m3u8') || url.includes('hls')) return 'application/x-mpegURL';
@@ -126,6 +126,7 @@
             this.animeTitle = data.anime_title;
             this.episodeTitle = data.episode_title;
             this.logo = data.logo;
+            this.config.backdrop = data.backdrop || this.config.backdrop;
             this.config.poster = data.poster;
 
             if (this.player) {
@@ -137,7 +138,6 @@
                 const titleEl = this.player.el().querySelector('.vjs-nuevo-title');
                 if(titleEl) titleEl.innerHTML = data.anime_title;
 
-                // Sadece force_play gelirse otomatik başlat
                 if(data.force_play) {
                     this.player.play();
                 } else {
@@ -205,27 +205,12 @@
                         skin: 'flow',
                         title: this.animeTitle,
                         settingsButton: true,
-                        shareMenu: true,
-                        rateMenu: true,
-                        zoomMenu: true,
-                        sleepTimerMenu: true,
-                        relatedMenu: false,
-                        tooltips: true,
-                        contextMenu: true,
-                        contextLink: true,
-                        contextUrl: 'https://animemodu.com',
-                        contextText: 'animemodu',
-                        pipButton: true,
-                        fullscreenButton: true,
-                        buttonRewind: true,
-                        buttonForward: false,
                         touchControls: true
                     });
                 }
             });
         },
 
-        // Memory Leak Önleme
         destroy() {
             if (this.player) {
                 this.player.dispose();
