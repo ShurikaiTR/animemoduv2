@@ -9,24 +9,20 @@ use Livewire\Form;
 
 class RegisterForm extends Form
 {
-    #[Validate('required|string|min:3|max:20|unique:profiles,username', message: [
-        'required' => 'Kullanıcı adı zorunludur.',
-        'min' => 'Kullanıcı adı en az 3 karakter olmalıdır.',
-        'max' => 'Kullanıcı adı en fazla 20 karakter olmalıdır.',
-        'unique' => 'Bu kullanıcı adı zaten alınmış.'
-    ], onUpdate: false)]
+    #[Validate('required', message: 'Kullanıcı adı zorunludur.', onUpdate: false)]
+    #[Validate('string', onUpdate: false)]
+    #[Validate('min:3', message: 'Kullanıcı adı en az 3 karakter olmalıdır.', onUpdate: false)]
+    #[Validate('max:20', message: 'Kullanıcı adı en fazla 20 karakter olmalıdır.', onUpdate: false)]
+    #[Validate('unique:profiles,username', message: 'Bu kullanıcı adı zaten alınmış.', onUpdate: false)]
     public string $username = '';
 
-    #[Validate('required|email|unique:users,email', message: [
-        'required' => 'E-posta adresi zorunludur.',
-        'email' => 'Geçerli bir e-posta adresi giriniz.',
-        'unique' => 'Bu e-posta adresi zaten kayıtlı.'
-    ], onUpdate: false)]
+    #[Validate('required', message: 'E-posta adresi zorunludur.', onUpdate: false)]
+    #[Validate('email', message: 'Geçerli bir e-posta adresi giriniz.', onUpdate: false)]
+    #[Validate('unique:users,email', message: 'Bu e-posta adresi zaten kayıtlı.', onUpdate: false)]
     public string $email = '';
 
-    #[Validate('required|string|min:8', message: [
-        'required' => 'Şifre zorunludur.',
-        'min' => 'Şifre en az 8 karakter olmalıdır.'
-    ], onUpdate: false)]
+    #[Validate('required', message: 'Şifre zorunludur.', onUpdate: false)]
+    #[Validate('string', onUpdate: false)]
+    #[Validate('min:8', message: 'Şifre en az 8 karakter olmalıdır.', onUpdate: false)]
     public string $password = '';
 }
