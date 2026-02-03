@@ -11,7 +11,7 @@
         src: '{{ $src }}',
         poster: '{{ $poster }}',
         logo: '{{ $logo }}',
-        animeTitle: '{{ addslashes($anime?->title ?? '') }}',
+        animeTitle: {{ json_encode($anime?->title ?? '') }},
         episodeTitle: '{{ $episode?->season_number }}. Sezon {{ $episode?->episode_number }}. Bölüm'
     })"
     class="w-full h-full rounded-xl overflow-hidden bg-black relative z-10 group"
@@ -137,7 +137,12 @@
                 const titleEl = this.player.el().querySelector('.vjs-nuevo-title');
                 if(titleEl) titleEl.innerHTML = data.anime_title;
 
-                this.player.play();
+                // Sadece force_play gelirse otomatik başlat
+                if(data.force_play) {
+                    this.player.play();
+                } else {
+                    this.showOverlay = true;
+                }
             }
         },
 
