@@ -123,7 +123,7 @@
             }
 
             // Türkçe Dil Dosyası Kontrolü
-            if(window.videojs && !window.videojs.getLanguage('tr')) {
+            if(window.videojs && (!window.videojs.languages || !window.videojs.languages['tr'])) {
                 // Eğer daha önce yüklenmediyse yükle
                 if (!document.querySelector('script[src*="tr.js"]')) {
                     const script = document.createElement('script');
