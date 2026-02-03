@@ -8,10 +8,18 @@ use App\Livewire\Forms\RegisterForm;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Defer;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
-new class extends Component {
+new #[Defer] class extends Component {
     use HasAuthModalConfig;
+
+    #[Computed]
+    public function current(): array
+    {
+        return $this->getConfig();
+    }
 
     public LoginForm $loginForm;
 
@@ -138,9 +146,6 @@ new class extends Component {
     }
 }; ?>
 
-@php
-    $current = $this->getConfig();
-@endphp
 
 <div x-data="{ isOpen: @entangle('isOpen') }" x-show="isOpen" x-on:keydown.escape.window="isOpen = false"
     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300"
@@ -158,13 +163,14 @@ new class extends Component {
 
         {{-- Visual Section --}}
         <div class="hidden md:block w-5/12 relative overflow-hidden group">
-            <img src="{{ $current['image'] }}" alt="{{ $current['imageAlt'] }}"
+            <img src="{{ $this->current['image'] }}" alt="{{ $this->current['imageAlt'] }}"
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-            <div class="absolute inset-0 bg-gradient-to-t opacity-60 {{ $current['accent'] }}"></div>
+            <div class="absolute inset-0 bg-gradient-to-t opacity-60 {{ $this->current['accent'] }}"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
             <div class="absolute bottom-8 left-8 right-8 text-white z-10">
-                <h3 class="text-3xl font-bold font-rubik leading-tight mb-2 drop-shadow-lg">{{ $current['title'] }}</h3>
-                <p class="text-white/80 text-sm leading-relaxed">{{ $current['desc'] }}</p>
+                <h3 class="text-3xl font-bold font-rubik leading-tight mb-2 drop-shadow-lg">
+                    {{ $this->current['title'] }}</h3>
+                <p class="text-white/80 text-sm leading-relaxed">{{ $this->current['desc'] }}</p>
             </div>
         </div>
 
@@ -172,10 +178,10 @@ new class extends Component {
         <div class="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative bg-bg-dark">
             <div class="mb-8">
                 <h2 class="text-2xl font-bold text-white mb-2 font-rubik">
-                    {{ $current['formTitle'] }}
+                    {{ $this->current['formTitle'] }}
                 </h2>
                 <p class="text-white/40 text-sm">
-                    {{ $current['formDesc'] }}
+                    {{ $this->current['formDesc'] }}
                 </p>
             </div>
 
@@ -259,13 +265,13 @@ new class extends Component {
                     </div>
                 @endif
 
-                <x-ui.button type="submit" variant="{{ $current['btnVariant'] }}" data-loading.attr="disabled"
+                <x-ui.button type="submit" variant="{{ $this->current['btnVariant'] }}" data-loading.attr="disabled"
                     class="w-full h-12 text-base font-bold mt-2 transition-all duration-300 data-loading:opacity-70 group/btn">
                     <span class="in-data-loading:hidden">
-                        {{ $current['submitLabel'] }}
+                        {{ $this->current['submitLabel'] }}
                     </span>
                     <div class="hidden in-data-loading:flex items-center justify-center gap-1.5 whitespace-nowrap">
-                        <span>{{ $current['loadingLabel'] }}</span>
+                        <span>{{ $this->current['loadingLabel'] }}</span>
                         <div class="flex gap-1" data-loading>
                             <span class="animate-dot-bounce w-1.5 h-1.5 bg-current rounded-full"></span>
                             <span class="animate-dot-bounce delay-200 w-1.5 h-1.5 bg-current rounded-full"></span>
