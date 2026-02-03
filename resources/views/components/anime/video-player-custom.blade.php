@@ -66,6 +66,17 @@
 <script src="/player/video.min.js"></script>
 <script src="/player/nuevo.min.js"></script>
 <link href="/player/skins/flow/videojs.min.css" rel="stylesheet">
+<style>
+    /* Poster resminin tüm alanı kaplamasını sağlar */
+    .video-js .vjs-poster {
+        background-size: cover;
+        background-position: center;
+    }
+    /* Video içeriğinin de konteynere yayılmasını sağlar (opsiyonel ama önerilir) */
+    .video-js video {
+        object-fit: cover;
+    }
+</style>
 @endassets
 
 @script
