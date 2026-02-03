@@ -20,15 +20,22 @@
         "
         class="w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10 relative z-10">
         
-        {{-- Real Player --}}
+        {{-- Real Player Selector --}}
         <template x-if="isPlaying">
-            <x-anime.player.nuevo 
-                :src="$episode->video_url"
-                :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
-                :anime="$anime" 
-                :episode="$episode" 
-                :logo="$anime->poster_path ? $tmdbService->getImageUrl($anime->poster_path, 'w500') : null" 
-            />
+            @if(str_contains($episode->video_url, '.m3u8') || str_contains($episode->video_url, '.mp4') || str_contains($episode->video_url, '.mpd') || str_contains($episode->video_url, '.mkv'))
+                <x-anime.player.nuevo 
+                    :src="$episode->video_url"
+                    :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
+                    :anime="$anime" 
+                    :episode="$episode" 
+                    :logo="$anime->poster_path ? $tmdbService->getImageUrl($anime->poster_path, 'w500') : null" 
+                />
+            @else
+                <x-anime.player.iframe 
+                    :src="$episode->video_url"
+                    :poster="$episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)"
+                />
+            @endif
         </template>
 
         {{-- Fake Player (Cover) --}}
