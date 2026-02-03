@@ -169,7 +169,8 @@ new #[Defer] class extends Component {
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80"></div>
             <div class="absolute bottom-8 left-8 right-8 text-white z-10">
                 <h3 class="text-3xl font-bold font-rubik leading-tight mb-2 drop-shadow-lg">
-                    {{ $this->current['title'] }}</h3>
+                    {{ $this->current['title'] }}
+                </h3>
                 <p class="text-white/80 text-sm leading-relaxed">{{ $this->current['desc'] }}</p>
             </div>
         </div>
@@ -266,11 +267,11 @@ new #[Defer] class extends Component {
                 @endif
 
                 <x-ui.button type="submit" variant="{{ $this->current['btnVariant'] }}" data-loading.attr="disabled"
-                    class="w-full h-12 text-base font-bold mt-2 transition-all duration-300 data-loading:opacity-70 group/btn">
-                    <span class="group-data-loading/btn:hidden">
+                    class="w-full h-12 text-base font-bold mt-2 transition-all duration-300 data-loading:opacity-70 group">
+                    <span class="group-data-[loading]:hidden">
                         {{ $this->current['submitLabel'] }}
                     </span>
-                    <div class="hidden group-data-loading/btn:flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <div class="hidden group-data-[loading]:flex items-center justify-center gap-1.5 whitespace-nowrap">
                         <span>{{ $this->current['loadingLabel'] }}</span>
                         <div class="flex gap-1">
                             <span class="animate-dot-bounce w-1.5 h-1.5 bg-current rounded-full"></span>
@@ -278,7 +279,7 @@ new #[Defer] class extends Component {
                             <span class="animate-dot-bounce delay-400 w-1.5 h-1.5 bg-current rounded-full"></span>
                         </div>
                     </div>
-                    <x-heroicon-o-arrow-right class="w-5 h-5 ml-2 group-data-loading/btn:hidden" />
+                    <x-heroicon-o-arrow-right class="w-5 h-5 ml-2 group-data-[loading]:hidden" />
                 </x-ui.button>
             </form>
 
