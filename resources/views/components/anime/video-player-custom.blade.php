@@ -23,7 +23,7 @@
         </div>
     </template>
 
-    {{-- Player Header Overlay --}}
+    {{-- Player Header Overlay (Custom) --}}
     <div 
         x-show="!isReady || showOverlay" 
         x-transition:enter="transition ease-out duration-500"
@@ -50,7 +50,7 @@
     </div>
 
     {{-- Player Container --}}
-    <div x-show="isReady" class="w-full h-full relative">
+    <div class="w-full h-full relative">
         <video
             x-ref="video"
             class="video-js vjs-big-play-centered"
@@ -61,9 +61,10 @@
     </div>
 </div>
 
+{{-- Scriptleri Lazy yerine normal yüklüyoruz ki player hemen gelsin --}}
 @assets
-<script src="/player/video.min.js" strategy="lazyOnload"></script>
-<script src="/player/nuevo.min.js" strategy="lazyOnload"></script>
+<script src="/player/video.min.js"></script>
+<script src="/player/nuevo.min.js"></script>
 <link href="/player/skins/flow/videojs.min.css" rel="stylesheet">
 @endassets
 
@@ -78,51 +79,81 @@
         logo: config.logo,
         
         init() {
-            this.loadLanguages().then(() => {
-                this.initPlayer();
+            // DOM'un hazır olduğundan emin ol
+            this.$nextTick(() => {
+                this.loadLanguages().then(() => {
+                    this.initPlayer();
+                });
             });
 
+            // Bölüm Değişikliği Eventi
             Livewire.on('play-episode', (data) => {
-                this.animeTitle = data.anime_title;
-                this.episodeTitle = data.episode_title;
-                this.logo = data.logo;
-
-                if (this.player && this.isReady) {
-                    this.player.poster(data.poster);
-                    this.player.src({ 
-                        type: data.src.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4', 
-                        src: data.src 
-                    });
-                    this.player.play();
-                }
+                this.handleEpisodeChange(data);
             });
         },
 
+        handleEpisodeChange(data) {
+            this.animeTitle = data.anime_title;
+            this.episodeTitle = data.episode_title;
+            this.logo = data.logo;
+
+            if (this.player) {
+                // 1. Kaynağı Değiştir
+                this.player.poster(data.poster);
+                this.player.src({ 
+                    type: data.src.includes('.m3u8') ? 'application/x-mpegURL' : 'video/mp4', 
+                    src: data.src 
+                });
+
+                // 2. Nuevo Başlığını Güncelle (Çok Önemli)
+                // Nuevo'nun başlık DOM elementini bulup güncelliyoruz çünkü API'si bazen kısıtlıdır
+                const titleEl = this.player.el().querySelector('.vjs-nuevo-title');
+                if(titleEl) titleEl.innerHTML = data.anime_title;
+
+                this.player.play();
+            }
+        },
+
         async loadLanguages() {
-            if (window.videojs) return;
-            
-            // Wait for videojs to be available (loaded by nsvideo.min.js)
+            // VideoJS'i bekle
             let checkCount = 0;
             while(!window.videojs && checkCount < 50) {
                 await new Promise(r => setTimeout(r, 100));
                 checkCount++;
             }
 
-            // Load Turkish language
-            if(window.videojs && !document.querySelector('script[src*="tr.js"]')) {
-                const script = document.createElement('script');
-                script.src = '/player/lang/tr.js';
-                document.body.appendChild(script);
-                await new Promise(r => script.onload = r);
+            // Türkçe Dil Dosyası Kontrolü
+            if(window.videojs && !window.videojs.getLanguage('tr')) {
+                // Eğer daha önce yüklenmediyse yükle
+                if (!document.querySelector('script[src*="tr.js"]')) {
+                    const script = document.createElement('script');
+                    script.src = '/player/lang/tr.js';
+                    document.body.appendChild(script);
+                    await new Promise(r => script.onload = r);
+                }
             }
         },
 
         initPlayer() {
-            if (!window.videojs) {
-                console.error('VideoJS not loaded');
+            if (!window.videojs) return;
+
+            // KORUMA: Eğer player zaten varsa tekrar başlatma (Hata kaynağı burasıydı)
+            if (this.player) {
+                // Zaten varsa sadece kaynağı güncelle (eğer config değiştiyse)
+                if (this.player.src() !== config.src) {
+                    this.handleEpisodeChange({
+                        src: config.src,
+                        poster: config.poster,
+                        anime_title: config.animeTitle,
+                        episode_title: config.episodeTitle,
+                        logo: config.logo
+                    });
+                }
+                this.isReady = true;
                 return;
             }
 
+            // Player Yoksa Sıfırdan Kur
             this.player = videojs(this.$refs.video, {
                 controls: true,
                 autoplay: false,
@@ -146,7 +177,7 @@
                 if (this.player.nuevo) {
                     this.player.nuevo({
                         skin: 'flow',
-                        title: this.animeTitle, // Use current title
+                        title: this.animeTitle,
                         settingsButton: true,
                         shareMenu: true,
                         rateMenu: true,
@@ -169,9 +200,11 @@
             });
         },
 
+        // Alpine bileşeni yok edildiğinde (sayfa değişirse vs) player'ı temizle
         destroy() {
             if (this.player) {
                 this.player.dispose();
+                this.player = null;
             }
         }
     }));
