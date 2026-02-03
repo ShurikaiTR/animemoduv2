@@ -62,7 +62,7 @@
 </div>
 
 @assets
-<script src="/player/nsvideo.min.js" strategy="lazyOnload"></script>
+<script src="/player/nuevo.min.js" strategy="lazyOnload"></script>
 <link href="/player/skins/flow/videojs.min.css" rel="stylesheet">
 @endassets
 

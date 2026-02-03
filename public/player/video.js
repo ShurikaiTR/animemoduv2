@@ -2167,9 +2167,9 @@
       if (event.button !== null && event.button !== undefined) {
         // The following is disabled because it does not pass videojs-standard
         // and... yikes.
-         
+        /* eslint-disable */
         event.button = event.button & 1 ? 0 : event.button & 4 ? 1 : event.button & 2 ? 2 : 0;
-         
+        /* eslint-enable */
       }
     }
     event.fixed_ = true;
@@ -2583,7 +2583,7 @@
       timeout = null;
     };
 
-     
+    /* eslint-disable consistent-this */
     const debounced = function () {
       const self = this;
       const args = arguments;
@@ -2600,7 +2600,7 @@
       context.clearTimeout(timeout);
       timeout = context.setTimeout(later, wait);
     };
-     
+    /* eslint-enable consistent-this */
 
     debounced.cancel = cancel;
     return debounced;
@@ -3532,7 +3532,7 @@
     constructor(player, options, ready) {
       // The component might be the player itself and we can't pass `this` to super
       if (!player && this.play) {
-        this.player_ = player = this;  
+        this.player_ = player = this; // eslint-disable-line
       } else {
         this.player_ = player;
       }
@@ -4953,7 +4953,7 @@
      */
     setTimeout(fn, timeout) {
       // declare as variables so they are properly available in timeout function
-       
+      // eslint-disable-next-line
       var timeoutId;
       fn = bind_(this, fn);
       this.clearTimersOnDispose_();
@@ -5070,7 +5070,7 @@
       this.clearTimersOnDispose_();
 
       // declare as variables so they are properly available in rAF function
-       
+      // eslint-disable-next-line
       var id;
       fn = bind_(this, fn);
       id = window.requestAnimationFrame(() => {
@@ -7707,7 +7707,7 @@
     }
     /**
      * For example fuzzFactor is 0.1
-     * This means Â±10% deviation
+     * This means ±10% deviation
      * So if we have delay as 1000
      * This function can generate any value from 900 to 1100
      */;
@@ -7775,7 +7775,7 @@
   /**
    * @license
    * slighly modified parse-headers 2.0.2 <https://github.com/kesla/parse-headers/>
-   * Copyright (c) 2014 David BjÃ¶rklund
+   * Copyright (c) 2014 David Björklund
    * Available under the MIT license
    * <https://github.com/kesla/parse-headers/blob/master/LICENCE>
    */
@@ -12742,7 +12742,7 @@
      */
     getCurrentComponent(target) {
       this.updateFocusableComponents();
-       
+      // eslint-disable-next-line
       const curComp = target || document.activeElement;
       if (this.focusableComponents.length) {
         for (const i of this.focusableComponents) {
@@ -13863,6 +13863,7 @@
         if (overrides.fontPercent && overrides.fontPercent !== 1) {
           const fontSize = window.parseFloat(cueDiv.style.fontSize);
 		  const fsize =fontSize * overrides.fontPercent;
+	
 		  if(fsize<15) fsize=15;
           cueDiv.style.fontSize = fsize + 'px';
           cueDiv.style.height = 'auto';
@@ -30314,7 +30315,7 @@
          * @param {Function} representation.enabled   Callback to enable/disable QualityLevel
          */
         constructor(representation) {
-          let level = this;  
+          let level = this; // eslint-disable-line
 
           level.id = representation.id;
           level.label = level.id;
@@ -30371,7 +30372,7 @@
          */
         constructor() {
           super();
-          let list = this;  
+          let list = this; // eslint-disable-line
 
           list.levels_ = [];
           list.selectedIndex_ = -1;
@@ -31524,10 +31525,10 @@
       this.mainDefinitions = opts.mainDefinitions || {};
       this.params = new URL(opts.uri, 'https://a.com').searchParams;
       this.lastProgramDateTime = null;
-       
+      /* eslint-disable consistent-this */
 
       const self = this;
-       
+      /* eslint-enable consistent-this */
 
       const uris = [];
       let currentUri = {}; // if specified, the active EXT-X-MAP definition
@@ -32563,7 +32564,7 @@
     }
     if (!Array.isArray(bytes) && !isTypedArray(bytes) && !(bytes instanceof ArrayBuffer)) {
       // any non-number or NaN leads to empty uint8array
-       
+      // eslint-disable-next-line
       if (typeof bytes !== 'number' || typeof bytes === 'number' && bytes !== bytes) {
         bytes = 0;
       } else {
@@ -32614,7 +32615,7 @@
       _ref2$le = _ref2.le,
       le = _ref2$le === void 0 ? false : _ref2$le;
 
-     
+    // eslint-disable-next-line
     if (typeof number !== 'bigint' && typeof number !== 'number' || typeof number === 'number' && number !== number) {
       number = 0;
     }
@@ -34564,7 +34565,7 @@
       //case DOCUMENT_TYPE_NODE:
       //cannot be imported.
       //case ENTITY_NODE:
-      //case NOTATION_NODEï¼š
+      //case NOTATION_NODE：
       //can not hit in level3
       //default:throw e;
     }
@@ -37077,7 +37078,7 @@
       if (end > start) {
         start = end;
       } else {
-        //TODO: è¿™é‡Œæœ‰å¯èƒ½saxå›žé€€ï¼Œæœ‰ä½ç½®é”™è¯¯é£Žé™©
+        //TODO: 这里有可能sax回退，有位置错误风险
         appendText(Math.max(tagStart, start) + 1);
       }
     }
@@ -37397,7 +37398,7 @@
       //console.log(tagName)
       pos = source.lastIndexOf('</' + tagName + '>');
       if (pos < elStartEnd) {
-        //å¿˜è®°é—­åˆ
+        //忘记闭合
         pos = source.lastIndexOf('</' + tagName);
       }
       closeMap[tagName] = pos;
@@ -38271,7 +38272,7 @@
     let presentationTime = periodStart;
     let number = playlist.mediaSequence || 0; // firstOffset is the offset from the end of the sidx box
 
-    let startIndex;  
+    let startIndex; // eslint-disable-next-line
 
     if (typeof sidx.firstOffset === 'bigint') {
       startIndex = window.BigInt(sidxEnd) + sidx.firstOffset;
@@ -38286,7 +38287,7 @@
 
       const duration = reference.subsegmentDuration; // should be an inclusive range
 
-      let endIndex;  
+      let endIndex; // eslint-disable-next-line
 
       if (typeof startIndex === 'bigint') {
         endIndex = startIndex + window.BigInt(size) - window.BigInt(1);
@@ -42671,7 +42672,7 @@
 
         if (nextPart > -1 && nextPart !== parts.length - 1) {
           // add existing parts to our preload hints
-           
+          // eslint-disable-next-line
           parameters._HLS_part = nextPart;
         } // this if statement makes sure that we request the msn
         // of the preload segment if:
@@ -42687,13 +42688,13 @@
           nextMSN--;
         }
       } // add _HLS_msn= in front of any _HLS_part query
-       
+      // eslint-disable-next-line
 
       parameters._HLS_msn = nextMSN;
     }
     if (media.serverControl && media.serverControl.canSkipUntil) {
       // add _HLS_skip= infront of all other queries.
-       
+      // eslint-disable-next-line
       parameters._HLS_skip = media.serverControl.canSkipDateranges ? 'v2' : 'YES';
     }
     if (Object.keys(parameters).length) {
@@ -47068,17 +47069,17 @@
       this.parse708captions_ = typeof options.parse708captions === 'boolean' ? options.parse708captions : true;
       this.captionPackets_ = [];
       this.ccStreams_ = [new Cea608Stream(0, 0),
-       
+      // eslint-disable-line no-use-before-define
       new Cea608Stream(0, 1),
-       
+      // eslint-disable-line no-use-before-define
       new Cea608Stream(1, 0),
-       
-      new Cea608Stream(1, 1)  
+      // eslint-disable-line no-use-before-define
+      new Cea608Stream(1, 1) // eslint-disable-line no-use-before-define
       ];
       if (this.parse708captions_) {
         this.cc708Stream_ = new Cea708Stream({
           captionServices: options.captionServices
-        });  
+        }); // eslint-disable-line no-use-before-define
       }
       this.reset(); // forward data and done events from CCs to this CaptionStream
 
@@ -47259,60 +47260,60 @@
 
     var CHARACTER_TRANSLATION_708 = {
       0x7f: 0x266a,
-      // â™ª
+      // ♪
       0x1020: 0x20,
       // Transparent Space
       0x1021: 0xa0,
       // Nob-breaking Transparent Space
       0x1025: 0x2026,
-      // â€¦
+      // …
       0x102a: 0x0160,
-      // Å 
+      // Š
       0x102c: 0x0152,
-      // Å’
+      // Œ
       0x1030: 0x2588,
-      // â–ˆ
+      // █
       0x1031: 0x2018,
-      // â€˜
+      // ‘
       0x1032: 0x2019,
-      // â€™
+      // ’
       0x1033: 0x201c,
-      // â€œ
+      // “
       0x1034: 0x201d,
-      // â€
+      // ”
       0x1035: 0x2022,
-      // â€¢
+      // •
       0x1039: 0x2122,
-      // â„¢
+      // ™
       0x103a: 0x0161,
-      // Å¡
+      // š
       0x103c: 0x0153,
-      // Å“
+      // œ
       0x103d: 0x2120,
-      // â„ 
+      // ℠
       0x103f: 0x0178,
-      // Å¸
+      // Ÿ
       0x1076: 0x215b,
-      // â…›
+      // ⅛
       0x1077: 0x215c,
-      // â…œ
+      // ⅜
       0x1078: 0x215d,
-      // â…
+      // ⅝
       0x1079: 0x215e,
-      // â…ž
+      // ⅞
       0x107a: 0x23d0,
-      // â
+      // ⏐
       0x107b: 0x23a4,
-      // âŽ¤
+      // ⎤
       0x107c: 0x23a3,
-      // âŽ£
+      // ⎣
       0x107d: 0x23af,
-      // âŽ¯
+      // ⎯
       0x107e: 0x23a6,
-      // âŽ¦
+      // ⎦
       0x107f: 0x23a1,
-      // âŽ¡
-      0x10a0: 0x3138 // ã„¸ (CC char)
+      // ⎡
+      0x10a0: 0x3138 // ㄸ (CC char)
     };
     var get708CharFromCode = function (code) {
       var newCode = CHARACTER_TRANSLATION_708[code] || code;
@@ -48116,139 +48117,139 @@
 
     var CHARACTER_TRANSLATION = {
       0x2a: 0xe1,
-      // Ã¡
+      // á
       0x5c: 0xe9,
-      // Ã©
+      // é
       0x5e: 0xed,
-      // Ã­
+      // í
       0x5f: 0xf3,
-      // Ã³
+      // ó
       0x60: 0xfa,
-      // Ãº
+      // ú
       0x7b: 0xe7,
-      // Ã§
+      // ç
       0x7c: 0xf7,
-      // Ã·
+      // ÷
       0x7d: 0xd1,
-      // Ã‘
+      // Ñ
       0x7e: 0xf1,
-      // Ã±
+      // ñ
       0x7f: 0x2588,
-      // â–ˆ
+      // █
       0x0130: 0xae,
-      // Â®
+      // ®
       0x0131: 0xb0,
-      // Â°
+      // °
       0x0132: 0xbd,
-      // Â½
+      // ½
       0x0133: 0xbf,
-      // Â¿
+      // ¿
       0x0134: 0x2122,
-      // â„¢
+      // ™
       0x0135: 0xa2,
-      // Â¢
+      // ¢
       0x0136: 0xa3,
-      // Â£
+      // £
       0x0137: 0x266a,
-      // â™ª
+      // ♪
       0x0138: 0xe0,
-      // Ã 
+      // à
       0x0139: 0xa0,
       //
       0x013a: 0xe8,
-      // Ã¨
+      // è
       0x013b: 0xe2,
-      // Ã¢
+      // â
       0x013c: 0xea,
-      // Ãª
+      // ê
       0x013d: 0xee,
-      // Ã®
+      // î
       0x013e: 0xf4,
-      // Ã´
+      // ô
       0x013f: 0xfb,
-      // Ã»
+      // û
       0x0220: 0xc1,
-      // Ã
+      // Á
       0x0221: 0xc9,
-      // Ã‰
+      // É
       0x0222: 0xd3,
-      // Ã“
+      // Ó
       0x0223: 0xda,
-      // Ãš
+      // Ú
       0x0224: 0xdc,
-      // Ãœ
+      // Ü
       0x0225: 0xfc,
-      // Ã¼
+      // ü
       0x0226: 0x2018,
-      // â€˜
+      // ‘
       0x0227: 0xa1,
-      // Â¡
+      // ¡
       0x0228: 0x2a,
       // *
       0x0229: 0x27,
       // '
       0x022a: 0x2014,
-      // â€”
+      // —
       0x022b: 0xa9,
-      // Â©
+      // ©
       0x022c: 0x2120,
-      // â„ 
+      // ℠
       0x022d: 0x2022,
-      // â€¢
+      // •
       0x022e: 0x201c,
-      // â€œ
+      // “
       0x022f: 0x201d,
-      // â€
+      // ”
       0x0230: 0xc0,
-      // Ã€
+      // À
       0x0231: 0xc2,
-      // Ã‚
+      // Â
       0x0232: 0xc7,
-      // Ã‡
+      // Ç
       0x0233: 0xc8,
-      // Ãˆ
+      // È
       0x0234: 0xca,
-      // ÃŠ
+      // Ê
       0x0235: 0xcb,
-      // Ã‹
+      // Ë
       0x0236: 0xeb,
-      // Ã«
+      // ë
       0x0237: 0xce,
-      // ÃŽ
+      // Î
       0x0238: 0xcf,
-      // Ã
+      // Ï
       0x0239: 0xef,
-      // Ã¯
+      // ï
       0x023a: 0xd4,
-      // Ã”
+      // Ô
       0x023b: 0xd9,
-      // Ã™
+      // Ù
       0x023c: 0xf9,
-      // Ã¹
+      // ù
       0x023d: 0xdb,
-      // Ã›
+      // Û
       0x023e: 0xab,
-      // Â«
+      // «
       0x023f: 0xbb,
-      // Â»
+      // »
       0x0320: 0xc3,
-      // Ãƒ
+      // Ã
       0x0321: 0xe3,
-      // Ã£
+      // ã
       0x0322: 0xcd,
-      // Ã
+      // Í
       0x0323: 0xcc,
-      // ÃŒ
+      // Ì
       0x0324: 0xec,
-      // Ã¬
+      // ì
       0x0325: 0xd2,
-      // Ã’
+      // Ò
       0x0326: 0xf2,
-      // Ã²
+      // ò
       0x0327: 0xd5,
-      // Ã•
+      // Õ
       0x0328: 0xf5,
-      // Ãµ
+      // õ
       0x0329: 0x7b,
       // {
       0x032a: 0x7d,
@@ -48264,36 +48265,36 @@
       0x032f: 0x7e,
       // ~
       0x0330: 0xc4,
-      // Ã„
+      // Ä
       0x0331: 0xe4,
-      // Ã¤
+      // ä
       0x0332: 0xd6,
-      // Ã–
+      // Ö
       0x0333: 0xf6,
-      // Ã¶
+      // ö
       0x0334: 0xdf,
-      // ÃŸ
+      // ß
       0x0335: 0xa5,
-      // Â¥
+      // ¥
       0x0336: 0xa4,
-      // Â¤
+      // ¤
       0x0337: 0x2502,
-      // â”‚
+      // │
       0x0338: 0xc5,
-      // Ã…
+      // Å
       0x0339: 0xe5,
-      // Ã¥
+      // å
       0x033a: 0xd8,
-      // Ã˜
+      // Ø
       0x033b: 0xf8,
-      // Ã¸
+      // ø
       0x033c: 0x250c,
-      // â”Œ
+      // ┌
       0x033d: 0x2510,
-      // â”
+      // ┐
       0x033e: 0x2514,
-      // â””
-      0x033f: 0x2518 // â”˜
+      // └
+      0x033f: 0x2518 // ┘
     };
     var getCharFromCode = function (code) {
       if (code === null) {
@@ -48411,9 +48412,9 @@
           this.column_++; // Append extended characters to caption text
         } else if (this.isExtCharacter(char0, char1)) {
           // Extended characters always follow their "non-extended" equivalents.
-          // IE if a "Ã¨" is desired, you'll always receive "eÃ¨"; non-compliant
-          // decoders are supposed to drop the "Ã¨", while compliant decoders
-          // backspace the "e" and insert "Ã¨".
+          // IE if a "è" is desired, you'll always receive "eè"; non-compliant
+          // decoders are supposed to drop the "è", while compliant decoders
+          // backspace the "e" and insert "è".
           // Delete the previous character
           if (this.mode_ === 'popOn') {
             this.nonDisplayed_[this.row_].text = this.nonDisplayed_[this.row_].text.slice(0, -1);
@@ -49448,9 +49449,9 @@
         }
       };
       parsePat = function (payload, pat) {
-        pat.section_number = payload[7];  
+        pat.section_number = payload[7]; // eslint-disable-line camelcase
 
-        pat.last_section_number = payload[8];  
+        pat.last_section_number = payload[8]; // eslint-disable-line camelcase
         // skip the PSI header and parse the first PMT entry
 
         self.pmtPid = (payload[10] & 0x1F) << 8 | payload[11];
@@ -54265,7 +54266,7 @@
                           result.firstKeyFrame = firstKeyFrame;
                           result.firstKeyFrame.type = 'video';
                         } else {
-                           
+                          // eslint-disable-next-line
                           console.warn('Failed to extract PTS/DTS from PES at first keyframe. ' + 'This could be an unusual TS segment, or else mux.js did not ' + 'parse your TS segment correctly. If you know your TS ' + 'segments do contain PTS/DTS on keyframes please file a bug ' + 'report! You can try ffprobe to double check for yourself.');
                         }
                       }
@@ -55026,10 +55027,10 @@
         transmuxedData,
         callback: onDone
       });
-       
+      /* eslint-disable no-use-before-define */
 
       dequeue(transmuxer);
-       
+      /* eslint-enable */
     };
     const handleError = () => {
       const error = {
@@ -63289,7 +63290,7 @@ ${segmentInfoString(segmentInfo)}`); // If there's an init segment associated wi
       const encrypted = new Uint8Array(data.encrypted.bytes, data.encrypted.byteOffset, data.encrypted.byteLength);
       const key = new Uint32Array(data.key.bytes, data.key.byteOffset, data.key.byteLength / 4);
       const iv = new Uint32Array(data.iv.bytes, data.iv.byteOffset, data.iv.byteLength / 4);
-       
+      /* eslint-disable no-new, handle-callback-err */
 
       new Decrypter(encrypted, key, iv, function (err, bytes) {
         self.postMessage(createTransferableMessage({
@@ -63297,7 +63298,7 @@ ${segmentInfoString(segmentInfo)}`); // If there's an init segment associated wi
           decrypted: bytes
         }), [bytes.buffer]);
       });
-       
+      /* eslint-enable */
     };
   }));
   var Decrypter = factory(workerCode);
