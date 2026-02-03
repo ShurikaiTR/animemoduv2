@@ -19,24 +19,30 @@ new class extends Component {
         return $this->user?->profile;
     }
 
+    #[Computed]
+    public function displayName()
+    {
+        return $this->profile?->username 
+            ?? $this->profile?->full_name 
+            ?? $this->user?->name 
+            ?? 'Misafir';
+    }
+
+    #[Computed]
+    public function avatar()
+    {
+        return $this->profile?->avatar_url ?: asset('default-avatar.webp');
+    }
+
     public function logout(): void
     {
         Auth::logout();
-
         session()->invalidate();
         session()->regenerateToken();
 
         $this->redirect(route('home'), navigate: true);
     }
 }; ?>
-
-@php
-    $user = $this->user;
-    $profile = $this->profile;
-    $displayUsername = $profile?->username ?? ($profile?->full_name ?? ($user?->name ?? 'User'));
-    $avatarUrl = $profile?->avatar_url;
-    $initial = strtoupper(substr($displayUsername, 0, 1));
-@endphp
 
 <div class="relative" x-data="{ open: false }" @click.outside="open = false">
     {{-- Trigger --}}
@@ -45,12 +51,12 @@ new class extends Component {
         :class="{ 'bg-white/5 border-white/5': open }">
         <div
             class="w-8 h-8 rounded-full bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/30 group-hover:from-primary/30 group-hover:to-primary/10 transition-all shadow-primary-mini overflow-hidden">
-            <img src="{{ $avatarUrl ?: asset('default-avatar.webp') }}" alt="{{ $displayUsername }}"
+            <img src="{{ $this->avatar }}" alt="{{ $this->displayName }}"
                 class="w-full h-full object-cover">
         </div>
         <div class="hidden sm:flex flex-col items-start text-left">
             <span class="text-sm font-medium text-white max-w-32 truncate group-hover:text-primary transition-colors">
-                {{ $displayUsername }}
+                {{ $this->displayName }}
             </span>
         </div>
         <x-heroicon-o-chevron-down
@@ -68,13 +74,13 @@ new class extends Component {
             <div class="flex flex-col space-y-1 bg-white/5 p-3 rounded-xl border border-white/5">
                 <p class="text-sm font-medium leading-none text-white">Hesabım</p>
                 <p class="text-xs leading-none text-white/40 truncate font-mono mt-1.5">
-                    {{ $user->email }}
+                    {{ $this->user?->email }}
                 </p>
             </div>
         </div>
 
         <div class="space-y-1">
-            <a href="{{ url('/profil') }}"
+            <a href="{{ url('/profil') }}" wire:navigate
                 class="flex items-center gap-2.5 hover:bg-primary/10 hover:text-primary cursor-pointer rounded-xl p-2.5 transition-colors group">
                 <div
                     class="p-1.5 rounded-md bg-white/5 text-white/70 group-hover:bg-primary/20 group-hover:text-primary transition-colors">
@@ -82,7 +88,7 @@ new class extends Component {
                 </div>
                 <span class="font-medium">Profil</span>
             </a>
-            <a href="{{ url('/settings') }}"
+            <a href="{{ url('/settings') }}" wire:navigate
                 class="flex items-center gap-2.5 hover:bg-primary/10 hover:text-primary cursor-pointer rounded-xl p-2.5 transition-colors group">
                 <div
                     class="p-1.5 rounded-md bg-white/5 text-white/70 group-hover:bg-primary/20 group-hover:text-primary transition-colors">
