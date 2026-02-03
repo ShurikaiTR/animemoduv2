@@ -197,7 +197,7 @@ new #[Defer] class extends Component {
                 </div>
             @endif
 
-            <form wire:submit.prevent="submit" class="space-y-4">
+            <form wire:submit.prevent="submit" class="space-y-4 group/form">
                 @if($view === 'register')
                     <div class="space-y-1">
                         <div class="relative">
@@ -267,11 +267,12 @@ new #[Defer] class extends Component {
                 @endif
 
                 <x-ui.button type="submit" variant="{{ $this->current['btnVariant'] }}" data-loading.attr="disabled"
-                    class="w-full h-12 text-base font-bold mt-2 transition-all duration-300 data-loading:opacity-70 group">
-                    <span class="group-data-[loading]:hidden">
+                    class="w-full h-12 text-base font-bold mt-2 transition-all duration-300 group-data-[loading]/form:opacity-70">
+                    <span class="group-data-[loading]/form:hidden">
                         {{ $this->current['submitLabel'] }}
                     </span>
-                    <div class="hidden group-data-[loading]:flex items-center justify-center gap-1.5 whitespace-nowrap">
+                    <div
+                        class="hidden group-data-[loading]/form:flex items-center justify-center gap-1.5 whitespace-nowrap">
                         <span>{{ $this->current['loadingLabel'] }}</span>
                         <div class="flex gap-1">
                             <span class="animate-dot-bounce w-1.5 h-1.5 bg-current rounded-full"></span>
@@ -279,7 +280,7 @@ new #[Defer] class extends Component {
                             <span class="animate-dot-bounce delay-400 w-1.5 h-1.5 bg-current rounded-full"></span>
                         </div>
                     </div>
-                    <x-heroicon-o-arrow-right class="w-5 h-5 ml-2 group-data-[loading]:hidden" />
+                    <x-heroicon-o-arrow-right class="w-5 h-5 ml-2 group-data-[loading]/form:hidden" />
                 </x-ui.button>
             </form>
 
