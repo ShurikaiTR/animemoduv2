@@ -36,7 +36,7 @@ class Watch extends Component
         $this->segment2 = $segment2;
 
         $this->resolveEpisode();
-        $this->dispatchPlayerEvent();
+        $this->dispatchPlayerEvent(forcePlay: false);
     }
 
     #[Computed]
@@ -150,7 +150,7 @@ class Watch extends Component
         }
     }
 
-    private function dispatchPlayerEvent(): void
+    private function dispatchPlayerEvent(bool $forcePlay = true): void
     {
         $this->dispatch(
             'play-episode',
@@ -162,7 +162,8 @@ class Watch extends Component
             episode_title: $this->episode->season_number . '. Sezon ' . $this->episode->episode_number . '. Bölüm',
             logo: $this->anime->poster_path
             ? TmdbService::getImageUrl($this->anime->poster_path, 'w500')
-            : null
+            : null,
+            force_play: $forcePlay
         );
     }
 

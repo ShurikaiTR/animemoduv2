@@ -12,7 +12,7 @@
             poster: {{ json_encode($episode->still_path ? $tmdbService->getImageUrl($episode->still_path, 'original') : ($anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'original') : null)) }},
             logo: {{ json_encode($anime->poster_path ? $tmdbService->getImageUrl($anime->poster_path, 'w500') : null) }}
         }" x-on:play-episode.window="
-            isPlaying = true;
+            isPlaying = isPlaying || $event.detail.force_play;
             animeTitle = $event.detail.anime_title;
             episodeTitle = $event.detail.episode_title;
             poster = $event.detail.poster;
