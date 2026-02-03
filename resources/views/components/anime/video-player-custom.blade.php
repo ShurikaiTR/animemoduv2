@@ -66,6 +66,13 @@
 <script src="/player/video.min.js"></script>
 <script src="/player/nuevo.min.js"></script>
 <link href="/player/skins/flow/videojs.min.css" rel="stylesheet">
+<style>
+    /* Sadece oynatıcı kapağının (poster) tam yayılmasını sağlar */
+    .video-js .vjs-poster {
+        background-size: cover;
+        background-position: center;
+    }
+</style>
 @endassets
 
 @script
