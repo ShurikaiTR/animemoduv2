@@ -1,7 +1,8 @@
 @props([
     'anime',
     'episodes',
-    'currentEpisode'
+    'currentEpisode',
+    'availableSeasons' => collect([1]) // Default value
 ])
 
 <aside {{ $attributes->merge(['class' => 'w-full']) }} aria-label="Bölüm Navigasyonu">
@@ -31,10 +32,7 @@
         </a>
 
         {{-- Episode List --}}
-        <div 
-            class="bg-bg-secondary/20 rounded-xl border border-white/5 overflow-hidden flex flex-col h-[600px] max-h-[calc(100vh-200px)]"
-            x-data="{ activeSeason: {{ $currentEpisode->season_number ?? 1 }} }"
-        >
+        <div class="bg-bg-secondary/20 rounded-xl border border-white/5 overflow-hidden flex flex-col h-[600px] max-h-[calc(100vh-200px)]">
             <div class="p-4 border-b border-white/5 bg-white/[0.02] space-y-4 shrink-0">
                 <div class="flex items-center justify-between">
                     <h2 class="font-bold text-white font-rubik flex items-center gap-2 text-sm">
@@ -49,28 +47,26 @@
             
             <div class="overflow-y-auto custom-scrollbar p-3 space-y-2 flex-1">
                 {{-- Season Tabs --}}
-                @php
-                    $seasons = $episodes->pluck('season_number')->unique()->sort()->values();
-                @endphp
-
-                @if($seasons->count() > 1)
+                @if($availableSeasons->count() > 1)
                     <nav class="flex items-center gap-2 mb-4 px-1" aria-label="Sezon seçimi">
                         <span class="text-xs font-semibold text-white/40 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
                             Sezon
                         </span>
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            @foreach($seasons as $season)
-                                <button
-                                    type="button"
-                                    @click="activeSeason = {{ $season }}"
+                            @foreach($availableSeasons as $season)
+                                <a
+                                    href="{{ route('anime.watch', ['anime' => $anime->slug, 'segment1' => 'sezon-' . $season, 'segment2' => 'bolum-1']) }}"
+                                    wire:navigate
                                     title="{{ $season == 0 ? 'Özel Bölümler' : $season . '. Sezon' }}"
-                                    :class="activeSeason === {{ $season }} 
-                                        ? 'bg-primary text-white shadow-lg shadow-primary/20' 
-                                        : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5 hover:border-white/10'"
-                                    class="w-11 h-11 rounded-lg text-sm font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                    @class([
+                                        'w-11 h-11 rounded-lg text-sm font-bold transition-all flex items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                                        $currentEpisode->season_number == $season
+                                            ? 'bg-primary text-white shadow-lg shadow-primary/20' 
+                                            : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5 hover:border-white/10'
+                                    ])
                                 >
                                     {{ $season == 0 ? 'Ö' : $season }}
-                                </button>
+                                </a>
                             @endforeach
                         </div>
                     </nav>
@@ -87,7 +83,6 @@
                     <a 
                         href="{{ $url }}"
                         wire:navigate
-                        x-show="activeSeason === {{ $ep->season_number }}"
                         class="block p-3 rounded-lg border transition-all duration-200 group relative overflow-hidden
                         {{ $isActive 
                             ? 'bg-primary/20 border-primary/50' 

@@ -1,20 +1,11 @@
-@props(['anime', 'index', 'activeSlide', 'tmdbService'])
-
 @use('App\Enums\AnimeStatus')
-
-@php
-    $backdropUrl = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w1280') : asset('img/placeholder-backdrop.jpg');
-    $backdropW780 = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w780') : null;
-    $backdropW1280 = $anime->backdrop_path ? $tmdbService->getImageUrl($anime->backdrop_path, 'w1280') : null;
-    $logoUrl = $anime->logo_path ? $tmdbService->getImageUrl($anime->logo_path, 'w500') : null;
-@endphp
 
 <div
     x-show="activeSlide === {{ $index }}"
     x-transition:enter="transition ease-out duration-700"
     x-transition:enter-start="opacity-0 scale-105"
     x-transition:enter-end="opacity-100 scale-100"
-    x-transition:leave="transition ease-in duration-700 absolute top-0 left-0 w-full h-full"
+    x-transition:leave="transition ease-in duration-700 absolute inset-0"
     x-transition:leave-start="opacity-100 scale-100 z-10"
     x-transition:leave-end="opacity-0 scale-100 z-0"
     class="absolute inset-0 w-full h-full"
@@ -26,6 +17,7 @@
                 src="{{ $backdropUrl }}"
                 @if($backdropW780 && $backdropW1280)
                     srcset="{{ $backdropW780 }} 780w, {{ $backdropW1280 }} 1280w, {{ $backdropUrl }} 1920w"
+                @endif
                 sizes="100vw"
                 width="1920" height="1080"
                 alt="{{ $anime->title }}"
@@ -119,7 +111,7 @@
                 {{ $anime->overview }}
             </p>
 
-            <div class="flex items-center gap-3 mt-2">
+            <div class="flex items-center gap-3 mt-2 mb-12">
                 <x-ui.button tag="a" href="{{ route('anime.show', $anime->slug) }}" variant="primary" size="lg" class="px-8 font-extrabold uppercase tracking-wide">
                     <x-icons.play class="w-5 h-5 fill-current" />
                     HEMEN İZLE
@@ -132,11 +124,6 @@
                         </x-ui.button>
                     </x-slot:trigger>
                 </x-anime.watch-status-dropdown>
-            </div>
-
-            {{-- Pagination Indicators --}}
-            <div class="flex items-center justify-start gap-2 mt-4">
-                {{ $slot }}
             </div>
         </div>
     </div>
